@@ -1,0 +1,1217 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:eo2_map_charger/model/Response/ResponseMsgId8.dart';
+import 'package:flutter/cupertino.dart';
+
+import 'CommonWidgets.dart';
+import 'ConnectServer.dart';
+import 'Connection.dart';
+import 'ConstantFunction/Constants.dart';
+import 'package:intl/intl.dart';
+import 'ev_analysis.dart';
+import 'model/Request/CommonRequest.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:app_settings/app_settings.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+import 'package:gateway/gateway.dart';
+import 'model/Request/RequestMsgId1.dart';
+import 'model/Request/RequestMsgId10.dart';
+import 'model/Request/RequestMsgId12.dart';
+import 'model/Request/RequestMsgId13.dart';
+import 'model/Request/RequestMsgId18.dart';
+import 'model/Request/RequestMsgId2.dart';
+import 'model/Request/RequestMsgId3.dart';
+import 'model/Request/RequestMsgId4.dart';
+import 'model/Request/RequestMsgId9.dart';
+import 'model/Response/CommonResponse.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'model/Response/ResponseMsgId10.dart';
+import 'model/Response/ResponseMsgId12.dart';
+import 'model/Response/ResponseMsgId14.dart';
+import 'model/Response/ResponseMsgId15.dart';
+import 'model/Response/ResponseMsgId16.dart';
+import 'model/Response/ResponseMsgId19.dart';
+import 'model/Response/ResponseMsgId21.dart';
+import 'model/Response/ResponseMsgId6.dart';
+
+class VisibilityWidgets with ChangeNotifier {
+  String qrText = "";
+  Socket socket;
+  bool isrunning = false, isNetwork = false;
+  int status;
+  int index = 0;
+  List<WeekEnergy> WeekEnergyData = [];
+  List<MonthEnergy> MonthEnergyData = [];
+  List<YearEnergy> YearEnergyData = [];
+
+  num hour_diff = 0.0, min_diff = 0.0;
+  num charging_current = 0.0,
+      charging_voltage = 0.0,
+      charging_power = 0.0,
+      overall_energy = 0.0;
+
+  int charging_state = 0,
+      auto_mode,
+      currentMax,
+      startHour = 00,
+      startMinute = 00,
+      endHour = 00,
+      endMinute = 00,
+      DurationLog = 0,
+      secLog = 0,
+      hourLog = 0,
+      minuteLog = 0,
+      energyLog = 0,
+      TotalOccurrences = 0,
+      Occurrences = 0,
+      StartNumber = -4,
+      EndNumber = 1,
+      logNumber = 0;
+
+  String timeLog = "", modLog = "", device_id = "", modeValue;
+  bool isScheduling = false, CurrentLog = true, isPaused = false;
+  List<Array10> ChargerSummaryList = new List();
+  Array10 array10 = new Array10();
+  List<Array12> WeekEnergyList;
+
+  List<Array12> MonthEnergyList;
+
+  List<Array12> YearEnergyList;
+
+  bool readyLoader = false,
+      stopLoader = false,
+      ChargingSummaryLoader = false,
+      EvAnalysisLoader = false,
+      isResponse8 = false;
+
+  CommonResponse commonResponse = new CommonResponse();
+  ResponseMsgId6 responseMsgId6 = new ResponseMsgId6();
+  Properties6 responsePropertyMsgId6 = new Properties6();
+  ResponseMsgId8 responseMsgId8;
+  Properties8 responsePropertyMsgId8 = new Properties8();
+  Properties1 commonResponseProperty = new Properties1();
+  ResponseMsgId10 responseMsgId10 = new ResponseMsgId10();
+  Properties10 responsePropertyMsgId10 = new Properties10();
+  ResponseMsgId12 responseMsgId12 = new ResponseMsgId12();
+  Properties12 responsePropertyMsgId12 = new Properties12();
+  ResponseMsgId14 responseMsgId14 = new ResponseMsgId14();
+  Properties14 responsePropertyMsgId14 = new Properties14();
+  ResponseMsgId15 responseMsgId15 = new ResponseMsgId15();
+  Properties15 responsePropertyMsgId15 = new Properties15();
+  ResponseMsgId16 responseMsgId16 = new ResponseMsgId16();
+  Properties16 responsePropertyMsgId16 = new Properties16();
+  ResponseMsgId19 responseMsgId19 = new ResponseMsgId19();
+  Properties19 responsePropertyMsgId19 = new Properties19();
+  ResponseMsgId21 responseMsgId21 = new ResponseMsgId21();
+  Properties21 responsePropertyMsgId21 = new Properties21();
+
+  ClearLists() {
+    WeekEnergyList = null;
+    MonthEnergyList = null;
+    YearEnergyList = null;
+    WeekEnergyData.clear();
+    MonthEnergyData.clear();
+    YearEnergyData.clear();
+  }
+
+  setsocket(Socket Socket) {
+    socket = Socket;
+    notifyListeners();
+  }
+
+  void setQr(String scanData) {
+    qrText = scanData;
+    notifyListeners();
+  }
+
+  void setIndex(int Index) {
+    index = Index;
+    notifyListeners();
+  }
+
+  bool setRunning(bool running) {
+    isrunning = running;
+    notifyListeners();
+  }
+
+  // Future<bool> Network() async {
+  //   ConnectivityResult connectivityResult;
+  //   connectivityResult = await (Connectivity().checkConnectivity());
+  //   if (connectivityResult == ConnectivityResult.wifi) {
+  //     if (socket == null) {
+  //       return false;
+  //     } else {
+  //       return true;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  //   notifyListeners();
+  // }
+
+  // Future<void> ConnectServer(BuildContext context1) async {
+  //   ConnectivityResult connectivityResult =
+  //       await (Connectivity().checkConnectivity());
+  //   if (connectivityResult == ConnectivityResult.wifi) {
+  //     final gatewayinfo = await Gateway.info;
+  //     final ServerIp = gatewayinfo.ip;
+  //     print(ServerIp);
+  //     print("object");
+  //     try {
+  //       socket = await Socket.connect(ServerIp, 8080);
+  //     } on Exception catch (e) {
+  //       print("Exception" + e.toString());
+  //     }
+  //     if (socket != null) {
+  //       print(
+  //           'Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
+  //       isrunning = true;
+  //       // listen for responses from the server
+  //
+  //       socket.listen(
+  //         // handle data from the server
+  //         (Uint8List data) {
+  //           // print(data);
+  //           /* String serverResponse =
+  //             "{\"msg_id\":12,\"properties\": {\"type\": 3,\"array\": [{\"energy\": 3444},{\"energy\": 3454},{\"energy\": 7888},{\"energy\": 5455},{\"energy\": 6465},{\"energy\": 8888},{\"energy\": 7777},{\"energy\": 3444},{\"energy\": 8888},{\"energy\": 8655},{\"energy\": 3333},{\"energy\": 6666},{\"energy\": 6677},{\"energy\": 7655},{\"energy\": 3333},{\"energy\": 3333},{\"energy\": 9999},{\"energy\": 1666},{\"energy\": 2545},{\"energy\": 9899},{\"energy\": 6656},{\"energy\": 3466},{\"energy\": 3567},{\"energy\": 7655},{\"energy\": 7898},{\"energy\": 4557},{\"energy\": 8878},{\"energy\": 3233},{\"energy\": 5678},{\"energy\": 5553}]}}\n\r";
+  //       */
+  //           String serverResponse = String.fromCharCodes(data);
+  //           if (serverResponse.contains("{\"msg_id\":")) {
+  //             List<String> Message = new List();
+  //             final split = serverResponse.split("\n\r");
+  //             for (int i = 0; i < split.length - 1; i++) {
+  //               Message.add(split[i]);
+  //             }
+  //             for (var value in Message) {
+  //               print(value);
+  //               String splitString = value.split("{\"msg_id\":")[1];
+  //               String msgId = splitString.split(",")[0];
+  //               setResponse(context1, value, msgId);
+  //             }
+  //           }
+  //         },
+  //         // handle errors
+  //         onError: (error) async {
+  //           print("Error===" + error.toString());
+  //           socket.destroy();
+  //           responseMsgId8 = null;
+  //           // SystemNavigator.pop();
+  //           if (context1 != null)
+  //             Navigator.of(context1).pushAndRemoveUntil(
+  //                 MaterialPageRoute(builder: (context1) => Connection()),
+  //                 (Route<dynamic> route) => false);
+  //           AppSettings.openWIFISettings();
+  //         },
+  //
+  //         // handle server ending connection
+  //         onDone: () {
+  //           print('Server left.');
+  //           responseMsgId8 = null;
+  //           socket.destroy();
+  //           Navigator.pop(context1);
+  //         },
+  //       );
+  //
+  //       // send some messages to the server
+  //       SendRequest1(1, EpochTime());
+  //       // CommonRequests(20);
+  //     } else {
+  //       print("Something Wrong with Ip Address");
+  //
+  //       //SystemNavigator.pop();
+  //       if (context1 != null)
+  //         Navigator.of(context1).pushAndRemoveUntil(
+  //             MaterialPageRoute(builder: (context1) => Connection()),
+  //             (Route<dynamic> route) => false);
+  //       AppSettings.openWIFISettings();
+  //     }
+  //   } else {
+  //     print("Wifi is not on or Mobile data is on");
+  //
+  //     // SystemNavigator.pop();
+  //     if (context1 != null)
+  //       Navigator.of(context1).pushAndRemoveUntil(
+  //           MaterialPageRoute(builder: (context1) => Connection()),
+  //           (Route<dynamic> route) => false);
+  //     AppSettings.openWIFISettings();
+  //   }
+  // }
+  //
+  // int EpochTime() {
+  //   int Epoch_time =
+  //       ((DateTime.now().millisecondsSinceEpoch) / 1000).ceil() as int;
+  //   return Epoch_time;
+  // }
+  //
+  // Future<void> sendMessage(Socket socket, String message) async {
+  //   print('Client: $message');
+  //   socket.write(message);
+  //   await Future.delayed(Duration(seconds: 2));
+  // }
+
+  Future<void> setResponse(
+      BuildContext context, String response, String msgId) async {
+    switch (msgId) {
+      case "1":
+        try {
+          stopLoader = false;
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          print(status.toString() + msgId.toString());
+          if (status != 0) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            CommonRequests(20);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "3":
+      case "4":
+        try {
+          stopLoader = false;
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          print(status.toString() + msgId.toString());
+          if (status != 0) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "2":
+        try {
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          print(status.toString() + msgId.toString());
+          if (status < 1) {
+            final pref = await SharedPreferences.getInstance();
+            pref.setInt("startHour", startHour);
+            pref.setInt("startMinute", startMinute);
+            pref.setInt("endHour", endHour);
+            pref.setInt("endMinute", endMinute);
+            pref.setBool("isScheduling", isScheduling);
+          } else {
+            CommonWidgets().showErrorSnackbar(context, status);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "6":
+        try {
+          responseMsgId6 = ResponseMsgId6.fromJson(jsonDecode(response));
+          responsePropertyMsgId6 = responseMsgId6.properties;
+          status = responsePropertyMsgId6.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            charging_current = responsePropertyMsgId6.current;
+            charging_voltage = responsePropertyMsgId6.voltage;
+            charging_power = responsePropertyMsgId6.power;
+            overall_energy = responsePropertyMsgId6.sessionEnergy;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "8":
+        try {
+          readyLoader = false;
+          isResponse8 = true;
+          responseMsgId8 = new ResponseMsgId8();
+          responseMsgId8 = ResponseMsgId8.fromJson(jsonDecode(response));
+          responsePropertyMsgId8 = responseMsgId8.properties;
+          status = responseMsgId8.properties.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            if (!isPaused)
+              charging_state = responsePropertyMsgId8.evChargingState;
+            else {
+              if (responsePropertyMsgId8.evChargingState != 66) {
+                charging_state = responsePropertyMsgId8.evChargingState;
+              }
+            }
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "10":
+        try {
+          setChargingSummaryLoader(false);
+          responseMsgId10 = ResponseMsgId10.fromJson(jsonDecode(response));
+          responsePropertyMsgId10 = responseMsgId10.properties;
+          status = responsePropertyMsgId10.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            ChargerSummaryList = responsePropertyMsgId10.array;
+            if (CurrentLog || isPaused) {
+              final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm:ss aa');
+              timeLog = formatter.format(DateTime.fromMillisecondsSinceEpoch(
+                  (ChargerSummaryList[0].time) * 1000));
+              if (ChargerSummaryList[0].mode == 1 ||
+                  ChargerSummaryList[0].mode == 6)
+                modLog = "Manual";
+              else if (ChargerSummaryList[0].mode == 2 ||
+                  ChargerSummaryList[0].mode == 7)
+                modLog = "Schedule";
+              else
+                modLog = "-Manual";
+              DurationLog = ChargerSummaryList[0].duration;
+              secLog = DurationLog % 60;
+              minuteLog = ((DurationLog / 60) % 60).round();
+              hourLog = ((DurationLog / 60) / 60).round();
+              energyLog = ChargerSummaryList[0].sessionEnergy;
+            }
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "12":
+        try {
+          responseMsgId12 = ResponseMsgId12.fromJson(jsonDecode(response));
+          responsePropertyMsgId12 = responseMsgId12.properties;
+          status = responsePropertyMsgId12.status;
+          int type = responsePropertyMsgId12.type;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+            setEvAnalysisLoader(false);
+          } else {
+            if (type == 1) {
+              WeekEnergyList = new List();
+              WeekEnergyList = responsePropertyMsgId12.array;
+              getWeekData();
+            } else if (type == 2) {
+              setEvAnalysisLoader(false);
+              MonthEnergyList = new List();
+              MonthEnergyList = responsePropertyMsgId12.array;
+              getMonthData();
+            } else if (type == 3) {
+              YearEnergyList = new List();
+              YearEnergyList = responsePropertyMsgId12.array;
+              getYearData();
+            }
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "13":
+        try {
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          print(status.toString() + msgId.toString());
+          if (status < 1) {
+            final pref = await SharedPreferences.getInstance();
+            pref.setInt("currentMax", currentMax);
+          } else {
+            CommonWidgets().showErrorSnackbar(context, status);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "14":
+        try {
+          // isResponse14 = true;
+          responseMsgId14 = ResponseMsgId14.fromJson(jsonDecode(response));
+          responsePropertyMsgId14 = responseMsgId14.properties;
+          status = responsePropertyMsgId14.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            if (responsePropertyMsgId14.maxCurrent == 6)
+              currentMax = 0;
+            else if (responsePropertyMsgId14.maxCurrent == 10)
+              currentMax = 1;
+            else if (responsePropertyMsgId14.maxCurrent == 15)
+              currentMax = 2;
+            else if (responsePropertyMsgId14.maxCurrent == 18)
+              currentMax = 3;
+            else if (responsePropertyMsgId14.maxCurrent == 24)
+              currentMax = 4;
+            else if (responsePropertyMsgId14.maxCurrent == 30)
+              currentMax = 5;
+            else
+              currentMax = 5;
+            /*currentMax = String.valueOf(responsePropertyMsgId14.getMaxCurrent());
+            PreferenceMan.getInstance().setMaxCurrent(Integer.parseInt(currentMax));
+          */
+            final pref = await SharedPreferences.getInstance();
+            pref.setInt("currentMax", currentMax);
+          }
+          //  statusMsg(status, AppController.getInstance(), msgId);
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "15":
+        try {
+          //isResponse15 = true;
+          responseMsgId15 = ResponseMsgId15.fromJson(jsonDecode(response));
+          responsePropertyMsgId15 = responseMsgId15.properties;
+          int status = responsePropertyMsgId15.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            startHour = (responsePropertyMsgId15.wdStartTm / 100).round();
+            startMinute = responsePropertyMsgId15.wdStartTm % 100;
+            endHour = (responsePropertyMsgId15.wdEndTm / 100).round();
+            endMinute = responsePropertyMsgId15.wdEndTm % 100;
+            isScheduling = responsePropertyMsgId15.isSchedule != 0;
+
+            final pref = await SharedPreferences.getInstance();
+            pref.setInt("startHour", startHour);
+            pref.setInt("startMinute", startMinute);
+            pref.setInt("endHour", endHour);
+            pref.setInt("endMinute", endMinute);
+            pref.setBool("isScheduling", isScheduling);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "16":
+        try {
+          responseMsgId16 = ResponseMsgId16.fromJson(jsonDecode(response));
+          responsePropertyMsgId16 = responseMsgId16.properties;
+          int status = responsePropertyMsgId16.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            logNumber = responsePropertyMsgId16.log;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "18":
+        try {
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          if (status != 0) {
+            CommonRequests(19);
+            CommonWidgets().showErrorSnackbar(context, status);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "19":
+        try {
+          responseMsgId19 = ResponseMsgId19.fromJson(jsonDecode(response));
+          responsePropertyMsgId19 = responseMsgId19.properties;
+          status = responsePropertyMsgId19.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            auto_mode = responsePropertyMsgId19.automode;
+            if (auto_mode == 0) {
+              modeValue = "Normal Mode";
+            } else if (auto_mode == 1) {
+              modeValue = "Plug and Play Mode";
+            } else if (auto_mode == 2) {
+              modeValue = "RFID Mode";
+            } else if (auto_mode == 3) {
+              modeValue = "OCPP Mode";
+            }
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "21":
+        try {
+          //isResponse21 = true;
+          responseMsgId21 = ResponseMsgId21.fromJson(jsonDecode(response));
+          responsePropertyMsgId21 = responseMsgId21.properties;
+          status = responsePropertyMsgId21.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            device_id = responsePropertyMsgId21.devId;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "255":
+        try {
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          CommonWidgets().showErrorSnackbar(context, status);
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+    }
+  }
+
+  Future<void> CommonRequests(int msgId) async {
+    try {
+      CommonRequest commonRequest = CommonRequest.setData(msgId);
+      await sendMessage(socket, jsonEncode(commonRequest));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest1(int msgId, int time) async {
+    try {
+      RequestMsgId1 requestMsgId1 = RequestMsgId1.setData(msgId, time);
+      await sendMessage(socket, jsonEncode(requestMsgId1));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest2(int msgId, bool Scheduling, int wdStartTime,
+      int wdEndTime, int weStartTime, int weEndTime, int maxCurrent) async {
+    try {
+      RequestMsgId2 requestMsgId2 = RequestMsgId2.setData(msgId, Scheduling,
+          wdStartTime, wdEndTime, weStartTime, weEndTime, maxCurrent);
+      await sendMessage(socket, jsonEncode(requestMsgId2));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest3(int msgId, int chargingStartStop) async {
+    try {
+      RequestMsgId3 requestMsgId3 =
+          RequestMsgId3.setData(msgId, chargingStartStop);
+      await sendMessage(socket, jsonEncode(requestMsgId3));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest4(int msgId, String url, String fileName) async {
+    try {
+      RequestMsgId4 requestMsgId4 = RequestMsgId4.setData(msgId, url, fileName);
+      await sendMessage(socket, jsonEncode(requestMsgId4));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest9(int msgId, int resetEnergy) async {
+    try {
+      RequestMsgId9 requestMsgId9 = RequestMsgId9.setData(msgId, resetEnergy);
+      await sendMessage(socket, jsonEncode(requestMsgId9));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest10(int msgId, int startNumber, int endNumber) async {
+    try {
+      RequestMsgId10 requestMsgId10 =
+          RequestMsgId10.setData(msgId, startNumber, endNumber);
+      await sendMessage(socket, jsonEncode(requestMsgId10));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest12(int msgId, int type) async {
+    try {
+      RequestMsgId12 requestMsgId12 = RequestMsgId12.setData(msgId, type);
+      await sendMessage(socket, jsonEncode(requestMsgId12));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest13(int msgId, int maxCurrent) async {
+    try {
+      RequestMsgId13 requestMsgId13 = RequestMsgId13.setData(msgId, maxCurrent);
+      await sendMessage(socket, jsonEncode(requestMsgId13));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest18(int msgId, int automode) async {
+    try {
+      RequestMsgId18 requestMsgId18 = RequestMsgId18.setData(msgId, automode);
+      await sendMessage(socket, jsonEncode(requestMsgId18));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  String Tips() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return "Tips: Please insert the Charging Gun";
+      } else if (charging_state == 66) {
+        return "";
+      } else if (charging_state == 67) {
+        return "";
+      } else if (charging_state == 70) {
+        return "";
+      } else if (charging_state == 73) {
+        return "Tips: There is Some Fault";
+      }
+    } else {
+      return "Tips: Your Charger is in Auto Mode";
+    }
+    notifyListeners();
+  }
+
+  bool isTip() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return true;
+      } else if (charging_state == 66) {
+        return false;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return true;
+      } else if (charging_state == 73) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    notifyListeners();
+  }
+
+  bool isbtnScheduling() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return true;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    notifyListeners();
+  }
+
+  bool isSizedBox() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return true;
+      } else if (charging_state == 66) {
+        return false;
+      } else if (charging_state == 67) {
+        return true;
+      } else if (charging_state == 70) {
+        return true;
+      } else if (charging_state == 73) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    notifyListeners();
+  }
+
+  bool isbtnReady() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return false;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    notifyListeners();
+  }
+
+  bool isbtnBoost() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return true;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    notifyListeners();
+  }
+
+  bool isChargingTxt() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return false;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    notifyListeners();
+  }
+
+  bool isNextChargingTxt() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return false;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    notifyListeners();
+  }
+
+  bool isReadyCard() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return true;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    notifyListeners();
+  }
+
+  bool isChargingCard() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return false;
+      } else if (charging_state == 66) {
+        return false;
+      } else if (charging_state == 67) {
+        return true;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    notifyListeners();
+  }
+
+  bool isPausedCard() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return false;
+      } else if (charging_state == 66) {
+        return false;
+      } else if (charging_state == 67) {
+        return false;
+      } else if (charging_state == 70) {
+        return true;
+      } else if (charging_state == 73) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    notifyListeners();
+  }
+
+  bool isTextprev() {
+    if (CurrentLog == false) {
+      if (StartNumber <= 1 || Occurrences == TotalOccurrences) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    //notifyListeners();
+  }
+
+  bool isTextNext() {
+    if (CurrentLog == false) {
+      if (EndNumber >= logNumber || Occurrences < 0)
+        return false;
+      else
+        return true;
+    }
+    // notifyListeners();
+  }
+
+  void setCurrentLog(bool current_log) {
+    CurrentLog = current_log;
+    notifyListeners();
+  }
+
+  void setisResponse8(bool IsResponse8) {
+    isResponse8 = IsResponse8;
+    notifyListeners();
+  }
+
+  void setisScheduling(bool is_Scheduling) {
+    isScheduling = is_Scheduling;
+    notifyListeners();
+  }
+
+  void setStartHour(int hour) {
+    startHour = hour;
+    notifyListeners();
+  }
+
+  void setStartMinute(int minute) {
+    startMinute = minute;
+    notifyListeners();
+  }
+
+  void setEndHour(int hour) {
+    endHour = hour;
+    notifyListeners();
+  }
+
+  void setEndMinute(int minute) {
+    endMinute = minute;
+    notifyListeners();
+  }
+
+  void setReadyLoader(bool ready_Loader) {
+    readyLoader = ready_Loader;
+    notifyListeners();
+  }
+
+  void setCurrentMax(int current) {
+    currentMax = current;
+    notifyListeners();
+  }
+
+  void setEvAnalysisLoader(bool evLoader) {
+    EvAnalysisLoader = evLoader;
+    notifyListeners();
+  }
+
+  void setStopLoader(bool stop_loader) {
+    stopLoader = stop_loader;
+    notifyListeners();
+  }
+
+  void setIsPaused(bool paused) {
+    isPaused = paused;
+    notifyListeners();
+  }
+
+  void setChargingState(int chargingState) {
+    charging_state = chargingState;
+    notifyListeners();
+  }
+
+  void setChargingSummaryLoader(bool chargingSummaryLoader) {
+    ChargingSummaryLoader = chargingSummaryLoader;
+    notifyListeners();
+  }
+
+  void setStartNumber(int start_number) {
+    StartNumber = start_number;
+    notifyListeners();
+  }
+
+  void setEndNumber(int end_number) {
+    EndNumber = end_number;
+    notifyListeners();
+  }
+
+  void setTotalOccurrences(int total_occurence) {
+    TotalOccurrences = total_occurence;
+    notifyListeners();
+  }
+
+  void setOccurrences(int occurrences) {
+    Occurrences = occurrences;
+    notifyListeners();
+  }
+
+  void setChargerSummaryList(List<Array10> List) {
+    ChargerSummaryList = List;
+    notifyListeners();
+  }
+
+  void setmodeValue(String mode_value) {
+    modeValue = mode_value;
+    notifyListeners();
+  }
+
+  void setAutoMode(int mode) {
+    auto_mode = mode;
+    notifyListeners();
+  }
+
+  void setWeekEnergyData(WeekEnergy weekEnergy) {
+    WeekEnergyData.add(weekEnergy);
+  }
+
+  void setMonthEnergyData(MonthEnergy monthEnergy) {
+    MonthEnergyData.add(monthEnergy);
+  }
+
+  void setYearEnergyData(YearEnergy yearEnergy) {
+    YearEnergyData.add(yearEnergy);
+  }
+
+  num timeDiffernce() {
+    num diffHour, diffMinute = 0.0;
+    num end_hour = endHour;
+    num end_minute = endMinute;
+    num start_hour = startHour;
+    num start_minute = startMinute;
+    if (end_minute < start_minute) {
+      if (end_hour <= start_hour) {
+        end_hour += 24;
+      }
+      end_minute += 60;
+      end_hour--;
+    } else {
+      if (end_hour < start_hour) {
+        end_hour += 24;
+      }
+    }
+    diffHour = end_hour - start_hour;
+    diffMinute = end_minute - start_minute;
+    if (diffMinute > 60) {
+      diffMinute = diffMinute - 60;
+    }
+    hour_diff = diffHour;
+    min_diff = diffMinute;
+    num diffTime = (((diffHour * 60) + diffMinute)).roundToDouble();
+    return diffTime;
+  }
+
+  void getWeekData() {
+    try {
+      if (WeekEnergyList != null) {
+        final DateFormat formatter = DateFormat('EEE');
+        String dayOfTheWeek = formatter.format(new DateTime.now());
+        int StartDayIndex = findIndex(Constants.WeekDays, dayOfTheWeek);
+        // int Index = StartDayIndex;
+        WeekEnergyList = List.from(WeekEnergyList.reversed);
+        int energyIndex = 0;
+        for (int j = StartDayIndex; j <= 6; j++) {
+          int energy = WeekEnergyList[energyIndex].energy;
+          setWeekEnergyData(WeekEnergy((energy / 1000).floor(), j + 1));
+
+          energyIndex++;
+        }
+
+        for (int i = 0; i < StartDayIndex; i++) {
+          int energy = WeekEnergyList[energyIndex].energy;
+          setWeekEnergyData(WeekEnergy((energy / 1000).round(), i + 1));
+          //WeekEnergyData.add();
+          energyIndex++;
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      print("===ExceptionWeek: " + e.toString());
+    }
+  }
+
+  void getMonthData() {
+    // try {
+    if (MonthEnergyList != null) {
+      MonthEnergyList = List.from(MonthEnergyList.reversed);
+      int PrePrevMonthDifference = 0,
+          PrePreMonthIndex = 0,
+          PrevMonthIndex = 0,
+          StartMonthIndex = 0,
+          // StartDayIndex,
+          PrevPreDifference = 0,
+          PreDifference = 0,
+          PrevMonthDifference = 0,
+          PreEndPoint = 0,
+          PrePreEndPoint = 0;
+      final DateFormat formatter1 = DateFormat('dd');
+      final DateFormat formatter2 = DateFormat('MMM');
+      final DateFormat formatter3 = DateFormat('yyyy');
+      var date_ = formatter1.format(new DateTime.now());
+      String month = formatter2.format(new DateTime.now());
+      var year_ = formatter3.format(new DateTime.now());
+      int year = int.parse(year_);
+      int date = int.parse(date_);
+      print("$date:$month:$year");
+      //  StartDayIndex = findIndex(Constants.Dates, date);
+      StartMonthIndex = findIndex(Constants.Months, month);
+      PreDifference = 31 - date;
+
+      PrevMonthIndex = StartMonthIndex - 1;
+      String PrevMonth = Constants.Months[PrevMonthIndex];
+      if (PrevMonth == "Jan" ||
+          PrevMonth == "Mar" ||
+          PrevMonth == "May" ||
+          PrevMonth == "Jul" ||
+          PrevMonth == "Aug" ||
+          PrevMonth == "Oct" ||
+          PrevMonth == "Dec") {
+        PreEndPoint = 31;
+      } else if (PrevMonth == "Feb") {
+        if (year % 4 == 0) {
+          PreEndPoint = 28;
+        } else {
+          PreEndPoint = 29;
+        }
+      } else {
+        PreEndPoint = 30;
+      }
+      PrevMonthDifference = PreEndPoint - PreDifference + 1;
+      int energyIndex = 0;
+      if (PrevMonthDifference > 0) {
+        for (int i = PrevMonthDifference; i <= PreEndPoint; i++) {
+          int energy = MonthEnergyList[energyIndex].energy;
+          setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+          //MonthEnergyData.add();
+          energyIndex++;
+        }
+      } else {
+        if (date_ == "2" && month == "Mar" && year % 4 == 0)
+          PrevPreDifference = 29 - PreEndPoint;
+        else
+          PrevPreDifference = 30 - PreEndPoint;
+        PrePreMonthIndex = PrevMonthIndex - 1;
+        String PrePrevMonth = Constants.Months[PrePreMonthIndex];
+        if (PrePrevMonth == "Jan" ||
+            PrePrevMonth == "Mar" ||
+            PrePrevMonth == "May" ||
+            PrePrevMonth == "Jul" ||
+            PrePrevMonth == "Aug" ||
+            PrePrevMonth == "Oct" ||
+            PrePrevMonth == "Dec") {
+          PrePreEndPoint = 31;
+        } else if (PrePrevMonth == "Feb") {
+          if (year % 4 == 0) {
+            PrePreEndPoint = 28;
+          } else {
+            PrePreEndPoint = 29;
+          }
+        } else {
+          PrePreEndPoint = 30;
+        }
+        PrePrevMonthDifference = PrePreEndPoint - PrevPreDifference + 1;
+        for (int i = PrePrevMonthDifference; i <= PrePreEndPoint; i++) {
+          int energy = MonthEnergyList[energyIndex].energy;
+          setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+          //MonthEnergyData.add();
+          energyIndex++;
+        }
+        for (int i = 1; i <= PreEndPoint; i++) {
+          int energy = MonthEnergyList[energyIndex].energy;
+          setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+          //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
+          energyIndex++;
+        }
+      }
+
+      for (int i = 1; i < date; i++) {
+        int energy = MonthEnergyList[energyIndex].energy;
+        setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+        //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
+        energyIndex++;
+      }
+    }
+    notifyListeners();
+    /*} catch (e) {
+      print("===ExceptionMonth: " + e.toString());
+    }*/
+  }
+
+  void getYearData() {
+    try {
+      if (YearEnergyList != null) {
+        int StartMonthIndex;
+        final DateFormat formatter = DateFormat('MMM');
+        String month = formatter.format(new DateTime.now());
+        StartMonthIndex = findIndex(Constants.Months, month);
+        int energyIndex = 0;
+        for (int j = StartMonthIndex; j <= 11; j++) {
+          int energy = YearEnergyList[energyIndex].energy;
+          setYearEnergyData(YearEnergy((energy / 1000).floorToDouble(), j + 1));
+          // YearEnergyData.add(YearEnergy((energy / 1000).floorToDouble(), j + 1));
+          energyIndex++;
+        }
+
+        for (int i = 0; i < StartMonthIndex; i++) {
+          int energy = YearEnergyList[energyIndex].energy;
+          setYearEnergyData(YearEnergy((energy / 1000).floorToDouble(), i + 1));
+          //YearEnergyData.add(YearEnergy((energy / 1000).floorToDouble(), i + 1));
+          energyIndex++;
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      print("===ExceptionYear: " + e.toString());
+    }
+  }
+
+  int findIndex(List<String> list, String t) {
+    if (list == null) {
+      return -1;
+    }
+    int len = list.length;
+    int i = 0;
+
+    // traverse in the array
+    while (i < len) {
+      if (list[i] == t) {
+        return i;
+      } else {
+        i = i + 1;
+      }
+    }
+    return -1;
+  }
+}
