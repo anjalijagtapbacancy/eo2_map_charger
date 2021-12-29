@@ -61,7 +61,7 @@ dev_dependencies:
   fluttertoast: ^8.0.8
 
 flutter_icons:
-  image_path: "assets/icons/charging_gun.png"
+  image_path: "assets/icons/charging_gun_icon.png"
   ios: true
   android: true
 

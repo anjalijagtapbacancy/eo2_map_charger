@@ -7,7 +7,7 @@ import 'ConstantFunction/custom_navigation.dart';
 import 'ConstantFunction/Constants.dart';
 import 'VisibilityWidgets.dart';
 
-void main() async {
+void main() {
   runApp(MyApp());
 }
 

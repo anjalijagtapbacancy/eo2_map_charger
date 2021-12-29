@@ -23,8 +23,8 @@ Future<void> ConnectServer(BuildContext context1) async {
       await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.wifi) {
     final gatewayinfo = await Gateway.info;
-    ServerIp = gatewayinfo.ip;
-    print(ServerIp);
+   // ServerIp = gatewayinfo.ip;
+   // print(ServerIp);
     print("object");
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       visibilityWidgetsRead = context1.read<VisibilityWidgets>();
@@ -35,14 +35,14 @@ Future<void> ConnectServer(BuildContext context1) async {
         print("${visibilityWidgetsRead.qrText}");
 
         try {
-          // InternetAddress.lookup("${visibilityWidgetsRead.qrText}.local")
-          //     .then((value) {
-          //   value.forEach((element) async {
-          //    // ServerIp = element.address;
-          //    // print("ServerIp== $ServerIp");
-          //   });
-          // });
-          socket = await Socket.connect(ServerIp, 8080);
+          InternetAddress.lookup("${visibilityWidgetsRead.qrText}.local")
+              .then((value) {
+            value.forEach((element) async {
+              ServerIp = element.address;
+              print("ServerIp== $ServerIp");
+            });
+          });
+          socket = await Socket.connect("${visibilityWidgetsRead.qrText}.local", 8080);
           visibilityWidgetsRead.setsocket(socket);
         } on Exception catch (e) {
           print("Exception" + e.toString());

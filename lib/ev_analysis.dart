@@ -124,8 +124,8 @@ class ev_analysis_state extends State<EvAnalysis>
                                     name: "Voltages",
                                     labelFormat: '{value} V',
                                   ),
-                                  series: <ColumnSeries<WeekEnergy, int>>[
-                                    ColumnSeries<WeekEnergy, int>(
+                                  series: <ColumnSeries<WeekEnergy, String>>[
+                                    ColumnSeries<WeekEnergy, String>(
                                         dataSource: visibilityWidgetsWatch.WeekEnergyData,
                                         xValueMapper:
                                             (WeekEnergy weekEnergy, _) =>
@@ -178,8 +178,8 @@ class ev_analysis_state extends State<EvAnalysis>
                                     name: "Voltages",
                                     labelFormat: '{value} V',
                                   ),
-                                  series: <ColumnSeries<YearEnergy, int>>[
-                                    ColumnSeries<YearEnergy, int>(
+                                  series: <ColumnSeries<YearEnergy, String>>[
+                                    ColumnSeries<YearEnergy, String>(
                                         dataSource: visibilityWidgetsWatch
                                             .YearEnergyData,
                                         xValueMapper:
@@ -240,8 +240,8 @@ class ev_analysis_state extends State<EvAnalysis>
 
 }
 class WeekEnergy {
-  num energy;
-  int time;
+  double energy;
+  String time;
 
   WeekEnergy(this.energy, this.time);
 }
@@ -254,8 +254,8 @@ class MonthEnergy {
 }
 
 class YearEnergy {
-  num energy;
-  int time;
+  double energy;
+  String time;
 
   YearEnergy(this.energy, this.time);
 }
