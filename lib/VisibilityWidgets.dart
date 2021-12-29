@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -37,6 +38,7 @@ import 'model/Response/ResponseMsgId15.dart';
 import 'model/Response/ResponseMsgId16.dart';
 import 'model/Response/ResponseMsgId19.dart';
 import 'model/Response/ResponseMsgId21.dart';
+import 'model/Response/ResponseMsgId22.dart';
 import 'model/Response/ResponseMsgId6.dart';
 
 class VisibilityWidgets with ChangeNotifier {
@@ -73,7 +75,19 @@ class VisibilityWidgets with ChangeNotifier {
       EndNumber = 1,
       logNumber = 0;
 
-  String timeLog = "", modLog = "", device_id = "", modeValue;
+  int StartTime = 0,
+      diffHour = 0,
+      diffMinute = 0,
+      diffSeconds = 0,
+      DifferenceTime;
+
+  DateTime date, StartDate;
+  String timeLog = "",
+      modLog = "",
+      device_id = "",
+      modeValue,
+      fileName,
+      fileUrl;
   bool isScheduling = false, CurrentLog = true, isPaused = false;
   List<Array10> ChargerSummaryList = new List();
   Array10 array10 = new Array10();
@@ -83,11 +97,13 @@ class VisibilityWidgets with ChangeNotifier {
 
   List<Array12> YearEnergyList;
 
-  bool readyLoader = false,
-      stopLoader = false,
+  bool readyLoader = true,
+      stopLoader = true,
       ChargingSummaryLoader = false,
       EvAnalysisLoader = false,
       isResponse8 = false;
+
+  StreamSubscription subscription;
 
   CommonResponse commonResponse = new CommonResponse();
   ResponseMsgId6 responseMsgId6 = new ResponseMsgId6();
@@ -109,6 +125,8 @@ class VisibilityWidgets with ChangeNotifier {
   Properties19 responsePropertyMsgId19 = new Properties19();
   ResponseMsgId21 responseMsgId21 = new ResponseMsgId21();
   Properties21 responsePropertyMsgId21 = new Properties21();
+  ResponseMsgId22 responseMsgId22 = new ResponseMsgId22();
+  Properties22 responsePropertyMsgId22 = new Properties22();
 
   ClearLists() {
     WeekEnergyList = null;
@@ -139,20 +157,40 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<bool> Network() async {
-  //   ConnectivityResult connectivityResult;
-  //   connectivityResult = await (Connectivity().checkConnectivity());
-  //   if (connectivityResult == ConnectivityResult.wifi) {
-  //     if (socket == null) {
-  //       return false;
-  //     } else {
-  //       return true;
+  // void Network(BuildContext context) {
+  //   subscription = Connectivity()
+  //       .onConnectivityChanged
+  //       .listen((ConnectivityResult result) {
+  //     if (socket != null) {
+  //       print("close");
+  //       socket.close();
+  //       Navigator.of(context).pushAndRemoveUntil(
+  //           MaterialPageRoute(builder: (context) => Connection()),
+  //           (Route<dynamic> route) => false);
   //     }
-  //   } else {
-  //     return false;
-  //   }
-  //   notifyListeners();
+  //   });
   // }
+
+  Future<void> Network(BuildContext context) async {
+    ConnectivityResult connectivityResult;
+    connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.wifi) {
+      if (socket == null) {
+        responseMsgId8 = null;
+        print("close if");
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Connection()),
+            (Route<dynamic> route) => false);
+      }
+    } else {
+      responseMsgId8 = null;
+      print("close else");
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Connection()),
+          (Route<dynamic> route) => false);
+    }
+    notifyListeners();
+  }
 
   // Future<void> ConnectServer(BuildContext context1) async {
   //   ConnectivityResult connectivityResult =
@@ -337,11 +375,15 @@ class VisibilityWidgets with ChangeNotifier {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
             if (!isPaused)
+              //charging_state = 67;
               charging_state = responsePropertyMsgId8.evChargingState;
             else {
               if (responsePropertyMsgId8.evChargingState != 66) {
                 charging_state = responsePropertyMsgId8.evChargingState;
               }
+            }
+            if (charging_state == 67) {
+              startCounting();
             }
           }
         } catch (e) {
@@ -546,6 +588,23 @@ class VisibilityWidgets with ChangeNotifier {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
             device_id = responsePropertyMsgId21.devId;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "22":
+        try {
+          responseMsgId22 = ResponseMsgId22.fromJson(jsonDecode(response));
+          responsePropertyMsgId22 = responseMsgId22.properties;
+          status = responsePropertyMsgId22.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            setStartTime(responsePropertyMsgId22.starttm);
+            //setStartTime(1640681762);
+            StartDate = DateTime.fromMillisecondsSinceEpoch(
+                (StartTime * 1000).ceil() as int);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -1005,6 +1064,21 @@ class VisibilityWidgets with ChangeNotifier {
     YearEnergyData.add(yearEnergy);
   }
 
+  void setStartTime(int startTime) {
+    StartTime = startTime;
+    notifyListeners();
+  }
+
+  void setfileName(String file_name) {
+    fileName = file_name;
+    notifyListeners();
+  }
+
+  void setfileUrl(String file_url) {
+    fileUrl = file_url;
+    notifyListeners();
+  }
+
   num timeDiffernce() {
     num diffHour, diffMinute = 0.0;
     num end_hour = endHour;
@@ -1213,5 +1287,29 @@ class VisibilityWidgets with ChangeNotifier {
       }
     }
     return -1;
+  }
+
+  void startCounting() async {
+    while (charging_state == 67) {
+      if (StartTime != 0) {
+        DifferenceTime = DateTime.now().difference(StartDate).inSeconds;
+        diffSeconds = (DifferenceTime % 60);
+        diffMinute = ((DifferenceTime / 60) % 60).floor();
+        diffHour = ((DifferenceTime / 60) / 60).floor();
+      }
+      notifyListeners();
+      await Future.delayed(Duration(milliseconds: 200));
+      // } else {
+      //   DifferenceTime = 0;
+      // }
+    }
+  }
+
+  void clearData() {
+    charging_current = 0;
+    charging_voltage = 0;
+    charging_power = 0;
+    overall_energy = 0;
+    notifyListeners();
   }
 }

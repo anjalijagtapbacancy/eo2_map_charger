@@ -38,6 +38,7 @@ class dashboard_state extends State<DashBoard>
   String ChargingText, NextChargingText;
   VisibilityWidgets visibilityWidgetsRead;
   VisibilityWidgets visibilityWidgetsWatch;
+
   //StreamSubscription subscription;
 
   dashboard_state();
@@ -66,17 +67,6 @@ class dashboard_state extends State<DashBoard>
                   }
               }
           });
-
-      // subscription = Connectivity()
-      //     .onConnectivityChanged
-      //     .listen((ConnectivityResult result) {
-      //       if(visibilityWidgetsRead.socket!=null) {
-      //         visibilityWidgetsRead.socket.close();
-      //         Navigator.of(context).pushAndRemoveUntil(
-      //             MaterialPageRoute(builder: (context) => Connection()),
-      //                 (Route<dynamic> route) => false);
-      //       }
-      // });
     });
     linearAnimationController = AnimationController(
         duration: const Duration(milliseconds: 2500), vsync: this);
@@ -93,8 +83,8 @@ class dashboard_state extends State<DashBoard>
 
   @override
   void dispose() {
+   // visibilityWidgetsRead.responseMsgId8 = null;
     linearAnimationController.dispose();
-    //subscription.cancel();
     super.dispose();
   }
 
@@ -104,6 +94,8 @@ class dashboard_state extends State<DashBoard>
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
+    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+      visibilityWidgetsWatch.Network(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(242, 255, 229, 1),
       body:
@@ -627,6 +619,8 @@ class dashboard_state extends State<DashBoard>
                                               child: GestureDetector(
                                                 onTap: () async {
                                                   visibilityWidgetsWatch
+                                                      .clearData();
+                                                  visibilityWidgetsWatch
                                                       .setReadyLoader(true);
                                                   visibilityWidgetsWatch
                                                       .SendRequest3(3, 1);
@@ -1072,8 +1066,8 @@ class dashboard_state extends State<DashBoard>
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .center,
-                                                      children: const [
-                                                        AspectRatio(
+                                                      children: [
+                                                        /* AspectRatio(
                                                           aspectRatio: 7,
                                                           child: Image(
                                                             image: AssetImage(
@@ -1081,14 +1075,38 @@ class dashboard_state extends State<DashBoard>
                                                                   .flash_charging,
                                                             ),
                                                           ),
+                                                        ),*/
+                                                        Text(
+                                                          sprintf(
+                                                              '%02d:%02d:%02d',
+                                                              [
+                                                                visibilityWidgetsWatch
+                                                                    .diffHour,
+                                                                visibilityWidgetsWatch
+                                                                    .diffMinute,
+                                                                visibilityWidgetsWatch
+                                                                    .diffSeconds
+                                                              ]),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.green,
+                                                              wordSpacing: 3,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 15),
                                                         ),
                                                         Text(
                                                           "Charging",
                                                           style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              wordSpacing: 3,
                                                               color:
                                                                   Colors.green,
                                                               fontSize: 15),
-                                                        )
+                                                        ),
                                                       ],
                                                     ),
                                                   )),

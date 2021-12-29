@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:eo2_map_charger/ConnectServer.dart';
+import 'package:eo2_map_charger/ota.dart';
 import 'package:eo2_map_charger/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -50,6 +51,7 @@ class home_state extends State<Home> {
     ConnectServer(context);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setIndex(0);
       //visibilityWidgetsRead.ConnectServer(context);
     });
     // VisibilityWidgets().ConnectServer(context);
@@ -111,10 +113,18 @@ class home_state extends State<Home> {
                   },
                 ),
                 ListTile(
+                  leading: Image.asset(AssetConstants.ota),
+                  title: const Text('OTA'),
+                  onTap: () {
+                    visibilityWidgetsWatch.setIndex(3);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
                   leading: Image.asset(AssetConstants.contact_us),
                   title: const Text('Contact Us'),
                   onTap: () {
-                    visibilityWidgetsWatch.setIndex(3);
+                    visibilityWidgetsWatch.setIndex(4);
                     Navigator.pop(context);
                   },
                 ),
@@ -142,6 +152,8 @@ class home_state extends State<Home> {
         visibilityWidgetsWatch.CommonRequests(19);
         return Settings();
       case 3:
+        return OTA();
+      case 4:
         return ContactUs();
     }
   }

@@ -88,6 +88,8 @@ class charging_summary_state extends State<ChargingSummary> {
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
+    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+      visibilityWidgetsWatch.Network(context);
     return Scaffold(
       body: visibilityWidgetsWatch.ChargerSummaryList != null
           ? visibilityWidgetsWatch.ChargingSummaryLoader == false
@@ -499,6 +501,18 @@ class charging_summary_state extends State<ChargingSummary> {
       return "Manual Stop";
     } else if (event == 5) {
       return "Power Loss";
+    } else if (event == 6) {
+      return "Charging Start";
+    } else if (event == 7) {
+      return "Other";
+    } else if (event == 8) {
+      return "OverCurrent";
+    } else if (event == 9) {
+      return "OverVoltage";
+    } else if (event == 10) {
+      return "UnderVoltage";
+    } else if (event == 11) {
+      return "Emergency Stop";
     }
   }
 }

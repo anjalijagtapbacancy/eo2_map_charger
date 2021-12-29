@@ -22,9 +22,7 @@ class RequestMsgId4 {
 
   static RequestMsgId4 setData(int msgId, String url, String fileName) {
     RequestMsgId4 requestMsgId4 = new RequestMsgId4();
-    Properties properties = requestMsgId4.properties;
-    properties.url = url;
-    properties.fileName = fileName;
+    Properties properties = new Properties(fileName: fileName, url: url);
     requestMsgId4.msgId = msgId;
     requestMsgId4.properties = properties;
     return requestMsgId4;

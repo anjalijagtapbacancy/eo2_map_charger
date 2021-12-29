@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/src/provider.dart';
 
 import 'ConstantFunction/Constants.dart';
+import 'VisibilityWidgets.dart';
 
 class ContactUs extends StatefulWidget {
   ContactUs();
@@ -12,9 +15,21 @@ class ContactUs extends StatefulWidget {
 
 class contact_us extends State<ContactUs> {
   contact_us();
+  VisibilityWidgets visibilityWidgetsRead;
+  VisibilityWidgets visibilityWidgetsWatch;
 
   @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      visibilityWidgetsRead = context.read<VisibilityWidgets>();
+    });
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+    visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
+    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+      visibilityWidgetsWatch.Network(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),

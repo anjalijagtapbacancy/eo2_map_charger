@@ -56,7 +56,8 @@ class ev_analysis_state extends State<EvAnalysis>
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
-    print("visibilityWidgetsWatch.WeekEnergyData.length== ${visibilityWidgetsWatch.WeekEnergyData.length}");
+    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+      visibilityWidgetsWatch.Network(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Ev Analysis"),

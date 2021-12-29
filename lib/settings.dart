@@ -43,6 +43,8 @@ class settings_state extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
+    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+      visibilityWidgetsWatch.Network(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15.0),

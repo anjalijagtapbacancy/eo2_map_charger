@@ -21,6 +21,7 @@ class AssetConstants {
   static const ic_twitter = "assets/icons/ic_twitter.png";
   static const ic_youtube = "assets/icons/ic_youtube.png";
   static const loader = "assets/icons/loader.gif";
+  static const ota = "assets/icons/snow.png";
 }
 class Constants {
   static List<String> WeekDays = [
