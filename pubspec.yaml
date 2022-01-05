@@ -59,6 +59,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.2
   qr_code_scanner: ^0.1.0
   fluttertoast: ^8.0.8
+  multicast_dns: ^0.3.1
 
 flutter_icons:
   image_path: "assets/icons/charging_gun_icon.png"

@@ -52,7 +52,7 @@ class dashboard_state extends State<DashBoard>
       visibilityWidgetsRead.setCurrentLog(true);
       visibilityWidgetsRead.setisResponse8(false);
       Future.delayed(
-        Duration(seconds: 7),
+        Duration(seconds: visibilityWidgetsRead.TIMEDELAY),
       ).then((value) => {
             if (mounted)
               {
@@ -83,7 +83,7 @@ class dashboard_state extends State<DashBoard>
 
   @override
   void dispose() {
-   // visibilityWidgetsRead.responseMsgId8 = null;
+    // visibilityWidgetsRead.responseMsgId8 = null;
     linearAnimationController.dispose();
     super.dispose();
   }
@@ -94,7 +94,7 @@ class dashboard_state extends State<DashBoard>
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
-    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+    if (mounted && visibilityWidgetsWatch.responseMsgId8 != null)
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(242, 255, 229, 1),
@@ -142,6 +142,7 @@ class dashboard_state extends State<DashBoard>
                                   ),
                                 ),
                                 onPressed: () {
+                                  visibilityWidgetsWatch.ClearLists();
                                   visibilityWidgetsWatch.SendRequest12(12, 1);
                                   Navigator.push(
                                       context,
@@ -969,7 +970,7 @@ class dashboard_state extends State<DashBoard>
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      const EdgeInsets.fromLTRB(10, 5, 10, 0),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15.0),
@@ -1768,5 +1769,14 @@ class dashboard_state extends State<DashBoard>
         );
       },
     );
+  }
+
+  void discovery() async {
+    try {
+      // Parse the command line arguments.
+
+    } catch (Exception) {
+      print("Exception== ${Exception.toString()}");
+    }
   }
 }

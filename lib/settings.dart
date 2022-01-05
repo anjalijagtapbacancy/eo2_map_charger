@@ -24,6 +24,7 @@ class settings_state extends State<Settings> {
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.CommonRequests(19);
     });
     super.initState();
   }
