@@ -98,15 +98,17 @@ class dashboard_state extends State<DashBoard>
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(242, 255, 229, 1),
-      body:
-          visibilityWidgetsWatch.responseMsgId8 != null &&
-                  visibilityWidgetsWatch.readyLoader == false &&
-                  visibilityWidgetsWatch.stopLoader == false
-              ? Column(
-                  children: [
-                    Expanded(
-                        child: SingleChildScrollView(
+      body: Column(
+        children: [
+          Expanded(
+              child: visibilityWidgetsWatch.responseMsgId8 != null &&
+                      visibilityWidgetsWatch.readyLoader == false &&
+                      visibilityWidgetsWatch.stopLoader == false
+                  ? SingleChildScrollView(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -285,7 +287,7 @@ class dashboard_state extends State<DashBoard>
                                                                     Padding(
                                                                       padding: const EdgeInsets
                                                                               .all(
-                                                                          10.0),
+                                                                          5.0),
                                                                       child:
                                                                           Row(
                                                                         mainAxisSize:
@@ -355,7 +357,7 @@ class dashboard_state extends State<DashBoard>
                                                                                         style: TextStyle(fontWeight: FontWeight.bold),
                                                                                       ),
                                                                                       SizedBox(
-                                                                                        height: 20,
+                                                                                        height: 15,
                                                                                         width: 20,
                                                                                       ),
                                                                                       Text(
@@ -403,7 +405,7 @@ class dashboard_state extends State<DashBoard>
                                                                                         style: TextStyle(fontWeight: FontWeight.bold),
                                                                                       ),
                                                                                       SizedBox(
-                                                                                        height: 20,
+                                                                                        height: 15,
                                                                                         width: 20,
                                                                                       ),
                                                                                       Text(
@@ -435,9 +437,7 @@ class dashboard_state extends State<DashBoard>
                                                                     ),
                                                                     Container(
                                                                       height:
-                                                                          200,
-                                                                      width:
-                                                                          200,
+                                                                          120,
                                                                       child: SfRadialGauge(
                                                                           axes: <
                                                                               RadialAxis>[
@@ -450,6 +450,7 @@ class dashboard_state extends State<DashBoard>
                                                                               startAngle: 270,
                                                                               maximum: 1440,
                                                                               endAngle: 270,
+                                                                              canScaleToFit: true,
                                                                               minimum: 0,
                                                                               showLabels: false,
                                                                               showTicks: false,
@@ -480,7 +481,7 @@ class dashboard_state extends State<DashBoard>
                                                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                                                     children: [
                                                                                       SizedBox(
-                                                                                        width: 13,
+                                                                                        width: 11,
                                                                                         height: 5,
                                                                                       ),
                                                                                       Text(
@@ -978,7 +979,7 @@ class dashboard_state extends State<DashBoard>
                                     color: Colors.white,
                                     elevation: 10,
                                     child: Column(
-                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
@@ -986,7 +987,7 @@ class dashboard_state extends State<DashBoard>
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
-                                              0, 5, 15, 0),
+                                              0, 0, 15, 0),
                                           child: Row(
                                             children: [
                                               Expanded(
@@ -1042,12 +1043,13 @@ class dashboard_state extends State<DashBoard>
                                           ),
                                         ),
                                         Container(
-                                          height: 290,
+                                          height: 240,
                                           child: SfRadialGauge(
                                             axes: <RadialAxis>[
                                               RadialAxis(
                                                 minimum: 0,
                                                 interval: 1,
+                                                canScaleToFit: true,
                                                 maximum: 360,
                                                 showLabels: false,
                                                 showTicks: false,
@@ -1137,6 +1139,7 @@ class dashboard_state extends State<DashBoard>
                                               RadialAxis(
                                                 minimum: 0,
                                                 interval: 1,
+                                                canScaleToFit: true,
                                                 maximum: 20,
                                                 showLabels: true,
                                                 showTicks: true,
@@ -1205,7 +1208,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 const SizedBox(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: 20,
                                                 ),
                                                 const Text(
@@ -1241,7 +1244,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 SizedBox(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: 20,
                                                 ),
                                                 Text(
@@ -1290,7 +1293,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 SizedBox(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: 20,
                                                 ),
                                                 Text(
@@ -1326,7 +1329,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 const SizedBox(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: 20,
                                                 ),
                                                 const Text(
@@ -1353,7 +1356,7 @@ class dashboard_state extends State<DashBoard>
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      const EdgeInsets.fromLTRB(10, 0, 10, 0),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15.0),
@@ -1379,7 +1382,7 @@ class dashboard_state extends State<DashBoard>
                                                 color: Colors.white,
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
+                                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                                   child: Row(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
@@ -1413,7 +1416,7 @@ class dashboard_state extends State<DashBoard>
                                           ],
                                         ),
                                         Container(
-                                          height: 280,
+                                          height: 240,
                                           child: SfRadialGauge(
                                             axes: <RadialAxis>[
                                               RadialAxis(
@@ -1423,6 +1426,7 @@ class dashboard_state extends State<DashBoard>
                                                 showLabels: false,
                                                 showTicks: false,
                                                 startAngle: 270,
+                                                canScaleToFit: true,
                                                 endAngle: 270,
                                                 radiusFactor: 0.6,
                                                 useRangeColorForAxis: true,
@@ -1453,7 +1457,7 @@ class dashboard_state extends State<DashBoard>
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.green,
-                                                              fontSize: 20),
+                                                              fontSize: 17),
                                                         )
                                                       ],
                                                     ),
@@ -1485,6 +1489,7 @@ class dashboard_state extends State<DashBoard>
                                                 minimum: 0,
                                                 interval: 1,
                                                 maximum: 20,
+                                                canScaleToFit: true,
                                                 showLabels: true,
                                                 showTicks: true,
                                                 showAxisLine: false,
@@ -1553,7 +1558,7 @@ class dashboard_state extends State<DashBoard>
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 5,
+                                                  height: 0,
                                                   width: 5,
                                                 ),
                                                 Text(
@@ -1573,7 +1578,7 @@ class dashboard_state extends State<DashBoard>
                                           color: Colors.white,
                                           elevation: 10,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(15.0),
+                                            padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
@@ -1589,7 +1594,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 SizedBox(
-                                                  height: 20,
+                                                  height: 15,
                                                   width: 20,
                                                 ),
                                                 Text(
@@ -1604,7 +1609,7 @@ class dashboard_state extends State<DashBoard>
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(15.0),
+                                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
@@ -1644,7 +1649,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 SizedBox(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: 20,
                                                 ),
                                                 Text(
@@ -1680,7 +1685,7 @@ class dashboard_state extends State<DashBoard>
                                                           FontWeight.bold),
                                                 ),
                                                 SizedBox(
-                                                  height: 20,
+                                                  height: 10,
                                                   width: 20,
                                                 ),
                                                 Text(
@@ -1700,45 +1705,45 @@ class dashboard_state extends State<DashBoard>
                           ),
                         ],
                       ),
-                    )),
-                    Container(
-                      height: 60,
-                      width: 200,
-                      child: Center(
-                        child: RaisedButton(
-                          textColor: Colors.black,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(
-                                  Icons.arrow_back_ios_rounded,
-                                  color: Colors.green,
-                                ),
-                                Text("Back"),
-                              ],
-                            ),
-                          ),
-                          onPressed: () async {
-                            final ConfirmAction action =
-                                await _asyncConfirmDialog(context);
-                            /*visibilityWidgetsWatch.socket.close();
+                    )
+                  : CommonWidgets().CommonLoader(context)),
+          Container(
+            height: 50,
+            width: 200,
+            child: Center(
+              child: RaisedButton(
+                textColor: Colors.black,
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.arrow_back_ios_rounded,
+                        color: Colors.green,
+                      ),
+                      Text("Back"),
+                    ],
+                  ),
+                ),
+                onPressed: () async {
+                  final ConfirmAction action =
+                      await _asyncConfirmDialog(context);
+                  /*visibilityWidgetsWatch.socket.close();
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => Connection()),
                                 (Route<dynamic> route) => false);*/
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : CommonWidgets().CommonLoader(context),
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1769,14 +1774,5 @@ class dashboard_state extends State<DashBoard>
         );
       },
     );
-  }
-
-  void discovery() async {
-    try {
-      // Parse the command line arguments.
-
-    } catch (Exception) {
-      print("Exception== ${Exception.toString()}");
-    }
   }
 }

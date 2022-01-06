@@ -25,6 +25,7 @@ class connection extends State<Connection> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setsocket(null);
     });
   }
 

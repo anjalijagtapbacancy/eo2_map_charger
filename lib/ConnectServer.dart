@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -8,7 +9,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 import 'package:gateway/gateway.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CommonWidgets.dart';
 import 'Connection.dart';
@@ -19,6 +19,7 @@ Future<void> ConnectServer(BuildContext context1) async {
   VisibilityWidgets visibilityWidgetsRead;
   InternetAddress ServerIp;
   Socket socket;
+  //Timer timer;
   MDnsClient client;
   ConnectivityResult connectivityResult =
       await (Connectivity().checkConnectivity());
@@ -32,6 +33,21 @@ Future<void> ConnectServer(BuildContext context1) async {
       // final pref = await SharedPreferences.getInstance();
       // visibilityWidgetsRead.setQr(
       //     (pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
+      onTimeout() {
+        print("close");
+        visibilityWidgetsRead.socket.close();
+      }
+
+      checkConnectionStatus() {
+        if(socket!=null) {
+          sendMessage(socket, "");
+        }else{
+          visibilityWidgetsRead.socket=null;
+          print("null");
+          //timer.cancel();
+        }
+      }
+
       if (visibilityWidgetsRead.qrText != "") {
         print("${visibilityWidgetsRead.qrText}");
         try {
@@ -70,9 +86,10 @@ Future<void> ConnectServer(BuildContext context1) async {
           //   });
           // });
           if(ServerIp!=null) {
-            socket = await Socket.connect(ServerIp, 8080,timeout: Duration(seconds: 1));
+            socket = await Socket.connect(ServerIp, 8080,timeout: Duration(seconds: 1)).timeout(Duration(seconds: 1));
             visibilityWidgetsRead.setsocket(socket);
-          }else{
+           // timer = Timer.periodic(Duration(seconds: 5), (Timer t) => checkConnectionStatus());
+          } else {
             Navigator.of(context1).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context1) => Connection()),
                     (Route<dynamic> route) => false);
@@ -104,8 +121,7 @@ Future<void> ConnectServer(BuildContext context1) async {
                 List<String> Message = new List();
                 final split = serverResponse.split("\n\r");
                 for (int i = 0; i < split.length - 1; i++) {
-                  if(split[i].contains("{\"msg_id\":"))
-                    Message.add(split[i]);
+                  if (split[i].contains("{\"msg_id\":")) Message.add(split[i]);
                 }
                 for (var value in Message) {
                   print(value);
@@ -114,9 +130,10 @@ Future<void> ConnectServer(BuildContext context1) async {
                   visibilityWidgetsRead.setResponse(context1, value, msgId);
                 }
               }
-            },
+            },cancelOnError: true,
             // handle errors
             onError: (error) async {
+              //timer.cancel();
               print("Error===" + error.toString());
               visibilityWidgetsRead.socket.destroy();
               visibilityWidgetsRead.responseMsgId8 = null;
@@ -130,15 +147,17 @@ Future<void> ConnectServer(BuildContext context1) async {
 
             // handle server ending connection
             onDone: () {
-              print('Server left.');
-              visibilityWidgetsRead.responseMsgId8 = null;
-              visibilityWidgetsRead.socket.destroy();
+
               try {
+                print('Server left.');
+                visibilityWidgetsRead.responseMsgId8 = null;
+                if(visibilityWidgetsRead.socket!=null)
+                  visibilityWidgetsRead.socket.destroy();
                 if (context1 != null)
                   Navigator.of(context1).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context1) => Connection()),
-                          (Route<dynamic> route) => false);
-              }catch(Exception){
+                      (Route<dynamic> route) => false);
+              } catch (Exception) {
                 print("Exception==${Exception.toString()}");
               }
             },

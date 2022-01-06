@@ -329,15 +329,22 @@ class VisibilityWidgets with ChangeNotifier {
            // setEvAnalysisLoader(false);
           } else {
             if (type == 1) {
+              setEvAnalysisLoader(false);
+              setWeekEnergyData(null);
+              WeekEnergyData=[];
               WeekEnergyList = new List();
               WeekEnergyList = responsePropertyMsgId12.array;
               getWeekData();
             } else if (type == 2) {
               setEvAnalysisLoader(false);
+              setMonthEnergyData(null);
+              MonthEnergyData=[];
               MonthEnergyList = new List();
               MonthEnergyList = responsePropertyMsgId12.array;
               getMonthData();
             } else if (type == 3) {
+              setYearEnergyData(null);
+              YearEnergyData=[];
               YearEnergyList = new List();
               YearEnergyList = responsePropertyMsgId12.array;
               getYearData();
@@ -1082,6 +1089,9 @@ class VisibilityWidgets with ChangeNotifier {
       PreDifference = 31 - date;
 
       PrevMonthIndex = StartMonthIndex - 1;
+      if(PrevMonthIndex==-1){
+        PrevMonthIndex=11;
+      }
       String PrevMonth = Constants.Months[PrevMonthIndex];
       if (PrevMonth == "Jan" ||
           PrevMonth == "Mar" ||
@@ -1115,6 +1125,9 @@ class VisibilityWidgets with ChangeNotifier {
         else
           PrevPreDifference = 30 - PreEndPoint;
         PrePreMonthIndex = PrevMonthIndex - 1;
+        if(PrePreMonthIndex==-1){
+          PrePreMonthIndex=11;
+        }
         String PrePrevMonth = Constants.Months[PrePreMonthIndex];
         if (PrePrevMonth == "Jan" ||
             PrePrevMonth == "Mar" ||
