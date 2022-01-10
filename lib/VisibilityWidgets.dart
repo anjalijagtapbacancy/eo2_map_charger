@@ -12,13 +12,9 @@ import 'ConstantFunction/Constants.dart';
 import 'package:intl/intl.dart';
 import 'ev_analysis.dart';
 import 'model/Request/CommonRequest.dart';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:gateway/gateway.dart';
 import 'model/Request/RequestMsgId1.dart';
 import 'model/Request/RequestMsgId10.dart';
 import 'model/Request/RequestMsgId12.dart';
@@ -56,7 +52,7 @@ class VisibilityWidgets with ChangeNotifier {
       charging_voltage = 0.0,
       charging_power = 0.0,
       overall_energy = 0.0;
-
+  int TIMEDELAY = 25;
   int charging_state = 0,
       auto_mode,
       currentMax,
@@ -157,20 +153,11 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
-  // void Network(BuildContext context) {
-  //   subscription = Connectivity()
-  //       .onConnectivityChanged
-  //       .listen((ConnectivityResult result) {
-  //     if (socket != null) {
-  //       print("close");
-  //       socket.close();
-  //       Navigator.of(context).pushAndRemoveUntil(
-  //           MaterialPageRoute(builder: (context) => Connection()),
-  //           (Route<dynamic> route) => false);
-  //     }
-  //   });
-  // }
 
+  Future<void> MacAddress() async {
+   final pref = await SharedPreferences.getInstance();
+   setQr((pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
+  }
   Future<void> Network(BuildContext context) async {
     ConnectivityResult connectivityResult;
     connectivityResult = await (Connectivity().checkConnectivity());
@@ -192,105 +179,6 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> ConnectServer(BuildContext context1) async {
-  //   ConnectivityResult connectivityResult =
-  //       await (Connectivity().checkConnectivity());
-  //   if (connectivityResult == ConnectivityResult.wifi) {
-  //     final gatewayinfo = await Gateway.info;
-  //     final ServerIp = gatewayinfo.ip;
-  //     print(ServerIp);
-  //     print("object");
-  //     try {
-  //       socket = await Socket.connect(ServerIp, 8080);
-  //     } on Exception catch (e) {
-  //       print("Exception" + e.toString());
-  //     }
-  //     if (socket != null) {
-  //       print(
-  //           'Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
-  //       isrunning = true;
-  //       // listen for responses from the server
-  //
-  //       socket.listen(
-  //         // handle data from the server
-  //         (Uint8List data) {
-  //           // print(data);
-  //           /* String serverResponse =
-  //             "{\"msg_id\":12,\"properties\": {\"type\": 3,\"array\": [{\"energy\": 3444},{\"energy\": 3454},{\"energy\": 7888},{\"energy\": 5455},{\"energy\": 6465},{\"energy\": 8888},{\"energy\": 7777},{\"energy\": 3444},{\"energy\": 8888},{\"energy\": 8655},{\"energy\": 3333},{\"energy\": 6666},{\"energy\": 6677},{\"energy\": 7655},{\"energy\": 3333},{\"energy\": 3333},{\"energy\": 9999},{\"energy\": 1666},{\"energy\": 2545},{\"energy\": 9899},{\"energy\": 6656},{\"energy\": 3466},{\"energy\": 3567},{\"energy\": 7655},{\"energy\": 7898},{\"energy\": 4557},{\"energy\": 8878},{\"energy\": 3233},{\"energy\": 5678},{\"energy\": 5553}]}}\n\r";
-  //       */
-  //           String serverResponse = String.fromCharCodes(data);
-  //           if (serverResponse.contains("{\"msg_id\":")) {
-  //             List<String> Message = new List();
-  //             final split = serverResponse.split("\n\r");
-  //             for (int i = 0; i < split.length - 1; i++) {
-  //               Message.add(split[i]);
-  //             }
-  //             for (var value in Message) {
-  //               print(value);
-  //               String splitString = value.split("{\"msg_id\":")[1];
-  //               String msgId = splitString.split(",")[0];
-  //               setResponse(context1, value, msgId);
-  //             }
-  //           }
-  //         },
-  //         // handle errors
-  //         onError: (error) async {
-  //           print("Error===" + error.toString());
-  //           socket.destroy();
-  //           responseMsgId8 = null;
-  //           // SystemNavigator.pop();
-  //           if (context1 != null)
-  //             Navigator.of(context1).pushAndRemoveUntil(
-  //                 MaterialPageRoute(builder: (context1) => Connection()),
-  //                 (Route<dynamic> route) => false);
-  //           AppSettings.openWIFISettings();
-  //         },
-  //
-  //         // handle server ending connection
-  //         onDone: () {
-  //           print('Server left.');
-  //           responseMsgId8 = null;
-  //           socket.destroy();
-  //           Navigator.pop(context1);
-  //         },
-  //       );
-  //
-  //       // send some messages to the server
-  //       SendRequest1(1, EpochTime());
-  //       // CommonRequests(20);
-  //     } else {
-  //       print("Something Wrong with Ip Address");
-  //
-  //       //SystemNavigator.pop();
-  //       if (context1 != null)
-  //         Navigator.of(context1).pushAndRemoveUntil(
-  //             MaterialPageRoute(builder: (context1) => Connection()),
-  //             (Route<dynamic> route) => false);
-  //       AppSettings.openWIFISettings();
-  //     }
-  //   } else {
-  //     print("Wifi is not on or Mobile data is on");
-  //
-  //     // SystemNavigator.pop();
-  //     if (context1 != null)
-  //       Navigator.of(context1).pushAndRemoveUntil(
-  //           MaterialPageRoute(builder: (context1) => Connection()),
-  //           (Route<dynamic> route) => false);
-  //     AppSettings.openWIFISettings();
-  //   }
-  // }
-  //
-  // int EpochTime() {
-  //   int Epoch_time =
-  //       ((DateTime.now().millisecondsSinceEpoch) / 1000).ceil() as int;
-  //   return Epoch_time;
-  // }
-  //
-  // Future<void> sendMessage(Socket socket, String message) async {
-  //   print('Client: $message');
-  //   socket.write(message);
-  //   await Future.delayed(Duration(seconds: 2));
-  // }
 
   Future<void> setResponse(
       BuildContext context, String response, String msgId) async {
@@ -304,9 +192,9 @@ class VisibilityWidgets with ChangeNotifier {
           print(status.toString() + msgId.toString());
           if (status != 0) {
             CommonWidgets().showErrorSnackbar(context, status);
-          } else {
+          } /*else {
             CommonRequests(20);
-          }
+          }*/
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
         }
@@ -339,6 +227,7 @@ class VisibilityWidgets with ChangeNotifier {
             pref.setInt("endHour", endHour);
             pref.setInt("endMinute", endMinute);
             pref.setBool("isScheduling", isScheduling);
+            CommonRequests(15);
           } else {
             CommonWidgets().showErrorSnackbar(context, status);
           }
@@ -351,6 +240,7 @@ class VisibilityWidgets with ChangeNotifier {
           responseMsgId6 = ResponseMsgId6.fromJson(jsonDecode(response));
           responsePropertyMsgId6 = responseMsgId6.properties;
           status = responsePropertyMsgId6.status;
+          if (isResponse8 == false) CommonRequests(20);
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
@@ -401,7 +291,7 @@ class VisibilityWidgets with ChangeNotifier {
           } else {
             ChargerSummaryList = responsePropertyMsgId10.array;
             if (CurrentLog || isPaused) {
-              final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm:ss aa');
+              final DateFormat formatter = DateFormat('dd/MM/yyyy hh:mm:ss aa');
               timeLog = formatter.format(DateTime.fromMillisecondsSinceEpoch(
                   (ChargerSummaryList[0].time) * 1000));
               if (ChargerSummaryList[0].mode == 1 ||
@@ -420,6 +310,7 @@ class VisibilityWidgets with ChangeNotifier {
             }
           }
         } catch (e) {
+          CommonWidgets().showToast("Something Wrong In Summary");
           print("===Exception: " + msgId + " " + e.toString());
         }
         break;
@@ -430,25 +321,35 @@ class VisibilityWidgets with ChangeNotifier {
           status = responsePropertyMsgId12.status;
           int type = responsePropertyMsgId12.type;
           if (status != null) {
-            CommonWidgets().showErrorSnackbar(context, status);
             setEvAnalysisLoader(false);
+            CommonWidgets().showErrorSnackbar(context, status);
           } else {
             if (type == 1) {
+              setEvAnalysisLoader(false);
+              setWeekEnergyData(null);
+              WeekEnergyData=[];
               WeekEnergyList = new List();
               WeekEnergyList = responsePropertyMsgId12.array;
               getWeekData();
             } else if (type == 2) {
               setEvAnalysisLoader(false);
+              setMonthEnergyData(null);
+              MonthEnergyData=[];
               MonthEnergyList = new List();
               MonthEnergyList = responsePropertyMsgId12.array;
               getMonthData();
             } else if (type == 3) {
+              setEvAnalysisLoader(false);
+              setYearEnergyData(null);
+              YearEnergyData=[];
               YearEnergyList = new List();
               YearEnergyList = responsePropertyMsgId12.array;
               getYearData();
             }
           }
         } catch (e) {
+          setEvAnalysisLoader(false);
+          CommonWidgets().showToast("Something Wrong In Graph data");
           print("===Exception: " + msgId + " " + e.toString());
         }
         break;
@@ -461,6 +362,7 @@ class VisibilityWidgets with ChangeNotifier {
           if (status < 1) {
             final pref = await SharedPreferences.getInstance();
             pref.setInt("currentMax", currentMax);
+            CommonRequests(14);
           } else {
             CommonWidgets().showErrorSnackbar(context, status);
           }
@@ -536,7 +438,7 @@ class VisibilityWidgets with ChangeNotifier {
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
-            logNumber = responsePropertyMsgId16.log;
+            setLogNumber(responsePropertyMsgId16.log);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -547,8 +449,9 @@ class VisibilityWidgets with ChangeNotifier {
           commonResponse = CommonResponse.fromJson(jsonDecode(response));
           commonResponseProperty = commonResponse.properties;
           status = commonResponseProperty.status;
+          CommonRequests(19);
           if (status != 0) {
-            CommonRequests(19);
+
             CommonWidgets().showErrorSnackbar(context, status);
           }
         } catch (e) {
@@ -717,6 +620,18 @@ class VisibilityWidgets with ChangeNotifier {
     }
   }
 
+  bool isSetting_OTA(){
+    if (auto_mode == 0) {
+      if (charging_state == 67) {
+        return false;
+      }else{
+        return true;
+      }
+    }else{
+      return true;
+    }
+    notifyListeners();
+  }
   String Tips() {
     if (auto_mode == 0) {
       if (charging_state == 65) {
@@ -1026,6 +941,10 @@ class VisibilityWidgets with ChangeNotifier {
     EndNumber = end_number;
     notifyListeners();
   }
+  void setLogNumber(int log_number) {
+    logNumber = log_number;
+    notifyListeners();
+  }
 
   void setTotalOccurrences(int total_occurence) {
     TotalOccurrences = total_occurence;
@@ -1076,6 +995,11 @@ class VisibilityWidgets with ChangeNotifier {
 
   void setfileUrl(String file_url) {
     fileUrl = file_url;
+    notifyListeners();
+  }
+
+  void setTIMEDELAY(int TIME_DELAY) {
+    TIMEDELAY = TIME_DELAY;
     notifyListeners();
   }
 
@@ -1139,7 +1063,7 @@ class VisibilityWidgets with ChangeNotifier {
   }
 
   void getMonthData() {
-    // try {
+     try {
     if (MonthEnergyList != null) {
       MonthEnergyList = List.from(MonthEnergyList.reversed);
       int PrePrevMonthDifference = 0,
@@ -1166,6 +1090,9 @@ class VisibilityWidgets with ChangeNotifier {
       PreDifference = 31 - date;
 
       PrevMonthIndex = StartMonthIndex - 1;
+      if(PrevMonthIndex==-1){
+        PrevMonthIndex=11;
+      }
       String PrevMonth = Constants.Months[PrevMonthIndex];
       if (PrevMonth == "Jan" ||
           PrevMonth == "Mar" ||
@@ -1177,9 +1104,9 @@ class VisibilityWidgets with ChangeNotifier {
         PreEndPoint = 31;
       } else if (PrevMonth == "Feb") {
         if (year % 4 == 0) {
-          PreEndPoint = 28;
-        } else {
           PreEndPoint = 29;
+        } else {
+          PreEndPoint = 28;
         }
       } else {
         PreEndPoint = 30;
@@ -1199,6 +1126,9 @@ class VisibilityWidgets with ChangeNotifier {
         else
           PrevPreDifference = 30 - PreEndPoint;
         PrePreMonthIndex = PrevMonthIndex - 1;
+        if(PrePreMonthIndex==-1){
+          PrePreMonthIndex=11;
+        }
         String PrePrevMonth = Constants.Months[PrePreMonthIndex];
         if (PrePrevMonth == "Jan" ||
             PrePrevMonth == "Mar" ||
@@ -1210,9 +1140,9 @@ class VisibilityWidgets with ChangeNotifier {
           PrePreEndPoint = 31;
         } else if (PrePrevMonth == "Feb") {
           if (year % 4 == 0) {
-            PrePreEndPoint = 28;
-          } else {
             PrePreEndPoint = 29;
+          } else {
+            PrePreEndPoint = 28;
           }
         } else {
           PrePreEndPoint = 30;
@@ -1240,9 +1170,9 @@ class VisibilityWidgets with ChangeNotifier {
       }
     }
     notifyListeners();
-    /*} catch (e) {
+    } catch (e) {
       print("===ExceptionMonth: " + e.toString());
-    }*/
+    }
   }
 
   void getYearData() {

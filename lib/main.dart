@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -41,10 +42,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  VisibilityWidgets visibilityWidgetsRead;
+
   @override
   void initState() {
     super.initState();
     //ConnectServer(context);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.MacAddress();
+    });
     Future.delayed(const Duration(seconds: 2)).then((value) {
       CustomNavigation.pushReplacement(
           context: context, className: Connection());

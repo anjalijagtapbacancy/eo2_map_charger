@@ -121,8 +121,8 @@ class ev_analysis_state extends State<EvAnalysis>
                                     desiredIntervals: 7,
                                   ),
                                   primaryYAxis: NumericAxis(
-                                    name: "Voltages",
-                                    labelFormat: '{value} V',
+                                    name: "Energy",
+                                    labelFormat: '{value} kWh',
                                   ),
                                   series: <ColumnSeries<WeekEnergy, String>>[
                                     ColumnSeries<WeekEnergy, String>(
@@ -148,8 +148,8 @@ class ev_analysis_state extends State<EvAnalysis>
                                     desiredIntervals: 30,
                                   ),
                                   primaryYAxis: NumericAxis(
-                                    name: "Voltages",
-                                    labelFormat: '{value} V',
+                                    name: "Energy",
+                                    labelFormat: '{value} kWh',
                                   ),
                                   series: <
                                       ColumnSeries<MonthEnergy, int>>[
@@ -175,8 +175,8 @@ class ev_analysis_state extends State<EvAnalysis>
                                     desiredIntervals: 12,
                                   ),
                                   primaryYAxis: NumericAxis(
-                                    name: "Voltages",
-                                    labelFormat: '{value} V',
+                                    name: "Energy",
+                                    labelFormat: '{value} kWh',
                                   ),
                                   series: <ColumnSeries<YearEnergy, String>>[
                                     ColumnSeries<YearEnergy, String>(

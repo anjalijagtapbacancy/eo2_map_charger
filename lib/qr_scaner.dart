@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CommonWidgets.dart';
 import 'ConstantFunction/Constants.dart';
+import 'ConstantFunction/custom_navigation.dart';
+import 'Home.dart';
 import 'VisibilityWidgets.dart';
 
 const flashOn = 'FLASH ON';
@@ -152,6 +154,8 @@ class _QRViewExampleState extends State<QRViewExample> {
         final pref = await SharedPreferences.getInstance();
         pref.setString("qrtxt", visibilityWidgetsRead.qrText);
         Navigator.pop(context);
+        CustomNavigation.push(
+            context: context, className: Home());
       }
     });
   }

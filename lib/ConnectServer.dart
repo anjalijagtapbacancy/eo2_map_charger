@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -5,8 +6,8 @@ import 'package:app_settings/app_settings.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:gateway/gateway.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/widgets.dart';
+import 'package:multicast_dns/multicast_dns.dart';
 
 import 'CommonWidgets.dart';
 import 'Connection.dart';
@@ -15,35 +16,69 @@ import 'package:provider/provider.dart';
 
 Future<void> ConnectServer(BuildContext context1) async {
   VisibilityWidgets visibilityWidgetsRead;
-  VisibilityWidgets visibilityWidgetsWatch;
-  String ServerIp;
+  InternetAddress ServerIp;
   Socket socket;
-
+  //Timer timer;
+  MDnsClient client;
   ConnectivityResult connectivityResult =
       await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.wifi) {
-    final gatewayinfo = await Gateway.info;
-   // ServerIp = gatewayinfo.ip;
-   // print(ServerIp);
+    //final gatewayinfo = await Gateway.info;
+    // ServerIp = gatewayinfo.ip;
+    // print(ServerIp);
     print("object");
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       visibilityWidgetsRead = context1.read<VisibilityWidgets>();
-      final pref = await SharedPreferences.getInstance();
-      visibilityWidgetsRead.setQr(
-          (pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
+      // final pref = await SharedPreferences.getInstance();
+      // visibilityWidgetsRead.setQr(
+      //     (pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
+
       if (visibilityWidgetsRead.qrText != "") {
         print("${visibilityWidgetsRead.qrText}");
-
         try {
-          InternetAddress.lookup("${visibilityWidgetsRead.qrText}.local")
-              .then((value) {
-            value.forEach((element) async {
-              ServerIp = element.address;
-              print("ServerIp== $ServerIp");
+          String name = '${visibilityWidgetsRead.qrText}.local';
+
+          if(Platform.isIOS) {
+            client = MDnsClient();
+          }else {
+            client = MDnsClient(rawDatagramSocketFactory:
+                (dynamic host, int port,
+                {bool reuseAddress, bool reusePort, int ttl}) {
+              return RawDatagramSocket.bind(host, port,
+                  reuseAddress: true, reusePort: false, ttl: ttl);
             });
-          });
-          socket = await Socket.connect("${visibilityWidgetsRead.qrText}.local", 8080);
-          visibilityWidgetsRead.setsocket(socket);
+          }
+          if(client!=null) {
+            await client.start();
+            await for (IPAddressResourceRecord record
+            in client.lookup<IPAddressResourceRecord>(
+                ResourceRecordQuery.addressIPv4(name),timeout:Duration(milliseconds: 500))) {
+              ServerIp = record.address;
+              print('Found address (${record.address}).');
+            }
+            client.stop();
+          }else{
+            CommonWidgets().showToast("Something Went wrong");
+            Navigator.pop(context1);
+            return;
+          }
+          // String discovery_service = "${visibilityWidgetsRead.qrText}.local";
+          // InternetAddress.lookup("${visibilityWidgetsRead.qrText}.local")
+          //     .then((value) {
+          //   value.forEach((element) async {
+          //     ServerIp = element.address;
+          //     print("ServerIp== $ServerIp");
+          //   });
+          // });
+          if(ServerIp!=null) {
+            socket = await Socket.connect(ServerIp, 8080,timeout: Duration(seconds: 1)).timeout(Duration(seconds: 1));
+            visibilityWidgetsRead.setsocket(socket);
+           // timer = Timer.periodic(Duration(seconds: 5), (Timer t) => checkConnectionStatus());
+          } else {
+            Navigator.of(context1).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context1) => Connection()),
+                    (Route<dynamic> route) => false);
+          }
         } on Exception catch (e) {
           print("Exception" + e.toString());
         }
@@ -68,10 +103,10 @@ Future<void> ConnectServer(BuildContext context1) async {
         */
               String serverResponse = String.fromCharCodes(data);
               if (serverResponse.contains("{\"msg_id\":")) {
-                List<String> Message = new List();
+                List<String> Message = [];
                 final split = serverResponse.split("\n\r");
                 for (int i = 0; i < split.length - 1; i++) {
-                  Message.add(split[i]);
+                  if (split[i].contains("{\"msg_id\":")) Message.add(split[i]);
                 }
                 for (var value in Message) {
                   print(value);
@@ -80,9 +115,10 @@ Future<void> ConnectServer(BuildContext context1) async {
                   visibilityWidgetsRead.setResponse(context1, value, msgId);
                 }
               }
-            },
+            },cancelOnError: true,
             // handle errors
             onError: (error) async {
+              //timer.cancel();
               print("Error===" + error.toString());
               visibilityWidgetsRead.socket.destroy();
               visibilityWidgetsRead.responseMsgId8 = null;
@@ -96,15 +132,17 @@ Future<void> ConnectServer(BuildContext context1) async {
 
             // handle server ending connection
             onDone: () {
-              print('Server left.');
-              visibilityWidgetsRead.responseMsgId8 = null;
-              visibilityWidgetsRead.socket.destroy();
+
               try {
+                print('Server left.');
+                visibilityWidgetsRead.responseMsgId8 = null;
+                if(visibilityWidgetsRead.socket!=null)
+                  visibilityWidgetsRead.socket.destroy();
                 if (context1 != null)
                   Navigator.of(context1).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context1) => Connection()),
-                          (Route<dynamic> route) => false);
-              }catch(Exception){
+                      (Route<dynamic> route) => false);
+              } catch (Exception) {
                 print("Exception==${Exception.toString()}");
               }
             },
@@ -112,7 +150,17 @@ Future<void> ConnectServer(BuildContext context1) async {
 
           // send some messages to the server
           visibilityWidgetsRead.SendRequest1(1, EpochTime());
-          // CommonRequests(20);
+          await Future.delayed(Duration(milliseconds: 500));
+          visibilityWidgetsRead.CommonRequests(20);
+          // await Future.delayed(Duration(milliseconds: 2000));
+          // visibilityWidgetsRead.CommonRequests(19);
+          // await Future.delayed(Duration(milliseconds: 500));
+          // visibilityWidgetsRead.CommonRequests(14);
+          // await Future.delayed(Duration(milliseconds: 500));
+          // visibilityWidgetsRead.CommonRequests(15);
+          // await Future.delayed(Duration(milliseconds: 500));
+          // visibilityWidgetsRead.CommonRequests(22);
+          // await Future.delayed(Duration(milliseconds: 500));
         } else {
           print("Something Wrong with Ip Address");
 
@@ -148,5 +196,5 @@ int EpochTime() {
 Future<void> sendMessage(Socket socket, String message) async {
   print('Client: $message');
   socket.write(message);
-  await Future.delayed(Duration(seconds: 2));
+  await Future.delayed(Duration(milliseconds: 500));
 }

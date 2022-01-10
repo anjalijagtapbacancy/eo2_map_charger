@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:eo2_map_charger/ConnectServer.dart';
+import 'package:eo2_map_charger/Connection.dart';
 import 'package:eo2_map_charger/ota.dart';
 import 'package:eo2_map_charger/settings.dart';
 import 'package:flutter/material.dart';
@@ -75,9 +75,9 @@ class home_state extends State<Home> {
                 DrawerHeader(
                   child: Row(
                     children: [
-                      SizedBox(width: 10.0, height: 50),
+                      SizedBox(width: 5, height: 50),
                       Image.asset(AssetConstants.charging_gun_icon),
-                      SizedBox(width: 10.0, height: 10),
+                      SizedBox(width: 5, height: 5),
                       Text(
                         'Device Id: ${visibilityWidgetsWatch.device_id}',
                         style: TextStyle(color: Colors.white),
@@ -104,21 +104,27 @@ class home_state extends State<Home> {
                     Navigator.pop(context);
                   },
                 ),
-                ListTile(
-                  leading: Image.asset(AssetConstants.settings),
-                  title: const Text('Settings'),
-                  onTap: () {
-                    visibilityWidgetsWatch.setIndex(2);
-                    Navigator.pop(context);
-                  },
+                Visibility(
+                  child: ListTile(
+                    leading: Image.asset(AssetConstants.settings),
+                    title: const Text('Settings'),
+                    onTap: () {
+                      visibilityWidgetsWatch.setIndex(2);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  visible: visibilityWidgetsWatch.isSetting_OTA(),
                 ),
-                ListTile(
-                  leading: Image.asset(AssetConstants.ota),
-                  title: const Text('OTA'),
-                  onTap: () {
-                    visibilityWidgetsWatch.setIndex(3);
-                    Navigator.pop(context);
-                  },
+                Visibility(
+                  child: ListTile(
+                    leading: Image.asset(AssetConstants.ota),
+                    title: const Text('OTA'),
+                    onTap: () {
+                      visibilityWidgetsWatch.setIndex(3);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  visible: visibilityWidgetsWatch.isSetting_OTA(),
                 ),
                 ListTile(
                   leading: Image.asset(AssetConstants.contact_us),
@@ -149,7 +155,6 @@ class home_state extends State<Home> {
       case 1:
         return ChargingSummary();
       case 2:
-        visibilityWidgetsWatch.CommonRequests(19);
         return Settings();
       case 3:
         return OTA();
@@ -176,8 +181,14 @@ class home_state extends State<Home> {
               child: const Text('Yes'),
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.Accept);
-                visibilityWidgetsWatch.socket.close();
-                Navigator.pop(context);
+                visibilityWidgetsRead.responseMsgId8 = null;
+                if(visibilityWidgetsWatch.socket!=null) {
+                  visibilityWidgetsWatch.socket.close();
+                } else {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Connection()),
+                        (Route<dynamic> route) => false);
+                }
               },
             )
           ],
