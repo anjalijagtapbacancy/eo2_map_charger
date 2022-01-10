@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -38,6 +37,7 @@ class charging_summary_state extends State<ChargingSummary> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setLogNumber(0);
       visibilityWidgetsRead.CommonRequests(16);
       visibilityWidgetsRead.setChargingSummaryLoader(true);
       visibilityWidgetsRead.setCurrentLog(false);
@@ -88,7 +88,7 @@ class charging_summary_state extends State<ChargingSummary> {
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
-    if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
+    if (mounted && visibilityWidgetsWatch.responseMsgId8 != null)
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
       body: visibilityWidgetsWatch.ChargerSummaryList != null
@@ -129,8 +129,8 @@ class charging_summary_state extends State<ChargingSummary> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        const Text(
-                                          "Time",
+                                        Text(
+                                          "${serialNo(index)}",
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -141,7 +141,18 @@ class charging_summary_state extends State<ChargingSummary> {
                                           timeLog(visibilityWidgetsWatch
                                               .ChargerSummaryList[index].time),
                                           textAlign: TextAlign.left,
-                                          style: TextStyle(color: Colors.grey),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          "${(visibilityWidgetsWatch.ChargerSummaryList[index].sessionEnergy / 1000).toStringAsFixed(2)} kWh",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                         SizedBox(
                                           width: 30,
@@ -190,7 +201,7 @@ class charging_summary_state extends State<ChargingSummary> {
                                                     color: Colors.black),
                                               ),
                                               Text(
-                                                "${(visibilityWidgetsWatch.ChargerSummaryList[index].sessionEnergy / 1000).toStringAsFixed(2)} kWh",
+                                                "                ${(visibilityWidgetsWatch.ChargerSummaryList[index].sessionEnergy / 1000).toStringAsFixed(2)} kWh",
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     color: Colors.grey),
@@ -216,12 +227,7 @@ class charging_summary_state extends State<ChargingSummary> {
                                                     color: Colors.black),
                                               ),
                                               Text(
-                                                modeLog(
-                                                    visibilityWidgetsWatch
-                                                        .ChargerSummaryList[
-                                                            index]
-                                                        .mode,
-                                                    index),
+                                                "                 ${modeLog(index)}",
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     color: Colors.grey),
@@ -247,11 +253,7 @@ class charging_summary_state extends State<ChargingSummary> {
                                                     color: Colors.black),
                                               ),
                                               Text(
-                                                durationLog(
-                                                    visibilityWidgetsWatch
-                                                        .ChargerSummaryList[
-                                                            index]
-                                                        .duration),
+                                                "             ${durationLog(visibilityWidgetsWatch.ChargerSummaryList[index].duration)}",
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     color: Colors.grey),
@@ -434,8 +436,7 @@ class charging_summary_state extends State<ChargingSummary> {
                                         10,
                                         visibilityWidgetsWatch.StartNumber,
                                         visibilityWidgetsWatch.EndNumber);
-                                    visibilityWidgetsWatch.setEndNumber(
-                                        visibilityWidgetsWatch.StartNumber - 1);
+                                    //visibilityWidgetsWatch.setEndNumber(visibilityWidgetsWatch.StartNumber - 1);
                                   }
                                 }
                                 setState(() {
@@ -466,11 +467,11 @@ class charging_summary_state extends State<ChargingSummary> {
   }
 
   String timeLog(int time) {
-    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm:ss aa');
+    final DateFormat formatter = DateFormat('dd/MM/yyyy hh:mm:ss aa');
     return formatter.format(DateTime.fromMillisecondsSinceEpoch((time) * 1000));
   }
 
-  String modeLog(int mode, int index) {
+  String modeLog(int index) {
     if (visibilityWidgetsWatch.ChargerSummaryList[index].mode == 1 ||
         visibilityWidgetsWatch.ChargerSummaryList[index].mode == 6)
       return "Manual";
@@ -478,7 +479,7 @@ class charging_summary_state extends State<ChargingSummary> {
         visibilityWidgetsWatch.ChargerSummaryList[index].mode == 7)
       return "Schedule";
     else
-      return "-Manual";
+      return "Other";
   }
 
   String durationLog(int duration) {
@@ -513,6 +514,20 @@ class charging_summary_state extends State<ChargingSummary> {
       return "UnderVoltage";
     } else if (event == 11) {
       return "Emergency Stop";
+    }
+  }
+
+  int serialNo(int index) {
+    if(index==0){
+      return visibilityWidgetsWatch.StartNumber;
+    }else if(index==1){
+      return visibilityWidgetsWatch.StartNumber+1;
+    }else if(index==2){
+      return visibilityWidgetsWatch.StartNumber+2;
+    }else if(index==3){
+      return visibilityWidgetsWatch.StartNumber+3;
+    }else if(index==4){
+      return visibilityWidgetsWatch.StartNumber+4;
     }
   }
 }

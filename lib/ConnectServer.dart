@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:multicast_dns/multicast_dns.dart';
-import 'package:gateway/gateway.dart';
 
 import 'CommonWidgets.dart';
 import 'Connection.dart';
@@ -24,7 +23,7 @@ Future<void> ConnectServer(BuildContext context1) async {
   ConnectivityResult connectivityResult =
       await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.wifi) {
-    final gatewayinfo = await Gateway.info;
+    //final gatewayinfo = await Gateway.info;
     // ServerIp = gatewayinfo.ip;
     // print(ServerIp);
     print("object");
@@ -33,20 +32,6 @@ Future<void> ConnectServer(BuildContext context1) async {
       // final pref = await SharedPreferences.getInstance();
       // visibilityWidgetsRead.setQr(
       //     (pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
-      onTimeout() {
-        print("close");
-        visibilityWidgetsRead.socket.close();
-      }
-
-      checkConnectionStatus() {
-        if(socket!=null) {
-          sendMessage(socket, "");
-        }else{
-          visibilityWidgetsRead.socket=null;
-          print("null");
-          //timer.cancel();
-        }
-      }
 
       if (visibilityWidgetsRead.qrText != "") {
         print("${visibilityWidgetsRead.qrText}");
@@ -118,7 +103,7 @@ Future<void> ConnectServer(BuildContext context1) async {
         */
               String serverResponse = String.fromCharCodes(data);
               if (serverResponse.contains("{\"msg_id\":")) {
-                List<String> Message = new List();
+                List<String> Message = [];
                 final split = serverResponse.split("\n\r");
                 for (int i = 0; i < split.length - 1; i++) {
                   if (split[i].contains("{\"msg_id\":")) Message.add(split[i]);

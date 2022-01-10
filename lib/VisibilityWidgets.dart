@@ -12,13 +12,9 @@ import 'ConstantFunction/Constants.dart';
 import 'package:intl/intl.dart';
 import 'ev_analysis.dart';
 import 'model/Request/CommonRequest.dart';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:gateway/gateway.dart';
 import 'model/Request/RequestMsgId1.dart';
 import 'model/Request/RequestMsgId10.dart';
 import 'model/Request/RequestMsgId12.dart';
@@ -295,7 +291,7 @@ class VisibilityWidgets with ChangeNotifier {
           } else {
             ChargerSummaryList = responsePropertyMsgId10.array;
             if (CurrentLog || isPaused) {
-              final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm:ss aa');
+              final DateFormat formatter = DateFormat('dd/MM/yyyy hh:mm:ss aa');
               timeLog = formatter.format(DateTime.fromMillisecondsSinceEpoch(
                   (ChargerSummaryList[0].time) * 1000));
               if (ChargerSummaryList[0].mode == 1 ||
@@ -325,8 +321,8 @@ class VisibilityWidgets with ChangeNotifier {
           status = responsePropertyMsgId12.status;
           int type = responsePropertyMsgId12.type;
           if (status != null) {
+            setEvAnalysisLoader(false);
             CommonWidgets().showErrorSnackbar(context, status);
-           // setEvAnalysisLoader(false);
           } else {
             if (type == 1) {
               setEvAnalysisLoader(false);
@@ -343,6 +339,7 @@ class VisibilityWidgets with ChangeNotifier {
               MonthEnergyList = responsePropertyMsgId12.array;
               getMonthData();
             } else if (type == 3) {
+              setEvAnalysisLoader(false);
               setYearEnergyData(null);
               YearEnergyData=[];
               YearEnergyList = new List();
@@ -441,7 +438,7 @@ class VisibilityWidgets with ChangeNotifier {
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
-            logNumber = responsePropertyMsgId16.log;
+            setLogNumber(responsePropertyMsgId16.log);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -944,6 +941,10 @@ class VisibilityWidgets with ChangeNotifier {
     EndNumber = end_number;
     notifyListeners();
   }
+  void setLogNumber(int log_number) {
+    logNumber = log_number;
+    notifyListeners();
+  }
 
   void setTotalOccurrences(int total_occurence) {
     TotalOccurrences = total_occurence;
@@ -1103,9 +1104,9 @@ class VisibilityWidgets with ChangeNotifier {
         PreEndPoint = 31;
       } else if (PrevMonth == "Feb") {
         if (year % 4 == 0) {
-          PreEndPoint = 28;
-        } else {
           PreEndPoint = 29;
+        } else {
+          PreEndPoint = 28;
         }
       } else {
         PreEndPoint = 30;
@@ -1139,9 +1140,9 @@ class VisibilityWidgets with ChangeNotifier {
           PrePreEndPoint = 31;
         } else if (PrePrevMonth == "Feb") {
           if (year % 4 == 0) {
-            PrePreEndPoint = 28;
-          } else {
             PrePreEndPoint = 29;
+          } else {
+            PrePreEndPoint = 28;
           }
         } else {
           PrePreEndPoint = 30;

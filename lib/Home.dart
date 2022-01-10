@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:eo2_map_charger/ConnectServer.dart';
 import 'package:eo2_map_charger/Connection.dart';
