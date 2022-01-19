@@ -16,13 +16,16 @@ class ota_state extends State<OTA> {
   VisibilityWidgets visibilityWidgetsRead;
   VisibilityWidgets visibilityWidgetsWatch;
   final GlobalKey<FormState> file_name_key = GlobalKey<FormState>();
-  bool _autoValidate=false;
+  String fileName="EO2_Charger.bin",
+      fileLink="http://bacancy-system-nptl.s3.ap-south-1.amazonaws.com/MAP/OTA/File/MAPChargerV1_0.bin";
 
   @override
   Future<void> initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setfileName(fileName);
+      visibilityWidgetsRead.setfileUrl(fileLink);
     });
   }
 
@@ -47,6 +50,9 @@ class ota_state extends State<OTA> {
               key: file_name_key,
               child: Column(
                 children: [
+                  SizedBox(height: 10,),
+                  Text("Current Firmware Version: ${visibilityWidgetsWatch.firmwareVersion}"),
+                  SizedBox(height: 10,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -56,6 +62,7 @@ class ota_state extends State<OTA> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       child: TextFormField(
+                          initialValue: fileName,
                             validator: (value) {
                              return value.isEmpty ? 'Value Should not be Empty' : null;
                             },
@@ -82,6 +89,7 @@ class ota_state extends State<OTA> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       child: TextFormField(
+                          initialValue: fileLink,
                           style: TextStyle(color: Colors.black),
                           validator: (value) {
                            return value.isEmpty ? 'Value Should not be Empty' : null;

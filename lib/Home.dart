@@ -134,6 +134,12 @@ class home_state extends State<Home> {
                     Navigator.pop(context);
                   },
                 ),
+                SizedBox(height: 10,),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
+                  child: Text("Firmware Version : ${visibilityWidgetsWatch.firmwareVersion}",style: TextStyle(color: Colors.green),),
+                ),
+                SizedBox(height: 10,),
               ],
             ),
           ),

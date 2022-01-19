@@ -35,6 +35,7 @@ import 'model/Response/ResponseMsgId16.dart';
 import 'model/Response/ResponseMsgId19.dart';
 import 'model/Response/ResponseMsgId21.dart';
 import 'model/Response/ResponseMsgId22.dart';
+import 'model/Response/ResponseMsgId23.dart';
 import 'model/Response/ResponseMsgId6.dart';
 
 class VisibilityWidgets with ChangeNotifier {
@@ -83,7 +84,8 @@ class VisibilityWidgets with ChangeNotifier {
       device_id = "",
       modeValue,
       fileName,
-      fileUrl;
+      fileUrl,
+      firmwareVersion="Not available";
   bool isScheduling = false, CurrentLog = true, isPaused = false;
   List<Array10> ChargerSummaryList = new List();
   Array10 array10 = new Array10();
@@ -123,6 +125,8 @@ class VisibilityWidgets with ChangeNotifier {
   Properties21 responsePropertyMsgId21 = new Properties21();
   ResponseMsgId22 responseMsgId22 = new ResponseMsgId22();
   Properties22 responsePropertyMsgId22 = new Properties22();
+  ResponseMsgId23 responseMsgId23 = new ResponseMsgId23();
+  Properties23 responsePropertyMsgId23 = new Properties23();
 
   ClearLists() {
     WeekEnergyList = null;
@@ -508,6 +512,20 @@ class VisibilityWidgets with ChangeNotifier {
             //setStartTime(1640681762);
             StartDate = DateTime.fromMillisecondsSinceEpoch(
                 (StartTime * 1000).ceil() as int);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "23":
+        try {
+          responseMsgId23 = ResponseMsgId23.fromJson(jsonDecode(response));
+          responsePropertyMsgId23 = responseMsgId23.properties;
+          status = responsePropertyMsgId23.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            firmwareVersion=responsePropertyMsgId23.fwVersion;
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
