@@ -94,7 +94,7 @@ class VisibilityWidgets with ChangeNotifier {
   List<Array12> MonthEnergyList;
 
   List<Array12> YearEnergyList;
-
+  double energy;
   bool readyLoader = true,
       stopLoader = true,
       ChargingSummaryLoader = false,
@@ -1059,7 +1059,7 @@ class VisibilityWidgets with ChangeNotifier {
         WeekEnergyList = List.from(WeekEnergyList.reversed);
         int energyIndex = 0;
         for (int j = StartDayIndex; j <= 6; j++) {
-          int energy = WeekEnergyList[energyIndex].energy;
+           energy = WeekEnergyList[energyIndex].energy;
           setWeekEnergyData(WeekEnergy(
               (energy / 1000).floorToDouble(), Constants.WeekDays[j]));
 
@@ -1067,7 +1067,7 @@ class VisibilityWidgets with ChangeNotifier {
         }
 
         for (int i = 0; i < StartDayIndex; i++) {
-          int energy = WeekEnergyList[energyIndex].energy;
+           energy = WeekEnergyList[energyIndex].energy;
           setWeekEnergyData(WeekEnergy(
               (energy / 1000).roundToDouble(), Constants.WeekDays[i]));
           //WeekEnergyData.add();
@@ -1133,7 +1133,7 @@ class VisibilityWidgets with ChangeNotifier {
       int energyIndex = 0;
       if (PrevMonthDifference > 0) {
         for (int i = PrevMonthDifference; i <= PreEndPoint; i++) {
-          int energy = MonthEnergyList[energyIndex].energy;
+           energy = MonthEnergyList[energyIndex].energy;
           setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
           //MonthEnergyData.add();
           energyIndex++;
@@ -1167,13 +1167,13 @@ class VisibilityWidgets with ChangeNotifier {
         }
         PrePrevMonthDifference = PrePreEndPoint - PrevPreDifference + 1;
         for (int i = PrePrevMonthDifference; i <= PrePreEndPoint; i++) {
-          int energy = MonthEnergyList[energyIndex].energy;
+          energy = MonthEnergyList[energyIndex].energy;
           setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
           //MonthEnergyData.add();
           energyIndex++;
         }
         for (int i = 1; i <= PreEndPoint; i++) {
-          int energy = MonthEnergyList[energyIndex].energy;
+          energy = MonthEnergyList[energyIndex].energy;
           setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
           //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
           energyIndex++;
@@ -1181,7 +1181,7 @@ class VisibilityWidgets with ChangeNotifier {
       }
 
       for (int i = 1; i < date; i++) {
-        int energy = MonthEnergyList[energyIndex].energy;
+        energy = MonthEnergyList[energyIndex].energy;
         setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
         //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
         energyIndex++;
@@ -1202,7 +1202,7 @@ class VisibilityWidgets with ChangeNotifier {
         StartMonthIndex = findIndex(Constants.Months, month);
         int energyIndex = 0;
         for (int j = StartMonthIndex; j <= 11; j++) {
-          int energy = YearEnergyList[energyIndex].energy;
+          energy = YearEnergyList[energyIndex].energy;
           setYearEnergyData(
               YearEnergy((energy / 1000).floorToDouble(), Constants.Months[j]));
           // YearEnergyData.add(YearEnergy((energy / 1000).floorToDouble(), j + 1));
@@ -1210,7 +1210,7 @@ class VisibilityWidgets with ChangeNotifier {
         }
 
         for (int i = 0; i < StartMonthIndex; i++) {
-          int energy = YearEnergyList[energyIndex].energy;
+          energy = YearEnergyList[energyIndex].energy;
           setYearEnergyData(
               YearEnergy((energy / 1000).floorToDouble(), Constants.Months[i]));
           //YearEnergyData.add(YearEnergy((energy / 1000).floorToDouble(), i + 1));

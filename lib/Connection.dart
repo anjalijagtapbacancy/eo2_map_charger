@@ -142,7 +142,7 @@ class connection extends State<Connection> {
                                   color: Colors.white,
                                   size: 30,
                                 ),
-                                Text("Connect",style: TextStyle(color: Colors.white),),
+                                Text("Proceed",style: TextStyle(color: Colors.white),),
                               ],
                             ),
                           ),
