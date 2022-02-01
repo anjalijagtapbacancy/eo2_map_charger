@@ -445,8 +445,8 @@ class VisibilityWidgets with ChangeNotifier {
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
-            //setLogNumber(responsePropertyMsgId16.log);
-            setLogNumber(30);
+            setLogNumber(responsePropertyMsgId16.log);
+            //setLogNumber(30);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
