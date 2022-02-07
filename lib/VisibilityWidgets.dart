@@ -94,7 +94,7 @@ class VisibilityWidgets with ChangeNotifier {
   List<Array12> MonthEnergyList;
 
   List<Array12> YearEnergyList;
-  double energy;
+  num energy;
   bool readyLoader = true,
       stopLoader = true,
       ChargingSummaryLoader = false,
