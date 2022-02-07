@@ -47,7 +47,7 @@ class VisibilityWidgets with ChangeNotifier {
   List<WeekEnergy> WeekEnergyData = [];
   List<MonthEnergy> MonthEnergyData = [];
   List<YearEnergy> YearEnergyData = [];
-
+  int selectedIndex=0;
   num hour_diff = 0.0, min_diff = 0.0;
   num charging_current = 0.0,
       charging_voltage = 0.0,
@@ -139,6 +139,11 @@ class VisibilityWidgets with ChangeNotifier {
 
   setsocket(Socket Socket) {
     socket = Socket;
+    notifyListeners();
+  }
+
+  setSelectedIndex(int selected_index) {
+    selectedIndex = selected_index;
     notifyListeners();
   }
 

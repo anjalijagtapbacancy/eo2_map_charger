@@ -37,6 +37,7 @@ class charging_summary_state extends State<ChargingSummary> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setSelectedIndex(0);
       visibilityWidgetsRead.setLogNumber(0);
       visibilityWidgetsRead.CommonRequests(16);
       visibilityWidgetsRead.setChargingSummaryLoader(true);
@@ -323,6 +324,9 @@ class charging_summary_state extends State<ChargingSummary> {
                                     color: Colors.green, fontSize: 19),
                               ),
                               onTap: () {
+                                print("OccurrencesPrev ${visibilityWidgetsWatch.Occurrences}");
+                                visibilityWidgetsWatch
+                                    .setSelectedIndex(visibilityWidgetsWatch.selectedIndex-1);
                                 visibilityWidgetsWatch
                                     .setChargingSummaryLoader(true);
                                 if (visibilityWidgetsWatch.logNumber % 5 == 0) {
@@ -381,6 +385,709 @@ class charging_summary_state extends State<ChargingSummary> {
                                 ? visibilityWidgetsWatch.isTextprev()
                                 : false,
                           ),
+                          Container(
+                            height: 20,
+                            width: 200,
+                            child: ListView.builder(
+                              itemCount: visibilityWidgetsWatch.logNumber % 5 ==
+                                      0
+                                  ? visibilityWidgetsWatch.TotalOccurrences
+                                  : visibilityWidgetsWatch.TotalOccurrences + 1,
+                              addAutomaticKeepAlives: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                                  child: GestureDetector(
+                                    child: Text(
+                                      "${index + 1}",
+                                      style: TextStyle(
+                                          color: visibilityWidgetsWatch
+                                                      .selectedIndex ==
+                                                  index
+                                              ? Colors.teal
+                                              : Colors.black,
+                                          fontSize: 15),
+                                    ),
+                                    onTap: () {
+                                      visibilityWidgetsWatch
+                                          .setChargingSummaryLoader(true);
+                                      visibilityWidgetsWatch
+                                          .setSelectedIndex(index);
+                                      if (visibilityWidgetsWatch.logNumber %
+                                              5 ==
+                                          0) {
+                                        if (index == 0) {
+                                          visibilityWidgetsWatch.SendRequest10(
+                                              10, 1, 5);
+                                          if (visibilityWidgetsWatch
+                                                      .StartNumber <
+                                                  1 &&
+                                              visibilityWidgetsWatch.EndNumber <
+                                                  5) {
+                                              int difference=1-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences1 ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                          } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-1;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences1 ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                          }
+                                          visibilityWidgetsWatch
+                                              .setStartNumber(1);
+                                          visibilityWidgetsWatch
+                                              .setEndNumber(5);
+                                        } else if (index == 1) {
+                                          visibilityWidgetsWatch.SendRequest10(
+                                              10, 6, 10);
+                                          if (visibilityWidgetsWatch
+                                                      .StartNumber <
+                                                  6 &&
+                                              visibilityWidgetsWatch.EndNumber <
+                                                  10){
+                                            int difference=6-visibilityWidgetsWatch.StartNumber;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences -
+                                                      1);
+                                              print("Occurrences1 ${visibilityWidgetsWatch.Occurrences}");
+                                            }
+                                          } else {
+                                            int difference=visibilityWidgetsWatch.StartNumber-6;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences +
+                                                      1);
+                                              print("Occurrences1 ${visibilityWidgetsWatch.Occurrences}");
+                                            }
+                                          }
+                                          visibilityWidgetsWatch
+                                              .setStartNumber(6);
+                                          visibilityWidgetsWatch
+                                              .setEndNumber(10);
+                                        } else if (index == 2) {
+                                          visibilityWidgetsWatch.SendRequest10(
+                                              10, 11, 15);
+                                          if (visibilityWidgetsWatch
+                                                      .StartNumber <
+                                                  11 &&
+                                              visibilityWidgetsWatch.EndNumber <
+                                                  15){
+                                            int difference=11-visibilityWidgetsWatch.StartNumber;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences -
+                                                      1);
+                                              print("Occurrences1 ${visibilityWidgetsWatch.Occurrences}");
+                                            }
+                                          } else {
+                                            int difference=visibilityWidgetsWatch.StartNumber-11;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences +
+                                                      1);
+                                              print("Occurrences1 ${visibilityWidgetsWatch.Occurrences}");
+                                            }
+                                          }
+                                          visibilityWidgetsWatch
+                                              .setStartNumber(11);
+                                          visibilityWidgetsWatch
+                                              .setEndNumber(15);
+                                        } else if (index == 3) {
+                                          visibilityWidgetsWatch.SendRequest10(
+                                              10, 16, 20);
+                                          if (visibilityWidgetsWatch
+                                                      .StartNumber <
+                                                  16 &&
+                                              visibilityWidgetsWatch.EndNumber <
+                                                  20){
+                                            int difference=16-visibilityWidgetsWatch.StartNumber;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences -
+                                                      1);
+                                            }
+                                          } else {
+                                            int difference=visibilityWidgetsWatch.StartNumber-16;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences +
+                                                      1);
+                                            }
+                                          }
+                                          visibilityWidgetsWatch
+                                              .setStartNumber(16);
+                                          visibilityWidgetsWatch
+                                              .setEndNumber(20);
+                                        } else if (index == 4) {
+                                          visibilityWidgetsWatch.SendRequest10(
+                                              10, 21, 25);
+                                          if (visibilityWidgetsWatch
+                                                      .StartNumber <
+                                                  21 &&
+                                              visibilityWidgetsWatch.EndNumber <
+                                                  25){
+                                            int difference=21-visibilityWidgetsWatch.StartNumber;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences -
+                                                      1);
+                                            }
+                                          } else {
+                                            int difference=visibilityWidgetsWatch.StartNumber-21;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences +
+                                                      1);
+                                            }
+                                          }
+                                          visibilityWidgetsWatch
+                                              .setStartNumber(21);
+                                          visibilityWidgetsWatch
+                                              .setEndNumber(25);
+                                        } else if (index == 5) {
+                                          visibilityWidgetsWatch.SendRequest10(
+                                              10, 26, 30);
+                                          if (visibilityWidgetsWatch
+                                                      .StartNumber <
+                                                  26 &&
+                                              visibilityWidgetsWatch.EndNumber <
+                                                  30){
+                                            int difference=26-visibilityWidgetsWatch.StartNumber;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences -
+                                                      1);
+                                            }
+                                          } else {
+                                            int difference=visibilityWidgetsWatch.StartNumber-26;
+                                            int gap=(difference/5).round();
+                                            for(int i=0;i<gap;i++){
+                                              visibilityWidgetsWatch
+                                                  .setOccurrences(
+                                                  visibilityWidgetsWatch
+                                                      .Occurrences +
+                                                      1);
+                                            }
+                                          }
+                                          visibilityWidgetsWatch
+                                              .setStartNumber(26);
+                                          visibilityWidgetsWatch
+                                              .setEndNumber(30);
+                                        }
+                                      } else {
+                                        if (index == 0) {
+                                          if (visibilityWidgetsWatch.logNumber <
+                                              5) {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(
+                                                    10,
+                                                    1,
+                                                    visibilityWidgetsWatch
+                                                        .logNumber);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    1 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    visibilityWidgetsWatch
+                                                        .logNumber){
+                                              int difference=1-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-1;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(1);
+                                            visibilityWidgetsWatch.setEndNumber(
+                                                visibilityWidgetsWatch
+                                                    .logNumber);
+                                          } else {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(10, 1, 5);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    1 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    5){
+                                              int difference=1-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-1;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(1);
+                                            visibilityWidgetsWatch
+                                                .setEndNumber(5);
+                                          }
+                                        } else if (index == 1) {
+                                          if (visibilityWidgetsWatch.logNumber <
+                                              10) {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(
+                                                    10,
+                                                    6,
+                                                    visibilityWidgetsWatch
+                                                        .logNumber);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    6 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    visibilityWidgetsWatch
+                                                        .logNumber){
+                                              int difference=6-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-6;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(6);
+                                            visibilityWidgetsWatch.setEndNumber(
+                                                visibilityWidgetsWatch
+                                                    .logNumber);
+                                          } else {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(10, 6, 10);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    6 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    10){
+                                              int difference=6-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-6;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(6);
+                                            visibilityWidgetsWatch
+                                                .setEndNumber(10);
+                                          }
+                                        } else if (index == 2) {
+                                          if (visibilityWidgetsWatch.logNumber <
+                                              15) {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(
+                                                    10,
+                                                    11,
+                                                    visibilityWidgetsWatch
+                                                        .logNumber);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    11 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    visibilityWidgetsWatch
+                                                        .logNumber){
+                                              int difference=11-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-11;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(11);
+                                            visibilityWidgetsWatch.setEndNumber(
+                                                visibilityWidgetsWatch
+                                                    .logNumber);
+                                          } else {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(10, 11, 15);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    11 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    15){
+                                              int difference=11-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-11;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                                print("Occurrences ${visibilityWidgetsWatch.Occurrences}");
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(11);
+                                            visibilityWidgetsWatch
+                                                .setEndNumber(15);
+                                          }
+                                        } else if (index == 3) {
+                                          if (visibilityWidgetsWatch.logNumber <
+                                              20) {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(
+                                                    10,
+                                                    16,
+                                                    visibilityWidgetsWatch
+                                                        .logNumber);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    16 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    visibilityWidgetsWatch
+                                                        .logNumber){
+                                              int difference=16-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-16;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(16);
+                                            visibilityWidgetsWatch.setEndNumber(
+                                                visibilityWidgetsWatch
+                                                    .logNumber);
+                                          } else {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(10, 16, 20);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    16 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    20){
+                                              int difference=16-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-16;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(16);
+                                            visibilityWidgetsWatch
+                                                .setEndNumber(20);
+                                          }
+                                        } else if (index == 4) {
+                                          if (visibilityWidgetsWatch.logNumber <
+                                              25) {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(
+                                                    10,
+                                                    21,
+                                                    visibilityWidgetsWatch
+                                                        .logNumber);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    21 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    visibilityWidgetsWatch
+                                                        .logNumber){
+                                              int difference=21-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-21;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(21);
+                                            visibilityWidgetsWatch.setEndNumber(
+                                                visibilityWidgetsWatch
+                                                    .logNumber);
+                                          } else {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(10, 21, 25);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    21 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    25){
+                                              int difference=21-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-21;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(21);
+                                            visibilityWidgetsWatch
+                                                .setEndNumber(25);
+                                          }
+                                        } else if (index == 5) {
+                                          if (visibilityWidgetsWatch.logNumber <
+                                              30) {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(
+                                                    10,
+                                                    26,
+                                                    visibilityWidgetsWatch
+                                                        .logNumber);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    26 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    visibilityWidgetsWatch
+                                                        .logNumber){
+                                              int difference=26-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-26;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(26);
+                                            visibilityWidgetsWatch.setEndNumber(
+                                                visibilityWidgetsWatch
+                                                    .logNumber);
+                                          } else {
+                                            visibilityWidgetsWatch
+                                                .SendRequest10(10, 26, 30);
+                                            if (visibilityWidgetsWatch
+                                                        .StartNumber <
+                                                    26 &&
+                                                visibilityWidgetsWatch
+                                                        .EndNumber <
+                                                    30){
+                                              int difference=26-visibilityWidgetsWatch.StartNumber;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences -
+                                                        1);
+                                              }
+                                            } else {
+                                              int difference=visibilityWidgetsWatch.StartNumber-26;
+                                              int gap=(difference/5).round();
+                                              for(int i=0;i<gap;i++){
+                                                visibilityWidgetsWatch
+                                                    .setOccurrences(
+                                                    visibilityWidgetsWatch
+                                                        .Occurrences +
+                                                        1);
+                                              }
+                                            }
+                                            visibilityWidgetsWatch
+                                                .setStartNumber(26);
+                                            visibilityWidgetsWatch
+                                                .setEndNumber(30);
+                                          }
+                                        }
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                           Visibility(
                             child: GestureDetector(
                               child: Text(
@@ -389,6 +1096,9 @@ class charging_summary_state extends State<ChargingSummary> {
                                     color: Colors.green, fontSize: 19),
                               ),
                               onTap: () {
+                                print("OccurrencesNext ${visibilityWidgetsWatch.Occurrences}");
+                                visibilityWidgetsWatch
+                                    .setSelectedIndex(visibilityWidgetsWatch.selectedIndex+1);
                                 visibilityWidgetsWatch
                                     .setChargingSummaryLoader(true);
                                 if (visibilityWidgetsWatch.logNumber % 5 == 0) {
@@ -518,16 +1228,16 @@ class charging_summary_state extends State<ChargingSummary> {
   }
 
   int serialNo(int index) {
-    if(index==0){
+    if (index == 0) {
       return visibilityWidgetsWatch.StartNumber;
-    }else if(index==1){
-      return visibilityWidgetsWatch.StartNumber+1;
-    }else if(index==2){
-      return visibilityWidgetsWatch.StartNumber+2;
-    }else if(index==3){
-      return visibilityWidgetsWatch.StartNumber+3;
-    }else if(index==4){
-      return visibilityWidgetsWatch.StartNumber+4;
+    } else if (index == 1) {
+      return visibilityWidgetsWatch.StartNumber + 1;
+    } else if (index == 2) {
+      return visibilityWidgetsWatch.StartNumber + 2;
+    } else if (index == 3) {
+      return visibilityWidgetsWatch.StartNumber + 3;
+    } else if (index == 4) {
+      return visibilityWidgetsWatch.StartNumber + 4;
     }
   }
 }
