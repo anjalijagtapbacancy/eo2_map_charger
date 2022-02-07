@@ -85,7 +85,7 @@ class VisibilityWidgets with ChangeNotifier {
       modeValue,
       fileName,
       fileUrl,
-      firmwareVersion = "Not available";
+      firmwareVersion="Not available";
   bool isScheduling = false, CurrentLog = true, isPaused = false;
   List<Array10> ChargerSummaryList = new List();
   Array10 array10 = new Array10();
@@ -136,6 +136,7 @@ class VisibilityWidgets with ChangeNotifier {
     MonthEnergyData.clear();
     YearEnergyData.clear();
   }
+
   setsocket(Socket Socket) {
     socket = Socket;
     notifyListeners();
@@ -161,11 +162,11 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> MacAddress() async {
-    final pref = await SharedPreferences.getInstance();
-    setQr((pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
-  }
 
+  Future<void> MacAddress() async {
+   final pref = await SharedPreferences.getInstance();
+   setQr((pref.getString('qrtxt') != null) ? pref.getString('qrtxt') : "");
+  }
   Future<void> Network(BuildContext context) async {
     ConnectivityResult connectivityResult;
     connectivityResult = await (Connectivity().checkConnectivity());
@@ -186,6 +187,7 @@ class VisibilityWidgets with ChangeNotifier {
     }
     notifyListeners();
   }
+
 
   Future<void> setResponse(
       BuildContext context, String response, String msgId) async {
@@ -334,21 +336,21 @@ class VisibilityWidgets with ChangeNotifier {
             if (type == 1) {
               setEvAnalysisLoader(false);
               setWeekEnergyData(null);
-              WeekEnergyData = [];
+              WeekEnergyData=[];
               WeekEnergyList = new List();
               WeekEnergyList = responsePropertyMsgId12.array;
               getWeekData();
             } else if (type == 2) {
               setEvAnalysisLoader(false);
               setMonthEnergyData(null);
-              MonthEnergyData = [];
+              MonthEnergyData=[];
               MonthEnergyList = new List();
               MonthEnergyList = responsePropertyMsgId12.array;
               getMonthData();
             } else if (type == 3) {
               setEvAnalysisLoader(false);
               setYearEnergyData(null);
-              YearEnergyData = [];
+              YearEnergyData=[];
               YearEnergyList = new List();
               YearEnergyList = responsePropertyMsgId12.array;
               getYearData();
@@ -446,7 +448,6 @@ class VisibilityWidgets with ChangeNotifier {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
             setLogNumber(responsePropertyMsgId16.log);
-            //setLogNumber(30);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -459,6 +460,7 @@ class VisibilityWidgets with ChangeNotifier {
           status = commonResponseProperty.status;
           CommonRequests(19);
           if (status != 0) {
+
             CommonWidgets().showErrorSnackbar(context, status);
           }
         } catch (e) {
@@ -528,7 +530,7 @@ class VisibilityWidgets with ChangeNotifier {
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
-            firmwareVersion = responsePropertyMsgId23.fwVersion;
+            firmwareVersion=responsePropertyMsgId23.fwVersion;
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -641,19 +643,18 @@ class VisibilityWidgets with ChangeNotifier {
     }
   }
 
-  bool isSetting_OTA() {
+  bool isSetting_OTA(){
     if (auto_mode == 0) {
       if (charging_state == 67) {
         return false;
-      } else {
+      }else{
         return true;
       }
-    } else {
+    }else{
       return true;
     }
     notifyListeners();
   }
-
   String Tips() {
     if (auto_mode == 0) {
       if (charging_state == 65) {
@@ -963,7 +964,6 @@ class VisibilityWidgets with ChangeNotifier {
     EndNumber = end_number;
     notifyListeners();
   }
-
   void setLogNumber(int log_number) {
     logNumber = log_number;
     notifyListeners();
@@ -1064,7 +1064,7 @@ class VisibilityWidgets with ChangeNotifier {
         WeekEnergyList = List.from(WeekEnergyList.reversed);
         int energyIndex = 0;
         for (int j = StartDayIndex; j <= 6; j++) {
-          energy = WeekEnergyList[energyIndex].energy.toDouble();
+           energy = WeekEnergyList[energyIndex].energy.toDouble();
           setWeekEnergyData(WeekEnergy(
               (energy / 1000).floorToDouble(), Constants.WeekDays[j]));
 
@@ -1072,7 +1072,7 @@ class VisibilityWidgets with ChangeNotifier {
         }
 
         for (int i = 0; i < StartDayIndex; i++) {
-          energy = WeekEnergyList[energyIndex].energy.toDouble();
+           energy = WeekEnergyList[energyIndex].energy.toDouble();
           setWeekEnergyData(WeekEnergy(
               (energy / 1000).floorToDouble(), Constants.WeekDays[i]));
           //WeekEnergyData.add();
@@ -1086,113 +1086,113 @@ class VisibilityWidgets with ChangeNotifier {
   }
 
   void getMonthData() {
-    try {
-      if (MonthEnergyList != null) {
-        MonthEnergyList = List.from(MonthEnergyList.reversed);
-        int PrePrevMonthDifference = 0,
-            PrePreMonthIndex = 0,
-            PrevMonthIndex = 0,
-            StartMonthIndex = 0,
-            // StartDayIndex,
-            PrevPreDifference = 0,
-            PreDifference = 0,
-            PrevMonthDifference = 0,
-            PreEndPoint = 0,
-            PrePreEndPoint = 0;
-        final DateFormat formatter1 = DateFormat('dd');
-        final DateFormat formatter2 = DateFormat('MMM');
-        final DateFormat formatter3 = DateFormat('yyyy');
-        var date_ = formatter1.format(new DateTime.now());
-        String month = formatter2.format(new DateTime.now());
-        var year_ = formatter3.format(new DateTime.now());
-        int year = int.parse(year_);
-        int date = int.parse(date_);
-        print("$date:$month:$year");
-        //  StartDayIndex = findIndex(Constants.Dates, date);
-        StartMonthIndex = findIndex(Constants.Months, month);
-        PreDifference = 31 - date;
+     try {
+    if (MonthEnergyList != null) {
+      MonthEnergyList = List.from(MonthEnergyList.reversed);
+      int PrePrevMonthDifference = 0,
+          PrePreMonthIndex = 0,
+          PrevMonthIndex = 0,
+          StartMonthIndex = 0,
+          // StartDayIndex,
+          PrevPreDifference = 0,
+          PreDifference = 0,
+          PrevMonthDifference = 0,
+          PreEndPoint = 0,
+          PrePreEndPoint = 0;
+      final DateFormat formatter1 = DateFormat('dd');
+      final DateFormat formatter2 = DateFormat('MMM');
+      final DateFormat formatter3 = DateFormat('yyyy');
+      var date_ = formatter1.format(new DateTime.now());
+      String month = formatter2.format(new DateTime.now());
+      var year_ = formatter3.format(new DateTime.now());
+      int year = int.parse(year_);
+      int date = int.parse(date_);
+      print("$date:$month:$year");
+      //  StartDayIndex = findIndex(Constants.Dates, date);
+      StartMonthIndex = findIndex(Constants.Months, month);
+      PreDifference = 31 - date;
 
-        PrevMonthIndex = StartMonthIndex - 1;
-        if (PrevMonthIndex == -1) {
-          PrevMonthIndex = 11;
+      PrevMonthIndex = StartMonthIndex - 1;
+      if(PrevMonthIndex==-1){
+        PrevMonthIndex=11;
+      }
+      String PrevMonth = Constants.Months[PrevMonthIndex];
+      if (PrevMonth == "Jan" ||
+          PrevMonth == "Mar" ||
+          PrevMonth == "May" ||
+          PrevMonth == "Jul" ||
+          PrevMonth == "Aug" ||
+          PrevMonth == "Oct" ||
+          PrevMonth == "Dec") {
+        PreEndPoint = 31;
+      } else if (PrevMonth == "Feb") {
+        if (year % 4 == 0) {
+          PreEndPoint = 29;
+        } else {
+          PreEndPoint = 28;
         }
-        String PrevMonth = Constants.Months[PrevMonthIndex];
-        if (PrevMonth == "Jan" ||
-            PrevMonth == "Mar" ||
-            PrevMonth == "May" ||
-            PrevMonth == "Jul" ||
-            PrevMonth == "Aug" ||
-            PrevMonth == "Oct" ||
-            PrevMonth == "Dec") {
-          PreEndPoint = 31;
-        } else if (PrevMonth == "Feb") {
+      } else {
+        PreEndPoint = 30;
+      }
+      PrevMonthDifference = PreEndPoint - PreDifference + 1;
+      int energyIndex = 0;
+      if (PrevMonthDifference > 0) {
+        for (int i = PrevMonthDifference; i <= PreEndPoint; i++) {
+           energy = MonthEnergyList[energyIndex].energy.toDouble();
+          setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+          //MonthEnergyData.add();
+          energyIndex++;
+        }
+      } else {
+        if (date_ == "2" && month == "Mar" && year % 4 == 0)
+          PrevPreDifference = 29 - PreEndPoint;
+        else
+          PrevPreDifference = 30 - PreEndPoint;
+        PrePreMonthIndex = PrevMonthIndex - 1;
+        if(PrePreMonthIndex==-1){
+          PrePreMonthIndex=11;
+        }
+        String PrePrevMonth = Constants.Months[PrePreMonthIndex];
+        if (PrePrevMonth == "Jan" ||
+            PrePrevMonth == "Mar" ||
+            PrePrevMonth == "May" ||
+            PrePrevMonth == "Jul" ||
+            PrePrevMonth == "Aug" ||
+            PrePrevMonth == "Oct" ||
+            PrePrevMonth == "Dec") {
+          PrePreEndPoint = 31;
+        } else if (PrePrevMonth == "Feb") {
           if (year % 4 == 0) {
-            PreEndPoint = 29;
+            PrePreEndPoint = 29;
           } else {
-            PreEndPoint = 28;
+            PrePreEndPoint = 28;
           }
         } else {
-          PreEndPoint = 30;
+          PrePreEndPoint = 30;
         }
-        PrevMonthDifference = PreEndPoint - PreDifference + 1;
-        int energyIndex = 0;
-        if (PrevMonthDifference > 0) {
-          for (int i = PrevMonthDifference; i <= PreEndPoint; i++) {
-            energy = MonthEnergyList[energyIndex].energy.toDouble();
-            setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
-            //MonthEnergyData.add();
-            energyIndex++;
-          }
-        } else {
-          if (date_ == "2" && month == "Mar" && year % 4 == 0)
-            PrevPreDifference = 29 - PreEndPoint;
-          else
-            PrevPreDifference = 30 - PreEndPoint;
-          PrePreMonthIndex = PrevMonthIndex - 1;
-          if (PrePreMonthIndex == -1) {
-            PrePreMonthIndex = 11;
-          }
-          String PrePrevMonth = Constants.Months[PrePreMonthIndex];
-          if (PrePrevMonth == "Jan" ||
-              PrePrevMonth == "Mar" ||
-              PrePrevMonth == "May" ||
-              PrePrevMonth == "Jul" ||
-              PrePrevMonth == "Aug" ||
-              PrePrevMonth == "Oct" ||
-              PrePrevMonth == "Dec") {
-            PrePreEndPoint = 31;
-          } else if (PrePrevMonth == "Feb") {
-            if (year % 4 == 0) {
-              PrePreEndPoint = 29;
-            } else {
-              PrePreEndPoint = 28;
-            }
-          } else {
-            PrePreEndPoint = 30;
-          }
-          PrePrevMonthDifference = PrePreEndPoint - PrevPreDifference + 1;
-          for (int i = PrePrevMonthDifference; i <= PrePreEndPoint; i++) {
-            energy = MonthEnergyList[energyIndex].energy.toDouble();
-            setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
-            //MonthEnergyData.add();
-            energyIndex++;
-          }
-          for (int i = 1; i <= PreEndPoint; i++) {
-            energy = MonthEnergyList[energyIndex].energy.toDouble();
-            setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
-            //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
-            energyIndex++;
-          }
+        PrePrevMonthDifference = PrePreEndPoint - PrevPreDifference + 1;
+        for (int i = PrePrevMonthDifference; i <= PrePreEndPoint; i++) {
+          energy = MonthEnergyList[energyIndex].energy.toDouble();
+          setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+          //MonthEnergyData.add();
+          energyIndex++;
         }
-
-        for (int i = 1; i < date; i++) {
+        for (int i = 1; i <= PreEndPoint; i++) {
           energy = MonthEnergyList[energyIndex].energy.toDouble();
           setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
           //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
           energyIndex++;
         }
       }
-      notifyListeners();
+
+      for (int i = 1; i < date; i++) {
+        energy = MonthEnergyList[energyIndex].energy.toDouble();
+        setMonthEnergyData(MonthEnergy((energy / 1000).floorToDouble(), i));
+        //MonthEnergyData.add(MonthEnergy((energy / 1000).floorToDouble(), i));
+        energyIndex++;
+      }
+    }
+    notifyListeners();
     } catch (e) {
       print("===ExceptionMonth: " + e.toString());
     }
