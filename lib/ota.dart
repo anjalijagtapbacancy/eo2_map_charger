@@ -35,18 +35,12 @@ class ota_state extends State<OTA> {
     if (mounted && visibilityWidgetsWatch.responseMsgId8 != null)
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
-      backgroundColor: Color.fromRGBO(242, 255, 229, 1),
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(4),
         child: Container(
           height: 400,
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            color: Colors.white,
-            elevation: 10,
-            child: Form(
+          child: Form(
               key: file_name_key,
               child: Column(
                 children: [
@@ -107,39 +101,45 @@ class ota_state extends State<OTA> {
                                   borderSide: BorderSide(color: Colors.green)))),
                     ),
                   ),
-                  MaterialButton(
-                    onPressed: () {
-                      if (file_name_key.currentState.validate()) {
-                        {file_name_key.currentState.save();
-                          visibilityWidgetsWatch.SendRequest4(
-                              4,
-                              visibilityWidgetsWatch.fileUrl,
-                              visibilityWidgetsWatch.fileName);
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      elevation: 5,
+                      onPressed: () {
+                        if (file_name_key.currentState.validate()) {
+                          {file_name_key.currentState.save();
+                            visibilityWidgetsWatch.SendRequest4(
+                                4,
+                                visibilityWidgetsWatch.fileUrl,
+                                visibilityWidgetsWatch.fileName);
 
+                          }
+                        } else {
+                          print('invalid');
                         }
-                      } else {
-                        print('invalid');
-                      }
-                      // if (visibilityWidgetsWatch.fileName != null &&
-                      //     visibilityWidgetsWatch.fileName != "" &&
-                      //     visibilityWidgetsWatch.fileUrl != "" &&
-                      //     visibilityWidgetsWatch.fileUrl != null) {
-                      //
-                      // }
-                    },
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold),
+                        // if (visibilityWidgetsWatch.fileName != null &&
+                        //     visibilityWidgetsWatch.fileName != "" &&
+                        //     visibilityWidgetsWatch.fileUrl != "" &&
+                        //     visibilityWidgetsWatch.fileUrl != null) {
+                        //
+                        // }
+                      },
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold),
+                      ),
+                      color: Colors.white,
                     ),
-                    color: Colors.grey[200],
                   )
                 ],
               ),
             ),
           ),
         ),
-      ),
     );
   }
 }
