@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:eo2_map_charger/model/Response/ResponseMsgId8.dart';
+import 'package:eo2_map_charger/user_name.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'CommonWidgets.dart';
@@ -40,6 +41,7 @@ import 'model/Response/ResponseMsgId6.dart';
 
 class VisibilityWidgets with ChangeNotifier {
   String qrText = "";
+  String user_name = "";
   Socket socket;
   bool isrunning = false, isNetwork = false;
   int status;
@@ -53,7 +55,7 @@ class VisibilityWidgets with ChangeNotifier {
       charging_voltage = 0.0,
       charging_power = 0.0,
       overall_energy = 0.0;
-  int TIMEDELAY = 25;
+  int TIMEDELAY = 10;
   int charging_state = 0,
       auto_mode,
       currentMax,
@@ -94,7 +96,7 @@ class VisibilityWidgets with ChangeNotifier {
   List<Array12> MonthEnergyList;
 
   List<Array12> YearEnergyList;
-  num energy;
+  num energy,totalConsumptionWeek=0,totalConsumptionMonth=0,totalConsumptionYear=0;
   bool readyLoader = true,
       stopLoader = true,
       ChargingSummaryLoader = false,
@@ -151,7 +153,10 @@ class VisibilityWidgets with ChangeNotifier {
     qrText = scanData;
     notifyListeners();
   }
-
+  void setuser_name(String name) {
+    user_name = name;
+    notifyListeners();
+  }
   void setIndex(int Index) {
     index = Index;
     notifyListeners();
@@ -162,6 +167,10 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> UserName() async {
+    final pref = await SharedPreferences.getInstance();
+    setuser_name((pref.getString('user_name') != null) ? pref.getString('user_name') : "");
+  }
 
   Future<void> MacAddress() async {
    final pref = await SharedPreferences.getInstance();
@@ -274,11 +283,12 @@ class VisibilityWidgets with ChangeNotifier {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
             if (!isPaused)
-              //charging_state = 67;
-              charging_state = responsePropertyMsgId8.evChargingState;
+              charging_state = 66;
+              //charging_state = responsePropertyMsgId8.evChargingState;
             else {
               if (responsePropertyMsgId8.evChargingState != 66) {
-                charging_state = responsePropertyMsgId8.evChargingState;
+                charging_state = 66;
+                //charging_state = responsePropertyMsgId8.evChargingState;
               }
             }
             if (charging_state == 67) {
@@ -1078,6 +1088,10 @@ class VisibilityWidgets with ChangeNotifier {
           //WeekEnergyData.add();
           energyIndex++;
         }
+
+        for(int i=0;i<WeekEnergyData.length;i++){
+          totalConsumptionWeek=totalConsumptionWeek+WeekEnergyData[i].energy;
+        }
         notifyListeners();
       }
     } catch (e) {
@@ -1192,6 +1206,9 @@ class VisibilityWidgets with ChangeNotifier {
         energyIndex++;
       }
     }
+    for(int i=0;i<MonthEnergyData.length;i++){
+      totalConsumptionMonth=totalConsumptionMonth+MonthEnergyData[i].energy;
+    }
     notifyListeners();
     } catch (e) {
       print("===ExceptionMonth: " + e.toString());
@@ -1220,6 +1237,9 @@ class VisibilityWidgets with ChangeNotifier {
               YearEnergy((energy / 1000).floorToDouble(), Constants.Months[i]));
           //YearEnergyData.add(YearEnergy((energy / 1000).floorToDouble(), i + 1));
           energyIndex++;
+        }
+        for(int i=0;i<YearEnergyData.length;i++){
+          totalConsumptionYear=totalConsumptionYear+YearEnergyData[i].energy;
         }
         notifyListeners();
       }

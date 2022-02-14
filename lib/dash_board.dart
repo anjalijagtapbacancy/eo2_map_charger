@@ -94,7 +94,7 @@ class dashboard_state extends State<DashBoard>
     if (mounted && visibilityWidgetsWatch.responseMsgId8 != null)
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
-      backgroundColor: Color.fromRGBO(242, 255, 229, 1),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -158,13 +158,10 @@ class dashboard_state extends State<DashBoard>
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                color: Colors.white,
-                                elevation: 10,
-                                child: Column(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SizedBox(
                                       height: 10,
@@ -955,12 +952,14 @@ class dashboard_state extends State<DashBoard>
                                     ),
                                   ],
                                 ),
-                              ),
                             ),
                             visible: visibilityWidgetsWatch.isReadyCard(),
                           ),
                           Visibility(
                             child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   "EV Connected",
@@ -969,13 +968,7 @@ class dashboard_state extends State<DashBoard>
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    color: Colors.white,
-                                    elevation: 10,
-                                    child: Column(
+                                  child:Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -1169,7 +1162,6 @@ class dashboard_state extends State<DashBoard>
                                       ],
                                     ),
                                   ),
-                                ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -1346,21 +1338,15 @@ class dashboard_state extends State<DashBoard>
                           ),
                           Visibility(
                             child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   "EV Connected",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    color: Colors.white,
-                                    elevation: 10,
-                                    child: Column(
+                               Column(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -1423,7 +1409,7 @@ class dashboard_state extends State<DashBoard>
                                                 showLabels: false,
                                                 showTicks: false,
                                                 startAngle: 270,
-                                                canScaleToFit: true,
+
                                                 endAngle: 270,
                                                 radiusFactor: 0.6,
                                                 useRangeColorForAxis: true,
@@ -1486,7 +1472,7 @@ class dashboard_state extends State<DashBoard>
                                                 minimum: 0,
                                                 interval: 1,
                                                 maximum: 20,
-                                                canScaleToFit: true,
+
                                                 showLabels: true,
                                                 showTicks: true,
                                                 showAxisLine: false,
@@ -1517,8 +1503,6 @@ class dashboard_state extends State<DashBoard>
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -1720,7 +1704,7 @@ class dashboard_state extends State<DashBoard>
                         Icons.arrow_back_ios_rounded,
                         color: Colors.green,
                       ),
-                      Text("Back"),
+                      Text("Disconnect"),
                     ],
                   ),
                 ),
@@ -1750,7 +1734,7 @@ class dashboard_state extends State<DashBoard>
       barrierDismissible: false, // user must tap button for close dialog!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Do you want to Exit'),
+          title: Container(width:MediaQuery.of(context).size.width,child: Text('Do you want to Disconnect?')),
           actions: <Widget>[
             FlatButton(
               child: const Text('No'),
@@ -1762,9 +1746,15 @@ class dashboard_state extends State<DashBoard>
               child: const Text('Yes'),
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.Accept);
+                visibilityWidgetsRead.responseMsgId8 = null;
                 visibilityWidgetsWatch.setIsPaused(false);
-                visibilityWidgetsWatch.socket.close();
-                Navigator.pop(context);
+                if(visibilityWidgetsWatch.socket!=null) {
+                  visibilityWidgetsWatch.socket.close();
+                } else {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Connection()),
+                          (Route<dynamic> route) => false);
+                }
               },
             )
           ],

@@ -1,3 +1,5 @@
+import 'package:eo2_map_charger/Home.dart';
+import 'package:eo2_map_charger/user_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -50,11 +52,25 @@ class _MyHomePageState extends State<MyHomePage> {
     //ConnectServer(context);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.UserName();
       visibilityWidgetsRead.MacAddress();
     });
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      CustomNavigation.pushReplacement(
-          context: context, className: Connection());
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      if (visibilityWidgetsRead.user_name == "" ||
+          visibilityWidgetsRead.user_name == " " ||
+          visibilityWidgetsRead.user_name == null) {
+        CustomNavigation.pushReplacement(
+            context: context, className: UserName());
+      } else {
+        if (visibilityWidgetsRead.qrText == "" ||
+            visibilityWidgetsRead.qrText == " " ||
+            visibilityWidgetsRead.qrText == null) {
+          CustomNavigation.pushReplacement(
+              context: context, className: Connection());
+        } else {
+          CustomNavigation.pushReplacement(context: context, className: Home());
+        }
+      }
     });
   }
 
