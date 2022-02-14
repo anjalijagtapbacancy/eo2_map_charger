@@ -123,7 +123,7 @@ class home_state extends State<Home> {
                                                 initialValue: visibilityWidgetsWatch.user_name,
                                                 style: TextStyle(color: Colors.black),
                                                 validator: (value) {
-                                                  return value.isEmpty ? 'Value Should not be Empty' : null;
+                                                  return value.isEmpty ? 'Name Should not be Empty' : null;
                                                 },
                                                 onChanged: (value) {
                                                   if (value.isNotEmpty) {
@@ -136,26 +136,49 @@ class home_state extends State<Home> {
                                                     labelStyle: TextStyle(color: Colors.green),
                                                     focusedBorder: OutlineInputBorder(
                                                         borderSide: BorderSide(color: Colors.green)))),
-                                            MaterialButton(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              ),
-                                              elevation: 5,
-                                              onPressed: () {
-                                                if (form_key.currentState.validate()) {
-                                                  Navigator.pop(context);
-                                                  form_key.currentState.save();
-                                                  visibilityWidgetsWatch.setuser_name(userName);
-                                                } else {
-                                                  print('invalid');
-                                                }
-                                              },
-                                              child: Text(
-                                                "Ok",
-                                                style: TextStyle(
-                                                    color: Colors.green, fontWeight: FontWeight.bold),
-                                              ),
-                                              color: Colors.white,
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                MaterialButton(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(30.0),
+                                                  ),
+                                                  elevation: 5,
+                                                  onPressed: () {
+                                                      userName="";
+                                                      Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Cancel",
+                                                    style: TextStyle(
+                                                        color: Colors.green, fontWeight: FontWeight.bold),
+                                                  ),
+                                                  color: Colors.white,
+                                                ),
+                                                MaterialButton(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(30.0),
+                                                  ),
+                                                  elevation: 5,
+                                                  onPressed: () {
+                                                    if (form_key.currentState.validate()) {
+                                                      Navigator.pop(context);
+                                                      form_key.currentState.save();
+                                                      visibilityWidgetsWatch.setuser_name(userName);
+                                                    } else {
+                                                      print('invalid');
+                                                    }
+                                                  },
+                                                  child: Text(
+                                                    "Ok",
+                                                    style: TextStyle(
+                                                        color: Colors.green, fontWeight: FontWeight.bold),
+                                                  ),
+                                                  color: Colors.white,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
