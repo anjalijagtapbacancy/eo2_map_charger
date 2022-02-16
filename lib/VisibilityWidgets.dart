@@ -43,6 +43,7 @@ class VisibilityWidgets with ChangeNotifier {
   String qrText = "";
   String user_name = "";
   Socket socket;
+  String appbar_name="Dashboard";
   bool isrunning = false, isNetwork = false;
   int status;
   int index = 0;
@@ -137,6 +138,11 @@ class VisibilityWidgets with ChangeNotifier {
     WeekEnergyData.clear();
     MonthEnergyData.clear();
     YearEnergyData.clear();
+  }
+
+  setappbar_name(String name) {
+    appbar_name = name;
+    notifyListeners();
   }
 
   setsocket(Socket Socket) {
@@ -283,12 +289,13 @@ class VisibilityWidgets with ChangeNotifier {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
             if (!isPaused)
-              charging_state = 66;
-              //charging_state = responsePropertyMsgId8.evChargingState;
+              //charging_state = 66;
+              charging_state = responsePropertyMsgId8.evChargingState;
             else {
-              if (responsePropertyMsgId8.evChargingState != 66) {
-                charging_state = 66;
-                //charging_state = responsePropertyMsgId8.evChargingState;
+              if (responsePropertyMsgId8.evChargingState != 66 || responsePropertyMsgId8.evChargingState != 65) {
+                //charging_state = 66;
+                charging_state = responsePropertyMsgId8.evChargingState;
+                setIsPaused(false);
               }
             }
             if (charging_state == 67) {

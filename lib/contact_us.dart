@@ -23,6 +23,7 @@ class contact_us extends State<ContactUs> {
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setappbar_name("Contact Us");
     });
     super.initState();
   }

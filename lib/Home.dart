@@ -14,6 +14,7 @@ import 'VisibilityWidgets.dart';
 import 'charging_summary.dart';
 import 'contact_us.dart';
 import 'dash_board2.dart';
+import 'ConstantFunction/Constants.dart';
 
 class Home extends StatefulWidget {
   Home();
@@ -28,6 +29,7 @@ class home_state extends State<Home> {
   VisibilityWidgets visibilityWidgetsRead;
   VisibilityWidgets visibilityWidgetsWatch;
   final GlobalKey<FormState> form_key = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String userName="";
   home_state();
 
@@ -69,12 +71,18 @@ class home_state extends State<Home> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Scaffold(
+            key: scaffoldKey,
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.green),
+              leading: IconButton(
+                icon: Image.asset(
+                  AssetConstants.menu_icon,
+                ),
+                onPressed: () =>scaffoldKey.currentState.openDrawer(),
+              ),
               backgroundColor: Colors.white,
-              title: const Text(
-                'Charger',
-                style: TextStyle(color: Colors.green),
+              title: Text(
+                visibilityWidgetsWatch.appbar_name,
+                style: TextStyle(color: Colors.black),
               ),
             ),
             body: showBody(),
@@ -85,22 +93,21 @@ class home_state extends State<Home> {
                   DrawerHeader(
                     child: Row(
                       children: [
-                        SizedBox(width: 5, height: 50),
-                        Image.asset(AssetConstants.charging_gun_icon),
-                        SizedBox(width: 5, height: 5),
+                        SizedBox(
+                          height: ScreenUtil().setHeight(50),),
+                        Image.asset(AssetConstants.user_icon),
+                        SizedBox(width: ScreenUtil().setWidth(5),
+                          height: ScreenUtil().setHeight(5),),
                         Text(
                           "Hi  ${visibilityWidgetsWatch.user_name}!",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         SizedBox(
-                          width: 5,
+                          width: ScreenUtil().setWidth(30),
                         ),
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
-                            child: Icon(
-                          Icons.change_circle,
-                          color: Colors.white,
-                        ),
+                            child: Image.asset(AssetConstants.pen),
                         onTap: (){
                             showDialog(
                                 barrierDismissible: false,
@@ -188,8 +195,9 @@ class home_state extends State<Home> {
                         },),
                       ],
                     ),
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
+                    decoration: BoxDecoration(
+                      color: Constants.black,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight:Radius.circular(20)),
                     ),
                   ),
                   ListTile(
@@ -239,17 +247,20 @@ class home_state extends State<Home> {
                     },
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenUtil().setHeight(100),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
-                    child: Text(
-                      "Firmware Version : ${visibilityWidgetsWatch.firmwareVersion}",
-                      style: TextStyle(color: Colors.green),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
+                      child: Text(
+                        "Firmware Version : ${visibilityWidgetsWatch.firmwareVersion}",
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenUtil().setHeight(10),
                   ),
                 ],
               ),
@@ -288,7 +299,7 @@ class home_state extends State<Home> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Container(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width/2,
               child: Text('Do you want to Disconnect?')),
           actions: <Widget>[
             FlatButton(

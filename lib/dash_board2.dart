@@ -44,7 +44,7 @@ class dashboard_state extends State<DashBoard2>
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
-
+      visibilityWidgetsRead.setappbar_name("Dashboard");
       visibilityWidgetsRead.setCurrentLog(true);
       visibilityWidgetsRead.setisResponse8(false);
       Future.delayed(
@@ -132,7 +132,7 @@ class dashboard_state extends State<DashBoard2>
                                       child: Row(
                                         children: [
                                           Image(
-                                            image: AssetImage(
+                                            image: const AssetImage(
                                                 AssetConstants.ic_ev_analysis),
                                             color: Colors.grey,
                                             width: ScreenUtil().setWidth(30),

@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import 'Connection.dart';
 import 'ConstantFunction/custom_navigation.dart';
 import 'ConstantFunction/Constants.dart';
+import 'ConstantFunction/size_constants.dart';
 import 'VisibilityWidgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(MyApp());
@@ -76,42 +78,41 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConstants.setScreenAwareConstant(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AssetConstants.splash_screen),
-                fit: BoxFit.cover,
+      backgroundColor:  Constants.white,
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height:ScreenUtil().setHeight(50)),
+                  Image(
+                    image: AssetImage(AssetConstants.app_logo),
+                    height: ScreenUtil().setHeight(100),
+                  ),
+                  Image(
+                    image: AssetImage(AssetConstants.charging_gun),
+                    height: ScreenUtil().setHeight(350)
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Powered by',
+                        style: TextStyle(color: Constants.black,fontSize: 14.sp),
+                      ),
+                      Text(
+                        'EO2 Evse Private Limited',
+                        style: TextStyle(color: Constants.green,fontSize: 14.sp),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(40, 5, 0, 0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 200.0, height: 100.0),
-                Image(
-                  image: AssetImage(AssetConstants.app_logo),
-                  height: 150,
-                ),
-                Image(
-                  image: AssetImage(AssetConstants.charging_gun),
-                  height: 250,
-                ),
-                Text(
-                  'Powered by EO2 Evse Private Limited',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

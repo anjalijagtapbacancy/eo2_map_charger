@@ -37,6 +37,7 @@ class charging_summary_state extends State<ChargingSummary> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setappbar_name("Charging Summary");
       visibilityWidgetsRead.setSelectedIndex(0);
       visibilityWidgetsRead.setLogNumber(0);
       visibilityWidgetsRead.CommonRequests(16);

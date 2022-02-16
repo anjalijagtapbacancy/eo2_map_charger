@@ -1,8 +1,10 @@
 import 'dart:core';
 
+import 'package:flutter/cupertino.dart';
+
 class AssetConstants {
   static const splash_screen = "assets/icons/splash_img.png";
-  static const app_logo = "assets/icons/logo.png";
+  static const app_logo = "assets/icons/eo2_logo.png";
   static const charging_gun = "assets/icons/charging_gun.png";
   static const charging_gun_icon = "assets/icons/charging_gun_icon.png";
   static const dashboard = "assets/icons/dashboard.png";
@@ -21,7 +23,11 @@ class AssetConstants {
   static const ic_twitter = "assets/icons/ic_twitter.png";
   static const ic_youtube = "assets/icons/ic_youtube.png";
   static const loader = "assets/icons/loader.gif";
-  static const ota = "assets/icons/snow.png";
+  static const ota = "assets/icons/ota.png";
+  static const scan_qr_icon = "assets/icons/scan_qr_icon.png";
+  static const menu_icon = "assets/icons/menu_icon.png";
+  static const user_icon = "assets/icons/user_icon.png";
+  static const pen = "assets/icons/pen.png";
 }
 class Constants {
   static List<String> WeekDays = [
@@ -81,5 +87,8 @@ class Constants {
     "31"
   ];
   static const qrCodeText = "Please scan the QR code to detect the MAC Address";
+  static Color green= Color.fromRGBO(139, 204, 21, 1.0);
+  static Color white= Color.fromRGBO(255, 255, 255, 1.0);
+  static Color black= Color.fromRGBO(13, 23, 36, 1.0);
 }
 

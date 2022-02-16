@@ -24,6 +24,7 @@ class ota_state extends State<OTA> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setappbar_name("OTA");
       visibilityWidgetsRead.setfileName(fileName);
       visibilityWidgetsRead.setfileUrl(fileLink);
     });

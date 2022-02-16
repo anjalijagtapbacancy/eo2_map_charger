@@ -5,10 +5,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/src/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'CommonWidgets.dart';
 import 'ConstantFunction/Constants.dart';
 import 'ConstantFunction/custom_navigation.dart';
+import 'ConstantFunction/size_constants.dart';
 import 'Home.dart';
 import 'VisibilityWidgets.dart';
 
@@ -47,6 +48,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
+    SizeConstants.setScreenAwareConstant(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -70,6 +72,18 @@ class _QRViewExampleState extends State<QRViewExample> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 50, 0, 0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: SizedBox(
+                            height: ScreenUtil().setHeight(80),
+                            child: GestureDetector(child: Icon(Icons.close,color:Constants.white,size: 40,),onTap: (){
+                              Navigator.pop(context);
+                            },),
+                          ),
+                        ),
+                    ),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
@@ -86,35 +100,6 @@ class _QRViewExampleState extends State<QRViewExample> {
                     )
                   ],
                 )),
-            Container(
-              height: 60,
-              width: 200,
-              child: Center(
-                child: RaisedButton(
-                  textColor: Colors.black,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.arrow_back_ios_rounded,
-                          color: Colors.green,
-                        ),
-                        Text("Back"),
-                      ],
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -131,15 +116,19 @@ class _QRViewExampleState extends State<QRViewExample> {
         },
         child: SizeChangedLayoutNotifier(
             key: const Key('qr-size-notifier'),
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.white,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 6,
-                cutOutSize: 200,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+                overlay: QrScannerOverlayShape(
+                  borderColor: Constants.green,
+                  borderRadius: 10,
+                  borderLength: 40,
+                  borderWidth: 6,
+                  cutOutSize: 400.sp,
+                ),
               ),
             )));
   }
