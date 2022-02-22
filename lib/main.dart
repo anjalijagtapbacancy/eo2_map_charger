@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           CustomNavigation.pushReplacement(
               context: context, className: Connection());
         } else {
-          CustomNavigation.pushReplacement(context: context, className: Home());
+         visibilityWidgetsRead.home(context);
         }
       }
     });

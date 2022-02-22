@@ -60,64 +60,67 @@ class user_name extends State<UserName> {
                 SizedBox(height:ScreenUtil().setHeight(20)),
                 Form(
                   key: user_key,
-                  child:TextFormField(
-                        style: TextStyle(color: Colors.black),
-                        validator: (value) {
-                          return value.isEmpty ? 'Name Should not be Empty' : null;
-                        },
-                        onChanged: (value) async {
-                          visibilityWidgetsWatch.setuser_name(value);
-                          final pref = await SharedPreferences.getInstance();
-                          pref.setString(
-                              "user_name", visibilityWidgetsWatch.user_name);
-                        },
-                        initialValue: visibilityWidgetsWatch.user_name,
-                        cursorColor: Colors.green,
-                        maxLength: 10,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(borderSide:const BorderSide(),),
-                            labelText: "Enter Your Name",
-                            fillColor: Colors.grey[200],
-                            labelStyle: TextStyle(color: Colors.grey),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey)))),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(20),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Container(
-                    height: 50,
-                    child: Center(
-                      child: RaisedButton(
-                        textColor: Colors.black,
-                        color: Constants.green,
-                        child: Center(
-                          child:Text(
-                            "Save & Continue",
-                            style: TextStyle(color: Colors.white),
+                  child:Column(
+                    children: [
+                      TextFormField(
+                            style: TextStyle(color: Colors.black),
+                            validator: (value) {
+                              return value.isEmpty ? 'Name Should not be Empty' : null;
+                            },
+                            onChanged: (value) async {
+                              visibilityWidgetsWatch.setuser_name(value);
+                              final pref = await SharedPreferences.getInstance();
+                              pref.setString(
+                                  "user_name", visibilityWidgetsWatch.user_name);
+                            },
+                            initialValue: visibilityWidgetsWatch.user_name,
+                            cursorColor: Colors.green,
+                            maxLength: 10,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(borderSide:const BorderSide(),),
+                                labelText: "Enter Your Name",
+                                fillColor: Colors.grey[200],
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey)))),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(20),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Container(
+                          height: 50,
+                          child: Center(
+                            child: RaisedButton(
+                              textColor: Colors.black,
+                              color: Constants.green,
+                              child: Center(
+                                child:Text(
+                                  "Save & Continue",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (user_key.currentState.validate()) {
+                                  user_key.currentState.save();
+                                  if (visibilityWidgetsRead.qrText == "" ||
+                                      visibilityWidgetsRead.qrText == " " ||
+                                      visibilityWidgetsRead.qrText == null) {
+                                    CustomNavigation.pushReplacement(
+                                        context: context, className: Connection());
+                                  } else {
+                                    visibilityWidgetsRead.home(context);
+                                  }
+                                }
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
                           ),
                         ),
-                        onPressed: () {
-                          if (user_key.currentState.validate()) {
-                            user_key.currentState.save();
-                            if (visibilityWidgetsRead.qrText == "" ||
-                                visibilityWidgetsRead.qrText == " " ||
-                                visibilityWidgetsRead.qrText == null) {
-                              CustomNavigation.pushReplacement(
-                                  context: context, className: Connection());
-                            } else {
-                              CustomNavigation.pushReplacement(
-                                  context: context, className: Home());
-                            }
-                          }
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],

@@ -183,8 +183,7 @@ class connection extends State<Connection> {
                           onPressed: () {
                             if (qr_key.currentState.validate()) {
                               qr_key.currentState.save();
-                              CustomNavigation.push(
-                                  context: context, className: Home());
+                              visibilityWidgetsRead.home(context);
                             }
                           },
                           shape: RoundedRectangleBorder(

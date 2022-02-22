@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:js';
 
 import 'package:eo2_map_charger/model/Response/ResponseMsgId8.dart';
 import 'package:eo2_map_charger/user_name.dart';
@@ -11,6 +12,8 @@ import 'ConnectServer.dart';
 import 'Connection.dart';
 import 'ConstantFunction/Constants.dart';
 import 'package:intl/intl.dart';
+import 'ConstantFunction/custom_navigation.dart';
+import 'Home.dart';
 import 'ev_analysis.dart';
 import 'model/Request/CommonRequest.dart';
 
@@ -203,6 +206,16 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
+  void home(BuildContext context) async{
+    ConnectivityResult connectivityResult;
+    connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.wifi) {
+      CustomNavigation.pushReplacement(context: context, className: Home());
+    }
+    else{
+      CommonWidgets().showToast("Please make sure that you are connected to the wifi");
+    }
+  }
 
   Future<void> setResponse(
       BuildContext context, String response, String msgId) async {
@@ -439,9 +452,9 @@ class VisibilityWidgets with ChangeNotifier {
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
-            startHour = (responsePropertyMsgId15.wdStartTm / 100).round();
+            startHour = (responsePropertyMsgId15.wdStartTm / 100).floor();
             startMinute = responsePropertyMsgId15.wdStartTm % 100;
-            endHour = (responsePropertyMsgId15.wdEndTm / 100).round();
+            endHour = (responsePropertyMsgId15.wdEndTm / 100).floor();
             endMinute = responsePropertyMsgId15.wdEndTm % 100;
             isScheduling = responsePropertyMsgId15.isSchedule != 0;
 

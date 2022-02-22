@@ -143,8 +143,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         final pref = await SharedPreferences.getInstance();
         pref.setString("qrtxt", visibilityWidgetsRead.qrText);
         Navigator.pop(context);
-        CustomNavigation.push(
-            context: context, className: Home());
+        visibilityWidgetsRead.home(context);
       }
     });
   }

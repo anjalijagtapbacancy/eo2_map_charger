@@ -56,6 +56,14 @@ class home_state extends State<Home> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
       visibilityWidgetsRead.setIndex(0);
+      Future.delayed(
+        Duration(seconds: 4),
+      ).then((value) =>
+      {
+        if(visibilityWidgetsRead.socket == null){
+          ConnectServer(context)
+        }
+      });
       //visibilityWidgetsRead.ConnectServer(context);
     });
     // VisibilityWidgets().ConnectServer(context);

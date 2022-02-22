@@ -19,149 +19,110 @@ Future<void> ConnectServer(BuildContext context1) async {
   InternetAddress ServerIp;
   Socket socket;
   MDnsClient client;
-  ConnectivityResult connectivityResult =
-  await (Connectivity().checkConnectivity());
-  if (connectivityResult == ConnectivityResult.wifi) {
+
     print("object");
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       visibilityWidgetsRead = context1.read<VisibilityWidgets>();
       print("${visibilityWidgetsRead.qrText}");
-      void ConnectRequest() async {
-        try {
-          String name = '${visibilityWidgetsRead.qrText}.local';
-          if (Platform.isIOS) {
-            client = MDnsClient();
-          } else {
-            client = MDnsClient(rawDatagramSocketFactory:
-                (dynamic host, int port,
-                {bool reuseAddress, bool reusePort, int ttl}) {
-              return RawDatagramSocket.bind(host, port,
-                  reuseAddress: true, reusePort: false, ttl: ttl);
-            });
+      try {
+        String name = '${visibilityWidgetsRead.qrText}.local';
+        if (Platform.isIOS) {
+          client = MDnsClient();
+        } else {
+          client = MDnsClient(rawDatagramSocketFactory:
+              (dynamic host, int port,
+              {bool reuseAddress, bool reusePort, int ttl}) {
+            return RawDatagramSocket.bind(host, port,
+                reuseAddress: true, reusePort: false, ttl: ttl);
+          });
+        }
+        if (client != null) {
+          await client.start();
+          await for (IPAddressResourceRecord record
+          in client.lookup<IPAddressResourceRecord>(
+              ResourceRecordQuery.addressIPv4(name),
+              timeout: Duration(milliseconds: 2000))) {
+            ServerIp = record.address;
+            print('Found address (${record.address}).');
+            client.stop();
           }
-          if (client != null) {
-            await client.start();
-            await for (IPAddressResourceRecord record
-            in client.lookup<IPAddressResourceRecord>(
-                ResourceRecordQuery.addressIPv4(name),
-                timeout: Duration(milliseconds: 2000)).timeout(
-                Duration(milliseconds: 2000), onTimeout: (EventSink) {
-              //CommonWidgets().showToast("Ip Address Not Found......");
-              print("${EventSink.toString()}");
-              client.stop();
-            })) {
-              ServerIp = record.address;
-              print('Found address (${record.address}).');
-              if (ServerIp != null) {
-                socket = await Socket.connect(
-                    ServerIp, 8080, timeout: Duration(seconds: 1)).timeout(
-                    Duration(seconds: 1), onTimeout: () {
-                  CommonWidgets().showToast("Connection Error");
-                });
-                visibilityWidgetsRead.setsocket(socket);
-                // timer = Timer.periodic(Duration(seconds: 5), (Timer t) => checkConnectionStatus());
-              }
-              client.stop();
-            }
-          }
-          if (visibilityWidgetsRead.socket != null) {
-            print(
-                'Connected to: ${visibilityWidgetsRead.socket.remoteAddress
-                    .address}:${visibilityWidgetsRead.socket.remotePort}');
-            visibilityWidgetsRead.isrunning = true;
-            visibilityWidgetsRead.socket.listen(
-                  (Uint8List data) {
-                /* String serverResponse =
+        }
+        if (ServerIp != null) {
+          socket = await Socket.connect(
+              ServerIp, 8080, timeout: Duration(seconds: 1)).timeout(
+              Duration(seconds: 1), onTimeout: () {
+            CommonWidgets().showToast("Connection Error");
+          });
+          visibilityWidgetsRead.setsocket(socket);
+          // timer = Timer.periodic(Duration(seconds: 5), (Timer t) => checkConnectionStatus());
+        }
+        if (visibilityWidgetsRead.socket != null) {
+          print(
+              'Connected to: ${visibilityWidgetsRead.socket.remoteAddress
+                  .address}:${visibilityWidgetsRead.socket.remotePort}');
+          visibilityWidgetsRead.isrunning = true;
+          visibilityWidgetsRead.socket.listen(
+                (Uint8List data) {
+              /* String serverResponse =
               "{\"msg_id\":12,\"properties\": {\"type\": 3,\"array\": [{\"energy\": 3444},{\"energy\": 3454},{\"energy\": 7888},{\"energy\": 5455},{\"energy\": 6465},{\"energy\": 8888},{\"energy\": 7777},{\"energy\": 3444},{\"energy\": 8888},{\"energy\": 8655},{\"energy\": 3333},{\"energy\": 6666},{\"energy\": 6677},{\"energy\": 7655},{\"energy\": 3333},{\"energy\": 3333},{\"energy\": 9999},{\"energy\": 1666},{\"energy\": 2545},{\"energy\": 9899},{\"energy\": 6656},{\"energy\": 3466},{\"energy\": 3567},{\"energy\": 7655},{\"energy\": 7898},{\"energy\": 4557},{\"energy\": 8878},{\"energy\": 3233},{\"energy\": 5678},{\"energy\": 5553}]}}\n\r";
         */
-                String serverResponse = String.fromCharCodes(data);
-                if (serverResponse.contains("{\"msg_id\":")) {
-                  List<String> Message = [];
-                  final split = serverResponse.split("\n\r");
-                  for (int i = 0; i < split.length - 1; i++) {
-                    if (split[i].contains("{\"msg_id\":")) Message.add(
-                        split[i]);
-                  }
-                  for (var value in Message) {
-                    print(value);
-                    String splitString = value.split("{\"msg_id\":")[1];
-                    String msgId = splitString.split(",")[0];
-                    visibilityWidgetsRead.setResponse(context1, value, msgId);
-                  }
+              String serverResponse = String.fromCharCodes(data);
+              if (serverResponse.contains("{\"msg_id\":")) {
+                List<String> Message = [];
+                final split = serverResponse.split("\n\r");
+                for (int i = 0; i < split.length - 1; i++) {
+                  if (split[i].contains("{\"msg_id\":")) Message.add(
+                      split[i]);
                 }
-              }, cancelOnError: true,
-              onError: (error) async {
-                print("Error===" + error.toString());
-                visibilityWidgetsRead.socket.destroy();
+                for (var value in Message) {
+                  print(value);
+                  String splitString = value.split("{\"msg_id\":")[1];
+                  String msgId = splitString.split(",")[0];
+                  visibilityWidgetsRead.setResponse(context1, value, msgId);
+                }
+              }
+            }, cancelOnError: true,
+            onError: (error) async {
+              print("Error===" + error.toString());
+              visibilityWidgetsRead.socket.destroy();
+              visibilityWidgetsRead.responseMsgId8 = null;
+              if (context1 != null)
+                Navigator.of(context1).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context1) => Connection()),
+                        (Route<dynamic> route) => false);
+            },
+            onDone: () {
+              try {
+                print('Server left.');
                 visibilityWidgetsRead.responseMsgId8 = null;
+                if (visibilityWidgetsRead.socket != null)
+                  visibilityWidgetsRead.socket.destroy();
                 if (context1 != null)
                   Navigator.of(context1).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context1) => Connection()),
                           (Route<dynamic> route) => false);
-              },
-              onDone: () {
-                try {
-                  print('Server left.');
-                  visibilityWidgetsRead.responseMsgId8 = null;
-                  if (visibilityWidgetsRead.socket != null)
-                    visibilityWidgetsRead.socket.destroy();
-                  if (context1 != null)
-                    Navigator.of(context1).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context1) => Connection()),
-                            (Route<dynamic> route) => false);
-                } catch (Exception) {
-                  print("Exception==onDone ${Exception.toString()}");
-                }
-              },
-            );
-            visibilityWidgetsRead.SendRequest1(1, EpochTime());
-            await Future.delayed(Duration(milliseconds: 500));
-            visibilityWidgetsRead.CommonRequests(20);
-          }
-          // else {
-          //   print("Something Wrong with Ip Address");
-          //   CommonWidgets().showToast("Ip Address Not Found");
-          //   if (context1 != null)
-          //     Navigator.of(context1).pushAndRemoveUntil(
-          //         MaterialPageRoute(builder: (context1) => Connection()),
-          //             (Route<dynamic> route) => false);
-          // }
-        } catch (e) {
-          print("Exception" + e.toString());
+              } catch (Exception) {
+                print("Exception==onDone ${Exception.toString()}");
+              }
+            },
+          );
+          visibilityWidgetsRead.SendRequest1(1, EpochTime());
+          await Future.delayed(Duration(milliseconds: 500));
+          visibilityWidgetsRead.CommonRequests(20);
         }
+        // else {
+        //   print("Something Wrong with Ip Address");
+        //   CommonWidgets().showToast("Ip Address Not Found");
+        //   if (context1 != null)
+        //     Navigator.of(context1).pushAndRemoveUntil(
+        //         MaterialPageRoute(builder: (context1) => Connection()),
+        //             (Route<dynamic> route) => false);
+        // }
+      } catch (e) {
+        print("Exception" + e.toString());
       }
-
-      ConnectRequest();
-
-      Future.delayed(
-        Duration(seconds: 2),
-      ).then((value) =>
-      {
-        if(visibilityWidgetsRead.socket == null){
-          ConnectRequest()
-        }
-      });
-
-      Future.delayed(
-        Duration(seconds: 4),
-      ).then((value) => {
-      if(visibilityWidgetsRead.socket == null){
-        CommonWidgets().showToast("Something Went Wrong"),
-      if (context1 != null)
-        Navigator.of(context1).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context1) => Connection()),
-                (Route<dynamic> route) => false)
-    }});
     });
-  }
-  else {
-    print("Wifi is not on or Mobile data is on");
-    CommonWidgets().showToast("Wifi is not on or Mobile data is on");
-    if (context1 != null)
-      Navigator.of(context1).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context1) => Connection()),
-              (Route<dynamic> route) => false);
-  }
+
 }
 
 int EpochTime() {
