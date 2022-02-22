@@ -43,69 +43,69 @@ class contact_us extends State<ContactUs> {
             children: [
               Image.asset(AssetConstants.app_logo),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: Text(
-                  "Phone:",
-                  style: TextStyle(color: Colors.green),
+                  "Address:",
+                  style: TextStyle(color: Constants.blue),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("+91-7574809624"),
+                child: Text("D-10, Defence Colony,New Delhi – 110024, India"),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: Text(
                   "Email:",
-                  style: TextStyle(color: Colors.green),
+                  style: TextStyle(color: Constants.blue),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("info@eo2.in"),
+                child: Text("info@trinitytouch.com"),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: Text(
                   "Website:",
-                  style: TextStyle(color: Colors.green),
+                  style: TextStyle(color: Constants.blue),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("eo2.in"),
+                child: Text("trinitytouch.com"),
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(20),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15,0, 15, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      child: Image.asset(AssetConstants.ic_facebook),
-                      width: ScreenUtil().setWidth(50),
-                      height: ScreenUtil().setHeight(50),
-                    ),
-                    SizedBox(
-                      child: Image.asset(AssetConstants.ic_twitter),
-                      width: ScreenUtil().setWidth(50),
-                      height: ScreenUtil().setHeight(50),
-                    ),
-                    SizedBox(
-                      child: Image.asset(AssetConstants.ic_linkedin),
-                      width: ScreenUtil().setWidth(50),
-                      height: ScreenUtil().setHeight(50),
-                    ),
-                    SizedBox(
-                      child: Image.asset(AssetConstants.ic_youtube),
-                      width: ScreenUtil().setWidth(50),
-                      height: ScreenUtil().setHeight(50),
-                    ),
-                  ],
-                ),
-              )
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(15,0, 15, 0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       SizedBox(
+              //         child: Image.asset(AssetConstants.ic_facebook),
+              //         width: ScreenUtil().setWidth(50),
+              //         height: ScreenUtil().setHeight(50),
+              //       ),
+              //       SizedBox(
+              //         child: Image.asset(AssetConstants.ic_twitter),
+              //         width: ScreenUtil().setWidth(50),
+              //         height: ScreenUtil().setHeight(50),
+              //       ),
+              //       SizedBox(
+              //         child: Image.asset(AssetConstants.ic_linkedin),
+              //         width: ScreenUtil().setWidth(50),
+              //         height: ScreenUtil().setHeight(50),
+              //       ),
+              //       SizedBox(
+              //         child: Image.asset(AssetConstants.ic_youtube),
+              //         width: ScreenUtil().setWidth(50),
+              //         height: ScreenUtil().setHeight(50),
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),

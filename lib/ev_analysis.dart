@@ -1,3 +1,4 @@
+import 'package:eo2_map_charger/ConstantFunction/Constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -63,9 +64,9 @@ class ev_analysis_state extends State<EvAnalysis>
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ev Analysis",style: TextStyle(color: Colors.green,),),
+        title: Text("Ev Analysis",style: TextStyle(color: Constants.blue,),),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color:Colors.green ),
+        iconTheme: IconThemeData(color:Constants.blue ),
       ),
       body: visibilityWidgetsWatch.EvAnalysisLoader == false
           ? Container(
@@ -85,9 +86,9 @@ class ev_analysis_state extends State<EvAnalysis>
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: TabBar(
-                  indicatorColor: Colors.green,
+                  indicatorColor: Constants.blue,
                   controller: _tabController,
-                  labelColor: Colors.green,
+                  labelColor: Constants.blue,
                   unselectedLabelColor: Colors.grey,
                   tabs: const [
                     Tab(
@@ -151,7 +152,7 @@ class ev_analysis_state extends State<EvAnalysis>
                                             yValueMapper:
                                                 (WeekEnergy weekEnergy, _) =>
                                             weekEnergy.energy,
-                                            color: Colors.green,
+                                            color: Constants.blue,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(15))),
                                       ]),
@@ -192,7 +193,7 @@ class ev_analysis_state extends State<EvAnalysis>
                                             yValueMapper:
                                                 (MonthEnergy monthEnergy, _) =>
                                             monthEnergy.energy,
-                                            color: Colors.green,
+                                            color: Constants.blue,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(15))),
                                       ]),
@@ -232,7 +233,7 @@ class ev_analysis_state extends State<EvAnalysis>
                                             yValueMapper:
                                                 (YearEnergy yearEnergy, _) =>
                                             yearEnergy.energy,
-                                            color: Colors.green,
+                                            color: Constants.blue,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(15))),
                                       ]),

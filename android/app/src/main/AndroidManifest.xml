@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
    <application
-        android:label="Eo2 Map Charger"
+        android:label="Trinity Touch Charger"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/src/provider.dart';
 
+import 'ConstantFunction/Constants.dart';
 import 'VisibilityWidgets.dart';
 
 class Settings extends StatefulWidget {
@@ -63,7 +64,7 @@ class settings_state extends State<Settings> {
                   Switch(
                     onChanged: toggleSwitch,
                     value: isAlert,
-                    activeColor: Colors.green,
+                    activeColor: Constants.blue,
                     activeTrackColor: Colors.grey,
                     inactiveThumbColor: Colors.black,
                     inactiveTrackColor: Colors.grey,

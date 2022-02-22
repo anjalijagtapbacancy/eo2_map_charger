@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 class AssetConstants {
   static const splash_screen = "assets/icons/splash_img.png";
-  static const app_logo = "assets/icons/eo2_logo.png";
+  static const app_logo = "assets/icons/trinitylogo.png";
   static const charging_gun = "assets/icons/charging_gun.png";
+  static const ic_launcher = "assets/icons/ic_launcher.png";
   static const charging_gun_icon = "assets/icons/charging_gun_icon.png";
   static const dashboard = "assets/icons/dashboard.png";
   static const charging_summary = "assets/icons/charging_summary.png";
@@ -87,7 +88,7 @@ class Constants {
     "31"
   ];
   static const qrCodeText = "Please scan the QR code to detect the MAC Address";
-  static Color green= Color.fromRGBO(139, 204, 21, 1.0);
+  static Color blue= Color.fromRGBO(40, 158, 243, 1.0);
   static Color white= Color.fromRGBO(255, 255, 255, 1.0);
   static Color black= Color.fromRGBO(13, 23, 36, 1.0);
 }

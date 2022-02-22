@@ -13,6 +13,7 @@ import 'ConstantFunction/size_constants.dart';
 import 'VisibilityWidgets.dart';
 import 'charging_summary.dart';
 import 'contact_us.dart';
+import 'dash_board.dart';
 import 'dash_board2.dart';
 import 'ConstantFunction/Constants.dart';
 
@@ -137,12 +138,12 @@ class home_state extends State<Home> {
                                                     userName=value;
                                                   }
                                                 },
-                                                cursorColor: Colors.green,
+                                                cursorColor: Constants.blue,
                                                 decoration: InputDecoration(
                                                     labelText: "User Name",
-                                                    labelStyle: TextStyle(color: Colors.green),
+                                                    labelStyle: TextStyle(color:Constants.blue,),
                                                     focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: Colors.green)))),
+                                                        borderSide: BorderSide(color: Constants.blue,)))),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,7 +161,7 @@ class home_state extends State<Home> {
                                                   child: Text(
                                                     "Cancel",
                                                     style: TextStyle(
-                                                        color: Colors.green, fontWeight: FontWeight.bold),
+                                                        color: Constants.blue, fontWeight: FontWeight.bold),
                                                   ),
                                                   color: Colors.white,
                                                 ),
@@ -181,7 +182,7 @@ class home_state extends State<Home> {
                                                   child: Text(
                                                     "Ok",
                                                     style: TextStyle(
-                                                        color: Colors.green, fontWeight: FontWeight.bold),
+                                                        color: Constants.blue, fontWeight: FontWeight.bold),
                                                   ),
                                                   color: Colors.white,
                                                 ),

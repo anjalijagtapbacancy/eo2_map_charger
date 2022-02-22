@@ -123,7 +123,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                 key: qrKey,
                 onQRViewCreated: _onQRViewCreated,
                 overlay: QrScannerOverlayShape(
-                  borderColor: Constants.green,
+                  borderColor: Constants.blue,
                   borderRadius: 10,
                   borderLength: 40,
                   borderWidth: 6,

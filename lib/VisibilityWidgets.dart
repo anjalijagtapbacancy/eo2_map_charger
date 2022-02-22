@@ -292,8 +292,10 @@ class VisibilityWidgets with ChangeNotifier {
               //charging_state = 66;
               charging_state = responsePropertyMsgId8.evChargingState;
             else {
-              if (responsePropertyMsgId8.evChargingState != 66 || responsePropertyMsgId8.evChargingState != 65) {
+              if (responsePropertyMsgId8.evChargingState == 66 || responsePropertyMsgId8.evChargingState == 65) {
                 //charging_state = 66;
+              }
+              else{
                 charging_state = responsePropertyMsgId8.evChargingState;
                 setIsPaused(false);
               }
@@ -439,9 +441,9 @@ class VisibilityWidgets with ChangeNotifier {
           if (status != null) {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
-            startHour = (responsePropertyMsgId15.wdStartTm / 100).round();
+            startHour = (responsePropertyMsgId15.wdStartTm / 100).floor();
             startMinute = responsePropertyMsgId15.wdStartTm % 100;
-            endHour = (responsePropertyMsgId15.wdEndTm / 100).round();
+            endHour = (responsePropertyMsgId15.wdEndTm / 100).floor();
             endMinute = responsePropertyMsgId15.wdEndTm % 100;
             isScheduling = responsePropertyMsgId15.isSchedule != 0;
 

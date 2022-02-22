@@ -1,3 +1,4 @@
+import 'package:eo2_map_charger/ConstantFunction/Constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -67,12 +68,12 @@ class ota_state extends State<OTA> {
                                 visibilityWidgetsWatch.setfileName(value);
                               }
                             },
-                            cursorColor: Colors.white,
+                            cursorColor: Constants.blue,
                             decoration: InputDecoration(
                                 labelText: "File Name",
-                                labelStyle: TextStyle(color: Colors.green),
+                                labelStyle: TextStyle(color: Constants.blue),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.green)))),
+                                    borderSide: BorderSide(color: Constants.blue)))),
                       ),
                     ),
                   Padding(
@@ -94,12 +95,12 @@ class ota_state extends State<OTA> {
                               visibilityWidgetsWatch.setfileUrl(value);
                             }
                           },
-                          cursorColor: Colors.white,
+                          cursorColor: Constants.blue,
                           decoration: InputDecoration(
                               labelText: "File Link",
-                              labelStyle: TextStyle(color: Colors.green),
+                              labelStyle: TextStyle(color: Constants.blue),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green)))),
+                                  borderSide: BorderSide(color: Constants.blue)))),
                     ),
                   ),
                   Padding(
@@ -131,7 +132,7 @@ class ota_state extends State<OTA> {
                       child: Text(
                         "Submit",
                         style: TextStyle(
-                            color: Colors.green, fontWeight: FontWeight.bold),
+                            color: Constants.blue, fontWeight: FontWeight.bold),
                       ),
                       color: Colors.white,
                     ),

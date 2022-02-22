@@ -105,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextStyle(color: Constants.black,fontSize: 14.sp),
                       ),
                       Text(
-                        'EO2 Evse Private Limited',
-                        style: TextStyle(color: Constants.green,fontSize: 14.sp),
+                        'Trinity Touch Private Limited',
+                        style: TextStyle(color: Constants.blue,fontSize: 14.sp),
                       ),
                     ],
                   ),

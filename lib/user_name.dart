@@ -72,7 +72,7 @@ class user_name extends State<UserName> {
                               "user_name", visibilityWidgetsWatch.user_name);
                         },
                         initialValue: visibilityWidgetsWatch.user_name,
-                        cursorColor: Colors.green,
+                        cursorColor: Constants.blue,
                         maxLength: 10,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(borderSide:const BorderSide(),),
@@ -92,7 +92,7 @@ class user_name extends State<UserName> {
                     child: Center(
                       child: RaisedButton(
                         textColor: Colors.black,
-                        color: Constants.green,
+                        color: Constants.blue,
                         child: Center(
                           child:Text(
                             "Save & Continue",

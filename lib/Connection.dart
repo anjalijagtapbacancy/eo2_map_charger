@@ -151,7 +151,7 @@ class connection extends State<Connection> {
                               "qrtxt", visibilityWidgetsWatch.qrText);
                         },
                         initialValue: visibilityWidgetsWatch.qrText,
-                        cursorColor: Constants.green,
+                        cursorColor: Constants.blue,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(borderSide:const BorderSide(),),
                             fillColor: Colors.grey[200],
@@ -170,7 +170,7 @@ class connection extends State<Connection> {
                       child: Center(
                         child: RaisedButton(
                           textColor: Constants.black,
-                          color: Constants.green,
+                          color: Constants.blue,
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),

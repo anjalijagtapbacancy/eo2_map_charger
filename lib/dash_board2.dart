@@ -115,7 +115,7 @@ class dashboard_state extends State<DashBoard2>
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.person,color: Colors.green,size:0.1.sw,),
+                                  Icon(Icons.person,color: Constants.blue,size:0.1.sw,),
                                   Text(
                                     "Hi  ${visibilityWidgetsWatch.user_name}!",
                                     style: TextStyle(fontSize:25.sp,color: Colors.black),
@@ -309,7 +309,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                   value:
                                                                                       visibilityWidgetsWatch.isScheduling,
                                                                                   activeColor:
-                                                                                      Colors.green,
+                                                                                  Constants.blue,
                                                                                   activeTrackColor:
                                                                                       Colors.grey,
                                                                                   inactiveThumbColor:
@@ -462,10 +462,26 @@ class dashboard_state extends State<DashBoard2>
                                                                                         enableAnimation: true,
                                                                                         sizeUnit: GaugeSizeUnit.factor,
                                                                                         gradient: const SweepGradient(colors: <Color>[
-                                                                                          Color.fromARGB(242, 147, 250, 151),
-                                                                                          Color.fromARGB(242, 82, 222, 88),
-                                                                                          Color.fromARGB(242, 48, 191, 54),
-                                                                                          Color.fromARGB(242, 16, 145, 21)
+                                                                                          Color.fromARGB(
+                                                                                              255,
+                                                                                              170,
+                                                                                              237,
+                                                                                              248),
+                                                                                          Color.fromARGB(
+                                                                                              255,
+                                                                                              92,
+                                                                                              217,
+                                                                                              239),
+                                                                                          Color.fromARGB(
+                                                                                              255,
+                                                                                              58,
+                                                                                              187,
+                                                                                              238),
+                                                                                          Color.fromARGB(
+                                                                                              255,
+                                                                                              7,
+                                                                                              172,
+                                                                                              239),
                                                                                         ], stops: <double>[
                                                                                           0.20,
                                                                                           0.40,
@@ -490,7 +506,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                                 visibilityWidgetsWatch.hour_diff,
                                                                                                 visibilityWidgetsWatch.min_diff
                                                                                               ]),
-                                                                                              style: TextStyle(color: Colors.green, fontSize: 19),
+                                                                                              style: TextStyle(color: Constants.blue, fontSize: 19),
                                                                                             ),
                                                                                           ],
                                                                                         ),
@@ -646,7 +662,7 @@ class dashboard_state extends State<DashBoard2>
                                                           color: Colors.white,
                                                           shape: BoxShape.circle,
                                                           border: new Border.all(
-                                                            color: Colors.green,
+                                                            color: Constants.blue,
                                                             width: ScreenUtil().setWidth(15),
                                                           ),
                                                         ),
@@ -655,7 +671,7 @@ class dashboard_state extends State<DashBoard2>
                                                             'Ready',
                                                             style: TextStyle(
                                                                 fontSize: 17.sp,
-                                                                color: Colors.green,
+                                                                color: Constants.blue,
                                                                 fontWeight:
                                                                     FontWeight.bold),
                                                           ),
@@ -728,8 +744,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                 .toString() +
                                                                             " A",
                                                                         style: TextStyle(
-                                                                            color: Colors
-                                                                                .green,
+                                                                            color: Constants.blue,
                                                                             fontSize:
                                                                                 20.sp),
                                                                       ),
@@ -753,8 +768,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                 .round()]
                                                                             .toString(),
                                                                         activeColor:
-                                                                            Colors
-                                                                                .green,
+                                                                        Constants.blue,
                                                                         onChanged:
                                                                             (double
                                                                                 value) {
@@ -1089,7 +1103,7 @@ class dashboard_state extends State<DashBoard2>
                                                                   .diffSeconds
                                                             ]),
                                                             style: TextStyle(
-                                                                color: Colors.green,
+                                                                color: Constants.blue,
                                                                 wordSpacing: 3,
                                                                 fontWeight:
                                                                     FontWeight.bold,
@@ -1101,7 +1115,7 @@ class dashboard_state extends State<DashBoard2>
                                                                 fontWeight:
                                                                     FontWeight.bold,
                                                                 wordSpacing: 3,
-                                                                color: Colors.green,
+                                                                color: Constants.blue,
                                                                 fontSize: 15),
                                                           ),
                                                         ],
@@ -1126,7 +1140,7 @@ class dashboard_state extends State<DashBoard2>
                                                         width: 0.05,
                                                         sizeUnit:
                                                             GaugeSizeUnit.factor,
-                                                        color: Colors.green)
+                                                        color: Constants.blue)
                                                   ],
                                                 ),
                                                 // Create secondary radial axis for segmented line
@@ -1345,8 +1359,8 @@ class dashboard_state extends State<DashBoard2>
                                           MainAxisSize.min,
                                           children: [
                                             SizedBox(
-                                                width: ScreenUtil().setWidth(15),
-                                                height: ScreenUtil().setHeight(15),
+                                                width: ScreenUtil().setWidth(5),
+                                                height: ScreenUtil().setHeight(10),
                                                 child: Container(
                                                   color: Colors.red,
                                                 )),
@@ -1477,7 +1491,7 @@ class dashboard_state extends State<DashBoard2>
                                                         Text(
                                                           "Paused\nCharging",
                                                           style: TextStyle(
-                                                              color: Colors.green,
+                                                              color: Constants.blue,
                                                               fontSize: 17.sp),
                                                         )
                                                       ],
@@ -1504,7 +1518,7 @@ class dashboard_state extends State<DashBoard2>
                                                       width: 0.05,
                                                       sizeUnit:
                                                           GaugeSizeUnit.factor,
-                                                      color: Colors.green)
+                                                      color: Constants.blue)
                                                 ],
                                               ),
                                               // Create secondary radial axis for segmented line
@@ -1577,7 +1591,7 @@ class dashboard_state extends State<DashBoard2>
                                                       ),
                                                     ),
                                                     SizedBox(
-                                                      height:ScreenUtil().setHeight(0),
+                                                      height:ScreenUtil().setHeight(12),
                                                       width: ScreenUtil().setWidth(5),
                                                     ),
                                                     Text(
@@ -1776,10 +1790,10 @@ class dashboard_state extends State<DashBoard2>
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.arrow_back_ios_rounded,
-                            color: Colors.green,
+                            color: Constants.blue,
                           ),
                           Text("Disconnect"),
                         ],

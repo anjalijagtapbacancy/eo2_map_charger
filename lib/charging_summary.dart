@@ -322,7 +322,7 @@ class charging_summary_state extends State<ChargingSummary> {
                               child: Text(
                                 "<<PREV",
                                 style: TextStyle(
-                                    color: Colors.green, fontSize: 19),
+                                    color: Constants.blue, fontSize: 19),
                               ),
                               onTap: () {
                                 print("OccurrencesPrev ${visibilityWidgetsWatch.Occurrences}");
@@ -407,7 +407,7 @@ class charging_summary_state extends State<ChargingSummary> {
                                           color: visibilityWidgetsWatch
                                                       .selectedIndex ==
                                                   index
-                                              ? Colors.teal
+                                              ? Constants.blue
                                               : Colors.black,
                                           fontSize: 15),
                                     ),
@@ -1094,7 +1094,7 @@ class charging_summary_state extends State<ChargingSummary> {
                               child: Text(
                                 "NEXT>>",
                                 style: TextStyle(
-                                    color: Colors.green, fontSize: 19),
+                                    color: Constants.blue, fontSize: 19),
                               ),
                               onTap: () {
                                 print("OccurrencesNext ${visibilityWidgetsWatch.Occurrences}");
@@ -1165,11 +1165,11 @@ class charging_summary_state extends State<ChargingSummary> {
                   ],
                 )
               : CommonWidgets().CommonLoader(context)
-          : const Center(
+          :  Center(
               child: Text(
                 "No Value",
                 style: TextStyle(
-                    color: Colors.green,
+                    color: Constants.blue,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
