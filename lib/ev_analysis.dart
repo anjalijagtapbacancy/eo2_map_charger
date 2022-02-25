@@ -33,6 +33,9 @@ class ev_analysis_state extends State<EvAnalysis>
     SendSecondRequest();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
+      visibilityWidgetsRead.setenergyWeek(0);
+      visibilityWidgetsRead.setenergyMonth(0);
+      visibilityWidgetsRead.setenergyYear(0);
       visibilityWidgetsRead.setEvAnalysisLoader(true);
       /*visibilityWidgetsRead.getWeekData();
       visibilityWidgetsRead.getMonthData();

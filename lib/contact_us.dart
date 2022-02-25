@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'ConstantFunction/Constants.dart';
 import 'ConstantFunction/size_constants.dart';
 import 'VisibilityWidgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactUs extends StatefulWidget {
   ContactUs();
@@ -34,49 +35,144 @@ class contact_us extends State<ContactUs> {
     if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
       visibilityWidgetsWatch.Network(context);
     return Scaffold(
+      backgroundColor: Constants.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Column(
             children: [
               Image.asset(AssetConstants.app_logo),
+              SizedBox(height: ScreenUtil().setHeight(15),),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text(
-                  "Phone:",
-                  style: TextStyle(color: Colors.green),
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text(
+                                " Phone",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text("+91-7574809624"),
+                            ),
+                          ],
+                        ),
+                        InkWell(child: Image.asset(AssetConstants.phone),
+                            onTap: () => launch('tel://+91-7574809624'),),
+                      ],
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: new Border.all(
+                      color: Colors.grey[300],
+                      width: 1,
+                    ),),
                 ),
               ),
+              SizedBox(height: ScreenUtil().setHeight(15),),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("+91-7574809624"),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text(
-                  "Email:",
-                  style: TextStyle(color: Colors.green),
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text(
+                                " Email",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text("info@eo2.in"),
+                            ),
+                          ],
+                        ),
+                        InkWell(child: Image.asset(AssetConstants.email),
+                          onTap: () => launch('mailto:info@eo2.in'),),
+                      ],
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: new Border.all(
+                      color: Colors.grey[300],
+                      width: 1,
+                    ),),
                 ),
               ),
+              SizedBox(height: ScreenUtil().setHeight(15),),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("info@eo2.in"),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text(
-                  "Website:",
-                  style: TextStyle(color: Colors.green),
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text(
+                                " Website",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Text("eo2.in"),
+                            ),
+                          ],
+                        ),
+                        InkWell(child: Image.asset(AssetConstants.website),
+                          onTap: () => launch('http://eo2.in'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: new Border.all(
+                      color: Colors.grey[300],
+                      width: 1,
+                    ),),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("eo2.in"),
               ),
               SizedBox(
-                height: ScreenUtil().setHeight(20),
+                height: ScreenUtil().setHeight(10),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15,0, 15, 0),

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:js';
+
 
 import 'package:eo2_map_charger/model/Response/ResponseMsgId8.dart';
 import 'package:eo2_map_charger/user_name.dart';
@@ -142,7 +142,18 @@ class VisibilityWidgets with ChangeNotifier {
     MonthEnergyData.clear();
     YearEnergyData.clear();
   }
-
+  setenergyWeek(num totalConsumption) {
+    totalConsumptionWeek = totalConsumption;
+    notifyListeners();
+  }
+  setenergyMonth(num totalConsumption) {
+    totalConsumptionMonth = totalConsumption;
+    notifyListeners();
+  }
+  setenergyYear(num totalConsumption) {
+    totalConsumptionYear = totalConsumption;
+    notifyListeners();
+  }
   setappbar_name(String name) {
     appbar_name = name;
     notifyListeners();
@@ -305,10 +316,12 @@ class VisibilityWidgets with ChangeNotifier {
               //charging_state = 66;
               charging_state = responsePropertyMsgId8.evChargingState;
             else {
-              if (responsePropertyMsgId8.evChargingState != 66 || responsePropertyMsgId8.evChargingState != 65) {
+              if (responsePropertyMsgId8.evChargingState != 66 ) {
+                if(responsePropertyMsgId8.evChargingState != 65){
                 //charging_state = 66;
                 charging_state = responsePropertyMsgId8.evChargingState;
                 setIsPaused(false);
+                }
               }
             }
             if (charging_state == 67) {

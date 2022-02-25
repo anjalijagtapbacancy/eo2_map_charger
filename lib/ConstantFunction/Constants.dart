@@ -28,6 +28,9 @@ class AssetConstants {
   static const menu_icon = "assets/icons/menu_icon.png";
   static const user_icon = "assets/icons/user_icon.png";
   static const pen = "assets/icons/pen.png";
+  static const email = "assets/icons/email.png";
+  static const phone = "assets/icons/phone.png";
+  static const website = "assets/icons/website.png";
 }
 class Constants {
   static List<String> WeekDays = [

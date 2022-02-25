@@ -140,42 +140,7 @@ class settings_state extends State<Settings> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Home Electricity Supply"),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
 
-                    // dropdown below..
-                    child: DropdownButton<String>(
-                        value: supplyValue,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 42,
-                        underline: SizedBox(),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            supplyValue = newValue;
-                          });
-                        },
-                        items: <String>['One', 'Two', 'Three', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList()),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
