@@ -23,6 +23,7 @@ import 'model/Request/RequestMsgId13.dart';
 import 'model/Request/RequestMsgId18.dart';
 import 'model/Request/RequestMsgId2.dart';
 import 'model/Request/RequestMsgId3.dart';
+import 'model/Request/RequestMsgId32.dart';
 import 'model/Request/RequestMsgId4.dart';
 import 'model/Request/RequestMsgId9.dart';
 import 'model/Response/CommonResponse.dart';
@@ -37,6 +38,9 @@ import 'model/Response/ResponseMsgId19.dart';
 import 'model/Response/ResponseMsgId21.dart';
 import 'model/Response/ResponseMsgId22.dart';
 import 'model/Response/ResponseMsgId23.dart';
+import 'model/Response/ResponseMsgId31.dart';
+import 'model/Response/ResponseMsgId33.dart';
+import 'model/Response/ResponseMsgId34.dart';
 import 'model/Response/ResponseMsgId6.dart';
 
 class VisibilityWidgets with ChangeNotifier {
@@ -103,9 +107,11 @@ class VisibilityWidgets with ChangeNotifier {
       ChargingSummaryLoader = false,
       EvAnalysisLoader = false,
       isResponse8 = false;
-
+  List<Array33> rfidList=[];
+  bool rfidShowLoader = false;
   StreamSubscription subscription;
-
+  Timer HeartBeatTimer;
+  //bool HeartBeat;
   CommonResponse commonResponse = new CommonResponse();
   ResponseMsgId6 responseMsgId6 = new ResponseMsgId6();
   Properties6 responsePropertyMsgId6 = new Properties6();
@@ -130,6 +136,12 @@ class VisibilityWidgets with ChangeNotifier {
   Properties22 responsePropertyMsgId22 = new Properties22();
   ResponseMsgId23 responseMsgId23 = new ResponseMsgId23();
   Properties23 responsePropertyMsgId23 = new Properties23();
+  ResponseMsgId31 responseMsgId31 = new ResponseMsgId31();
+  Properties31 responsePropertyMsgId31 = new Properties31();
+  ResponseMsgId33 responseMsgId33 = new ResponseMsgId33();
+  Properties33 responsePropertyMsgId33 = new Properties33();
+  ResponseMsgId34 responseMsgId34 = new ResponseMsgId34();
+  Properties34 responsePropertyMsgId34 = new Properties34();
 
   ClearLists() {
     WeekEnergyList = null;
@@ -170,6 +182,11 @@ class VisibilityWidgets with ChangeNotifier {
 
   bool setRunning(bool running) {
     isrunning = running;
+    notifyListeners();
+  }
+
+  bool setRfidShowLoader(bool value){
+    rfidShowLoader = value;
     notifyListeners();
   }
 
@@ -503,6 +520,8 @@ class VisibilityWidgets with ChangeNotifier {
               modeValue = "RFID Mode";
             } else if (auto_mode == 3) {
               modeValue = "OCPP Mode";
+            } else if (auto_mode == 4) {
+              modeValue = "Plug and Play Mode \nWith Push Button";
             }
           }
         } catch (e) {
@@ -550,6 +569,72 @@ class VisibilityWidgets with ChangeNotifier {
             CommonWidgets().showErrorSnackbar(context, status);
           } else {
             firmwareVersion=responsePropertyMsgId23.fwVersion;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "31":
+        try {
+          responseMsgId31 = ResponseMsgId31.fromJson(jsonDecode(response));
+          //responsePropertyMsgId31 = responseMsgId31.properties;
+          //HeartBeat=true;
+          print('true');
+          if(HeartBeatTimer !=null)
+            HeartBeatTimer.cancel();
+          responseMsgId31=null;
+          print('null');
+          HeartBeatTimer=Timer( const Duration(seconds: 5),
+                () {
+              print('after 5 sec');
+              if(responseMsgId31==null){
+                print('socket close');
+                if (socket != null)
+                  socket.destroy();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Connection()),
+                        (Route<dynamic> route) => false);
+                HeartBeatTimer.cancel();
+              }
+            },
+          );
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "33":
+        try {
+          responseMsgId33 = ResponseMsgId33.fromJson(jsonDecode(response));
+          responsePropertyMsgId33 = responseMsgId33.properties;
+          status = responsePropertyMsgId33.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            rfidList = responsePropertyMsgId33.array;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "34":
+        try {
+          responseMsgId34 = ResponseMsgId34.fromJson(jsonDecode(response));
+          responsePropertyMsgId34 = responseMsgId34.properties;
+          status = responsePropertyMsgId34.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            setRfidShowLoader(false);
+            if(responsePropertyMsgId34.errorcode == 1)
+              CommonWidgets().showToast('SuccessFully Added');
+            else if(responsePropertyMsgId34.errorcode == 2)
+              CommonWidgets().showToast('Already Added');
+            else if(responsePropertyMsgId34.errorcode == 3)
+              CommonWidgets().showToast('Timeout');
+            else if(responsePropertyMsgId34.errorcode == 4)
+              CommonWidgets().showToast('Full');
+            CommonRequests(33);
+            Navigator.pop(context);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -662,6 +747,15 @@ class VisibilityWidgets with ChangeNotifier {
     }
   }
 
+  Future<void> SendRequest32(int msgId, int action) async {
+    try {
+      RequestMsgId32 requestMsgId32 = RequestMsgId32.setData(msgId, action);
+      await sendMessage(socket, jsonEncode(requestMsgId32));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
   bool isSetting_OTA(){
     if (auto_mode == 0) {
       if (charging_state == 67) {
@@ -687,8 +781,14 @@ class VisibilityWidgets with ChangeNotifier {
       } else if (charging_state == 73) {
         return "Tips: There is Some Fault";
       }
-    } else {
-      return "Tips: Your Charger is in Auto Mode";
+    } else if(auto_mode == 1) {
+      return "Tips: Your Charger is in Plug and Play Mode";
+    } else if(auto_mode == 2) {
+      return "Tips: Your Charger is in RFID Mode";
+    } else if(auto_mode == 3) {
+      return "Tips: Your Charger is in OCPP Mode";
+    } else if(auto_mode == 4) {
+      return "Tips: Your Charger is in Plug and Play Mode With Push Button";
     }
     notifyListeners();
   }

@@ -1,9 +1,11 @@
+import 'package:eo2_map_charger/card_setting.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/src/provider.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'ConstantFunction/Constants.dart';
+import 'ConstantFunction/size_constants.dart';
 import 'VisibilityWidgets.dart';
 
 class Settings extends StatefulWidget {
@@ -45,6 +47,7 @@ class settings_state extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConstants.setScreenAwareConstant(context);
     visibilityWidgetsWatch = context.watch<VisibilityWidgets>();
     if(mounted && visibilityWidgetsWatch.responseMsgId8 != null)
       visibilityWidgetsWatch.Network(context);
@@ -52,6 +55,9 @@ class settings_state extends State<Settings> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -74,10 +80,10 @@ class settings_state extends State<Settings> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
+              child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Mode"),
                   Container(
@@ -109,6 +115,10 @@ class settings_state extends State<Settings> {
                                 "OCPP Mode") {
                               visibilityWidgetsWatch.SendRequest18(18, 3);
                               // GlobalVariables.modeValue = mode_value;
+                            } else if (visibilityWidgetsWatch.modeValue ==
+                                "Plug and Play Mode \nWith Push Button") {
+                              visibilityWidgetsWatch.SendRequest18(18, 4);
+                              // GlobalVariables.modeValue = mode_value;
                             }
                             print(visibilityWidgetsWatch.modeValue);
                             if (visibilityWidgetsWatch.modeValue ==
@@ -123,6 +133,9 @@ class settings_state extends State<Settings> {
                             } else if (visibilityWidgetsWatch.modeValue ==
                                 "OCPP Mode") {
                               visibilityWidgetsWatch.setAutoMode(3);
+                            } else if (visibilityWidgetsWatch.modeValue ==
+                                "Plug and Play Mode \nWith Push Button") {
+                              visibilityWidgetsWatch.setAutoMode(4);
                             }
                           });
                         },
@@ -130,7 +143,8 @@ class settings_state extends State<Settings> {
                           'Normal Mode',
                           'Plug and Play Mode',
                           'RFID Mode',
-                          'OCPP Mode'
+                          'OCPP Mode',
+                          'Plug and Play Mode \nWith Push Button'
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -141,40 +155,37 @@ class settings_state extends State<Settings> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Home Electricity Supply"),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-
-                    // dropdown below..
-                    child: DropdownButton<String>(
-                        value: supplyValue,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 42,
-                        underline: SizedBox(),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            supplyValue = newValue;
-                          });
-                        },
-                        items: <String>['One', 'Two', 'Three', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList()),
+            SizedBox(
+              height: ScreenUtil().setHeight(20),
+            ),
+            Container(
+              height: ScreenUtil().setHeight(60),
+              child: RaisedButton(
+                textColor: Constants.blue,
+                color: Constants.white,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        "RFID Card",
+                        style: TextStyle(color: Constants.blue),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                onPressed: () {
+                  visibilityWidgetsWatch.CommonRequests(33);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CardSettings()));
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(color: Constants.blue),
+                ),
               ),
             ),
           ],
