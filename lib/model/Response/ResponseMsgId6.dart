@@ -22,34 +22,56 @@ class ResponseMsgId6 {
 }
 
 class Properties6 {
-  num current;
-  num voltage;
-  num power;
-  num sessionEnergy;
   int status;
+  List<Array6> array;
 
-  Properties6(
-      {this.current,
-      this.voltage,
-      this.power,
-      this.sessionEnergy,
-      this.status});
+  Properties6({this.status, this.array});
 
   Properties6.fromJson(Map<String, dynamic> json) {
-    current = json['current'];
-    voltage = json['voltage'];
-    power = json['power'];
-    sessionEnergy = json['session_energy'];
     status = json['status'];
+    if (json['array'] != null) {
+      array = <Array6>[];
+      json['array'].forEach((v) {
+        array.add(new Array6.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['current'] = this.current;
+    data['status'] = this.status;
+    if (this.array != null) {
+      data['array'] = this.array.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Array6 {
+  String phase;
+  num voltage;
+  num current;
+  num power;
+  num sessionEnergy;
+
+  Array6(
+      {this.phase, this.voltage, this.current, this.power, this.sessionEnergy});
+
+  Array6.fromJson(Map<String, dynamic> json) {
+    phase = json['Phase '];
+    voltage = json['voltage'];
+    current = json['current'];
+    power = json['power'];
+    sessionEnergy = json['session_energy'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Phase '] = this.phase;
     data['voltage'] = this.voltage;
+    data['current'] = this.current;
     data['power'] = this.power;
     data['session_energy'] = this.sessionEnergy;
-    data['status'] = this.status;
     return data;
   }
 }

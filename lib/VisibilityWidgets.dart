@@ -22,6 +22,9 @@ import 'model/Request/RequestMsgId12.dart';
 import 'model/Request/RequestMsgId13.dart';
 import 'model/Request/RequestMsgId18.dart';
 import 'model/Request/RequestMsgId2.dart';
+import 'model/Request/RequestMsgId24.dart';
+import 'model/Request/RequestMsgId26.dart';
+import 'model/Request/RequestMsgId28.dart';
 import 'model/Request/RequestMsgId3.dart';
 import 'model/Request/RequestMsgId32.dart';
 import 'model/Request/RequestMsgId4.dart';
@@ -38,10 +41,13 @@ import 'model/Response/ResponseMsgId19.dart';
 import 'model/Response/ResponseMsgId21.dart';
 import 'model/Response/ResponseMsgId22.dart';
 import 'model/Response/ResponseMsgId23.dart';
+import 'model/Response/ResponseMsgId25.dart';
+import 'model/Response/ResponseMsgId27.dart';
 import 'model/Response/ResponseMsgId31.dart';
 import 'model/Response/ResponseMsgId33.dart';
 import 'model/Response/ResponseMsgId34.dart';
 import 'model/Response/ResponseMsgId6.dart';
+import 'model/Response/ResponseMsgId6_single.dart';
 
 class VisibilityWidgets with ChangeNotifier {
   String qrText = "";
@@ -56,10 +62,11 @@ class VisibilityWidgets with ChangeNotifier {
   List<YearEnergy> YearEnergyData = [];
   int selectedIndex=0;
   num hour_diff = 0.0, min_diff = 0.0;
-  num charging_current = 0.0,
+  List<Array6> chargingData = [];
+/*  num charging_current = 0.0,
       charging_voltage = 0.0,
       charging_power = 0.0,
-      overall_energy = 0.0;
+      overall_energy = 0.0;*/
   int TIMEDELAY = 10;
   int charging_state = 0,
       auto_mode,
@@ -92,7 +99,19 @@ class VisibilityWidgets with ChangeNotifier {
       modeValue,
       fileName,
       fileUrl,
-      firmwareVersion="Not available";
+      firmwareVersion="Not available",
+      wifi_ssid = "",
+      wifi_pswd = "",
+      apn_name = "",
+      apn_pswd = "",
+      security = "0",
+      interface,
+      app_mode = "",
+      gsm_type = "0",
+      chargername = "",
+      chargertype,
+      chargercapacity = "32 A",
+      connectiontype;
   bool isScheduling = false, CurrentLog = true, isPaused = false;
   List<Array10> ChargerSummaryList = new List();
   Array10 array10 = new Array10();
@@ -106,6 +125,7 @@ class VisibilityWidgets with ChangeNotifier {
       stopLoader = true,
       ChargingSummaryLoader = false,
       EvAnalysisLoader = false,
+      SettingsLoader = false,
       isResponse8 = false;
   List<Array33> rfidList=[];
   bool rfidShowLoader = false;
@@ -115,6 +135,8 @@ class VisibilityWidgets with ChangeNotifier {
   CommonResponse commonResponse = new CommonResponse();
   ResponseMsgId6 responseMsgId6 = new ResponseMsgId6();
   Properties6 responsePropertyMsgId6 = new Properties6();
+  ResponseMsgId6Single responseMsgId6single = new ResponseMsgId6Single();
+  Properties6Single responsePropertyMsgId6single = new Properties6Single();
   ResponseMsgId8 responseMsgId8;
   Properties8 responsePropertyMsgId8 = new Properties8();
   Properties1 commonResponseProperty = new Properties1();
@@ -136,6 +158,10 @@ class VisibilityWidgets with ChangeNotifier {
   Properties22 responsePropertyMsgId22 = new Properties22();
   ResponseMsgId23 responseMsgId23 = new ResponseMsgId23();
   Properties23 responsePropertyMsgId23 = new Properties23();
+  ResponseMsgId25 responseMsgId25 = new ResponseMsgId25();
+  Properties25 responsePropertyMsgId25 = new Properties25();
+  ResponseMsgId27 responseMsgId27 = new ResponseMsgId27();
+  Properties27 responsePropertyMsgId27 = new Properties27();
   ResponseMsgId31 responseMsgId31 = new ResponseMsgId31();
   Properties31 responsePropertyMsgId31 = new Properties31();
   ResponseMsgId33 responseMsgId33 = new ResponseMsgId33();
@@ -278,17 +304,34 @@ class VisibilityWidgets with ChangeNotifier {
         break;
       case "6":
         try {
-          responseMsgId6 = ResponseMsgId6.fromJson(jsonDecode(response));
-          responsePropertyMsgId6 = responseMsgId6.properties;
-          status = responsePropertyMsgId6.status;
-          if (isResponse8 == false) CommonRequests(20);
-          if (status != null) {
-            CommonWidgets().showErrorSnackbar(context, status);
-          } else {
-            charging_current = responsePropertyMsgId6.current;
-            charging_voltage = responsePropertyMsgId6.voltage;
-            charging_power = responsePropertyMsgId6.power;
-            overall_energy = responsePropertyMsgId6.sessionEnergy;
+          if(response.length > 150) {
+            responseMsgId6 = ResponseMsgId6.fromJson(jsonDecode(response));
+            responsePropertyMsgId6 = responseMsgId6.properties;
+            status = responsePropertyMsgId6.status;
+            if (isResponse8 == false) CommonRequests(20);
+            if (status != null) {
+              CommonWidgets().showErrorSnackbar(context, status);
+            } else {
+              setChargingData(responsePropertyMsgId6.array);
+              //charging_current = responsePropertyMsgId6.current;
+              // charging_voltage = responsePropertyMsgId6.voltage;
+              // charging_power = responsePropertyMsgId6.power;
+              // overall_energy = responsePropertyMsgId6.sessionEnergy;
+            }
+          }else{
+            responseMsgId6single = ResponseMsgId6Single.fromJson(jsonDecode(response));
+            responsePropertyMsgId6single = responseMsgId6single.properties;
+            status = responsePropertyMsgId6single.status;
+            if (isResponse8 == false) CommonRequests(20);
+            if (status != null) {
+              CommonWidgets().showErrorSnackbar(context, status);
+            } else {
+              List<Array6> data = [];
+              Array6 array = Array6(power:responsePropertyMsgId6single.power,current: responsePropertyMsgId6single.current,sessionEnergy: responsePropertyMsgId6single.sessionEnergy,
+                          voltage: responsePropertyMsgId6single.voltage,phase: "1");
+              data.add(array);
+              setChargingData(data);
+            }
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -574,6 +617,89 @@ class VisibilityWidgets with ChangeNotifier {
           print("===Exception: " + msgId + " " + e.toString());
         }
         break;
+      case "24":
+        try {
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          if (status != 0) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            CommonRequests(25);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "25":
+        try {
+          responseMsgId25 = ResponseMsgId25.fromJson(jsonDecode(response));
+          responsePropertyMsgId25 = responseMsgId25.properties;
+          status = responsePropertyMsgId25.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            wifi_ssid = responsePropertyMsgId25.ssid;
+            wifi_pswd = responsePropertyMsgId25.pwd;
+            setSettingsLoader(false);
+            if (responsePropertyMsgId25.iType == "1")
+              interface = "WIFI";
+            else
+              interface = "GSM";
+            app_mode = responsePropertyMsgId25.appMode;
+            apn_name = responsePropertyMsgId25.apn;
+            apn_pswd = responsePropertyMsgId25.gsmPass;
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "26":
+        try {
+          commonResponse = CommonResponse.fromJson(jsonDecode(response));
+          commonResponseProperty = commonResponse.properties;
+          status = commonResponseProperty.status;
+          if (status != 0) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            CommonRequests(27);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
+      case "27":
+        try {
+          responseMsgId27 = ResponseMsgId27.fromJson(jsonDecode(response));
+          responsePropertyMsgId27 = responseMsgId27.properties;
+          status = responsePropertyMsgId27.status;
+          if (status != null) {
+            CommonWidgets().showErrorSnackbar(context, status);
+          } else {
+            chargername = responsePropertyMsgId27.chargerName;
+            if (responsePropertyMsgId27.chargerCapacity == 16)
+              chargercapacity = "16 A";
+            else
+              chargercapacity = "32 A";
+            if (responsePropertyMsgId27.chargerType == 1)
+              chargertype = "Single Phase";
+            else
+              chargertype = "Three Phase";
+            if (responsePropertyMsgId27.connectionType == 1)
+              connectiontype = "Socket";
+            else
+              connectiontype = "Cable";
+            Future.delayed(Duration(seconds: 2));
+            if (chargercapacity == '16 A')
+              SendRequest13(13, 15);
+            else if (chargercapacity == '32 A') SendRequest13(13, 30);
+            await Future.delayed(Duration(milliseconds: 500));
+            CommonRequests(14);
+          }
+        } catch (e) {
+          print("===Exception: " + msgId + " " + e.toString());
+        }
+        break;
       case "31":
         try {
           responseMsgId31 = ResponseMsgId31.fromJson(jsonDecode(response));
@@ -742,6 +868,46 @@ class VisibilityWidgets with ChangeNotifier {
     try {
       RequestMsgId18 requestMsgId18 = RequestMsgId18.setData(msgId, automode);
       await sendMessage(socket, jsonEncode(requestMsgId18));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest24(
+      int msgId,
+      String ssid,
+      String pwd,
+      String iType,
+      String appMode,
+      String security,
+      String apn,
+      String gsmPass,
+      String gsmType,
+      String networkswitchmode) async {
+    try {
+      RequestMsgId24 requestMsgId24 = RequestMsgId24.setData(
+          msgId, ssid, pwd, iType, appMode, security, apn, gsmPass, gsmType,networkswitchmode);
+      await sendMessage(socket, jsonEncode(requestMsgId24));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest26(int msgId, String chargername, String chargertype,
+      String chargercapacity, String connectiontype) async {
+    try {
+      RequestMsgId26 requestMsgId26 = RequestMsgId26.setData(
+          msgId, chargername, chargertype, chargercapacity, connectiontype);
+      await sendMessage(socket, jsonEncode(requestMsgId26));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+  Future<void> SendRequest28(int msgId, String url) async {
+    try {
+      RequestMsgId28 requestMsgId28 = RequestMsgId28.setData(msgId, url);
+      await sendMessage(socket, jsonEncode(requestMsgId28));
     } on Exception catch (e) {
       print("===Exception:" + msgId.toString() + e.toString());
     }
@@ -1054,6 +1220,11 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
+  void setSettingsLoader(bool Loader) {
+    SettingsLoader = Loader;
+    notifyListeners();
+  }
+
   void setStopLoader(bool stop_loader) {
     stopLoader = stop_loader;
     notifyListeners();
@@ -1111,6 +1282,10 @@ class VisibilityWidgets with ChangeNotifier {
   void setAutoMode(int mode) {
     auto_mode = mode;
     notifyListeners();
+  }
+
+  void setChargingData(List<Array6> data) {
+    chargingData = data;
   }
 
   void setWeekEnergyData(WeekEnergy weekEnergy) {
@@ -1392,10 +1567,11 @@ class VisibilityWidgets with ChangeNotifier {
   }
 
   void clearData() {
-    charging_current = 0;
-    charging_voltage = 0;
-    charging_power = 0;
-    overall_energy = 0;
+    // charging_current = 0;
+    // charging_voltage = 0;
+    // charging_power = 0;
+    // overall_energy = 0;
+    chargingData.clear();
     notifyListeners();
   }
 }

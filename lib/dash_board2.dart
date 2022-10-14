@@ -984,415 +984,439 @@ class dashboard_state extends State<DashBoard2>
                                   visible: visibilityWidgetsWatch.isReadyCard(),
                                 ),
                               Visibility(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "EV Connected",
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 15, 0),
-                                            // child: Row(
-                                            //   children: [
-                                            //     Expanded(
-                                            //         child: SizedBox(height: ScreenUtil().setHeight(15),)),
-                                            //     RaisedButton(
-                                            //       textColor: Colors.black,
-                                            //       color: Colors.white,
-                                            //       child: Padding(
-                                            //         padding:
-                                            //             const EdgeInsets.all(8.0),
-                                            //         child: Row(
-                                            //           mainAxisSize:
-                                            //               MainAxisSize.min,
-                                            //           children: [
-                                            //             SizedBox(
-                                            //                 width: ScreenUtil().setWidth(15),
-                                            //                 height: ScreenUtil().setHeight(15),
-                                            //                 child: Container(
-                                            //                   color: Colors.red,
-                                            //                 )),
-                                            //             Padding(
-                                            //               padding: const EdgeInsets
-                                            //                   .fromLTRB(5, 0, 0, 0),
-                                            //               child: Text(
-                                            //                 "Stop",
-                                            //                 style: TextStyle(
-                                            //                     color:
-                                            //                         Colors.black),
-                                            //               ),
-                                            //             ),
-                                            //           ],
-                                            //         ),
-                                            //       ),
-                                            //       onPressed: () {
-                                            //         visibilityWidgetsWatch
-                                            //             .setStopLoader(true);
-                                            //         visibilityWidgetsWatch
-                                            //             .setIsPaused(true);
-                                            //         visibilityWidgetsWatch
-                                            //             .setChargingState(70);
-                                            //         visibilityWidgetsWatch
-                                            //             .SendRequest3(3, 2);
-                                            //       },
-                                            //       shape: RoundedRectangleBorder(
-                                            //         borderRadius:
-                                            //             BorderRadius.circular(30.0),
-                                            //       ),
-                                            //     ),
-                                            //   ],
-                                            // ),
-                                          ),
-                                          SizedBox(
-                                            height: ScreenUtil().setHeight(200),
-                                            child: SfRadialGauge(
-                                              axes: <RadialAxis>[
-                                                RadialAxis(
-                                                  minimum: 0,
-                                                  interval: 1,
-                                                  maximum: 360,
-                                                  showLabels: false,
-                                                  showTicks: false,
-                                                  startAngle: 270,
-                                                  endAngle: 270,
-                                                  radiusFactor: 0.6,
-                                                  useRangeColorForAxis: true,
-                                                  annotations: <GaugeAnnotation>[
-                                                    GaugeAnnotation(
-                                                        widget: Container(
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          /* AspectRatio(
-                                                              aspectRatio: 7,
-                                                              child: Image(
-                                                                image: AssetImage(
-                                                                  AssetConstants
-                                                                      .flash_charging,
-                                                                ),
-                                                              ),
-                                                            ),*/
-                                                          Text(
-                                                            sprintf(
-                                                                '%02d:%02d:%02d', [
-                                                              visibilityWidgetsWatch
-                                                                  .diffHour,
-                                                              visibilityWidgetsWatch
-                                                                  .diffMinute,
-                                                              visibilityWidgetsWatch
-                                                                  .diffSeconds
-                                                            ]),
-                                                            style: TextStyle(
-                                                                color: Constants.blue,
-                                                                wordSpacing: 3,
-                                                                fontWeight:
-                                                                    FontWeight.bold,
-                                                                fontSize: 15),
-                                                          ),
-                                                          Text(
-                                                            "Charging",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight.bold,
-                                                                wordSpacing: 3,
-                                                                color: Constants.blue,
-                                                                fontSize: 15),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )),
-                                                  ],
-                                                  ranges: <GaugeRange>[
-                                                    GaugeRange(
-                                                        startValue: 0,
-                                                        endValue: 360,
-                                                        color: Colors.yellow[200])
-                                                  ],
-                                                  axisLineStyle: AxisLineStyle(
-                                                    thickness: 0.05,
-                                                    color: Colors.grey,
-                                                    thicknessUnit:
-                                                        GaugeSizeUnit.factor,
-                                                  ),
-                                                  pointers: <GaugePointer>[
-                                                    RangePointer(
-                                                        value: animationValue,
-                                                        width: 0.05,
-                                                        sizeUnit:
-                                                            GaugeSizeUnit.factor,
-                                                        color: Constants.blue)
-                                                  ],
-                                                ),
-                                                // Create secondary radial axis for segmented line
-                                                RadialAxis(
-                                                  minimum: 0,
-                                                  interval: 1,
-                                                  maximum: 20,
-                                                  showLabels: true,
-                                                  showTicks: true,
-                                                  showAxisLine: false,
-                                                  tickOffset: -0.05,
-                                                  offsetUnit: GaugeSizeUnit.factor,
-                                                  minorTicksPerInterval: 0,
-                                                  startAngle: 270,
-                                                  endAngle: 270,
-                                                  radiusFactor: 0.6,
-                                                  majorTickStyle: MajorTickStyle(
-                                                      length: 0.1,
-                                                      thickness: 5,
-                                                      lengthUnit:
-                                                          GaugeSizeUnit.factor,
-                                                      color: Colors.white),
-                                                  /* annotations: <GaugeAnnotation>[
-                                                      GaugeAnnotation(
-                                                          widget: Text(
-                                                        'Charging',
-                                                        style: TextStyle(
-                                                            color: Colors.green, fontSize: 25),
-                                                      ))
-                                                    ]*/
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
+                                child: SingleChildScrollView(
+                                  physics: ScrollPhysics(),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "EV Connected",
+                                        style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                              color: Colors.white,
-                                              elevation: 10,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(15.0),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${(visibilityWidgetsWatch.charging_current / 1000).toStringAsFixed(2)} A",
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                     SizedBox(
-                                                      height: ScreenUtil().setHeight(10),
-                                                      width: ScreenUtil().setWidth(20),
-                                                    ),
-                                                    const Text(
-                                                      "Charging Current",
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                              color: Colors.white,
-                                              elevation: 10,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(15.0),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${(visibilityWidgetsWatch.charging_voltage / 100).toStringAsFixed(2)} V",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(
-                                                      height: ScreenUtil().setHeight(10),
-                                                      width: ScreenUtil().setWidth(20),
-                                                    ),
-                                                    Text(
-                                                      "Charging Voltage",
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                              color: Colors.white,
-                                              elevation: 10,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(15.0),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${(visibilityWidgetsWatch.charging_power / 1000).toStringAsFixed(2)} KW",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(
-                                                      height: ScreenUtil().setHeight(10),
-                                                      width: ScreenUtil().setWidth(20),
-                                                    ),
-                                                    Text(
-                                                      "Charging Power",
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                              color: Colors.white,
-                                              elevation: 10,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(15.0),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${(visibilityWidgetsWatch.overall_energy / 1000).toStringAsFixed(2)} KWh",
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(
-                                                      height: ScreenUtil().setHeight(10),
-                                                      width: ScreenUtil().setWidth(20),
-                                                    ),
-                                                    const Text(
-                                                      "Charging Energy",
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    RaisedButton(
-                                      textColor: Colors.black,
-                                      color: Colors.white,
-                                      child: Padding(
+                                      Padding(
                                         padding:
-                                        const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisSize:
-                                          MainAxisSize.min,
+                                            const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            SizedBox(
-                                                width: ScreenUtil().setWidth(5),
-                                                height: ScreenUtil().setHeight(10),
-                                                child: Container(
-                                                  color: Colors.red,
-                                                )),
                                             Padding(
-                                              padding: const EdgeInsets
-                                                  .fromLTRB(5, 0, 0, 0),
-                                              child: Text(
-                                                "Stop",
-                                                style: TextStyle(
-                                                    color:
-                                                    Colors.black),
+                                              padding: const EdgeInsets.fromLTRB(
+                                                  0, 0, 15, 0),
+                                              // child: Row(
+                                              //   children: [
+                                              //     Expanded(
+                                              //         child: SizedBox(height: ScreenUtil().setHeight(15),)),
+                                              //     RaisedButton(
+                                              //       textColor: Colors.black,
+                                              //       color: Colors.white,
+                                              //       child: Padding(
+                                              //         padding:
+                                              //             const EdgeInsets.all(8.0),
+                                              //         child: Row(
+                                              //           mainAxisSize:
+                                              //               MainAxisSize.min,
+                                              //           children: [
+                                              //             SizedBox(
+                                              //                 width: ScreenUtil().setWidth(15),
+                                              //                 height: ScreenUtil().setHeight(15),
+                                              //                 child: Container(
+                                              //                   color: Colors.red,
+                                              //                 )),
+                                              //             Padding(
+                                              //               padding: const EdgeInsets
+                                              //                   .fromLTRB(5, 0, 0, 0),
+                                              //               child: Text(
+                                              //                 "Stop",
+                                              //                 style: TextStyle(
+                                              //                     color:
+                                              //                         Colors.black),
+                                              //               ),
+                                              //             ),
+                                              //           ],
+                                              //         ),
+                                              //       ),
+                                              //       onPressed: () {
+                                              //         visibilityWidgetsWatch
+                                              //             .setStopLoader(true);
+                                              //         visibilityWidgetsWatch
+                                              //             .setIsPaused(true);
+                                              //         visibilityWidgetsWatch
+                                              //             .setChargingState(70);
+                                              //         visibilityWidgetsWatch
+                                              //             .SendRequest3(3, 2);
+                                              //       },
+                                              //       shape: RoundedRectangleBorder(
+                                              //         borderRadius:
+                                              //             BorderRadius.circular(30.0),
+                                              //       ),
+                                              //     ),
+                                              //   ],
+                                              // ),
+                                            ),
+                                            SizedBox(
+                                              height: ScreenUtil().setHeight(300),
+                                              child: SfRadialGauge(
+                                                axes: <RadialAxis>[
+                                                  RadialAxis(
+                                                    minimum: 0,
+                                                    interval: 1,
+                                                    maximum: 360,
+                                                    showLabels: false,
+                                                    showTicks: false,
+                                                    startAngle: 270,
+                                                    endAngle: 270,
+                                                    radiusFactor: 0.6,
+                                                    useRangeColorForAxis: true,
+                                                    annotations: <GaugeAnnotation>[
+                                                      GaugeAnnotation(
+                                                          widget: Container(
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            /* AspectRatio(
+                                                                aspectRatio: 7,
+                                                                child: Image(
+                                                                  image: AssetImage(
+                                                                    AssetConstants
+                                                                        .flash_charging,
+                                                                  ),
+                                                                ),
+                                                              ),*/
+                                                            Text(
+                                                              sprintf(
+                                                                  '%02d:%02d:%02d', [
+                                                                visibilityWidgetsWatch
+                                                                    .diffHour,
+                                                                visibilityWidgetsWatch
+                                                                    .diffMinute,
+                                                                visibilityWidgetsWatch
+                                                                    .diffSeconds
+                                                              ]),
+                                                              style: TextStyle(
+                                                                  color: Constants.blue,
+                                                                  wordSpacing: 3,
+                                                                  fontWeight:
+                                                                      FontWeight.bold,
+                                                                  fontSize: 15),
+                                                            ),
+                                                            Text(
+                                                              "Charging",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight.bold,
+                                                                  wordSpacing: 3,
+                                                                  color: Constants.blue,
+                                                                  fontSize: 15),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )),
+                                                    ],
+                                                    ranges: <GaugeRange>[
+                                                      GaugeRange(
+                                                          startValue: 0,
+                                                          endValue: 360,
+                                                          color: Colors.yellow[200])
+                                                    ],
+                                                    axisLineStyle: AxisLineStyle(
+                                                      thickness: 0.05,
+                                                      color: Colors.grey,
+                                                      thicknessUnit:
+                                                          GaugeSizeUnit.factor,
+                                                    ),
+                                                    pointers: <GaugePointer>[
+                                                      RangePointer(
+                                                          value: animationValue,
+                                                          width: 0.05,
+                                                          sizeUnit:
+                                                              GaugeSizeUnit.factor,
+                                                          color: Constants.blue)
+                                                    ],
+                                                  ),
+                                                  // Create secondary radial axis for segmented line
+                                                  RadialAxis(
+                                                    minimum: 0,
+                                                    interval: 1,
+                                                    maximum: 20,
+                                                    showLabels: true,
+                                                    showTicks: true,
+                                                    showAxisLine: false,
+                                                    tickOffset: -0.05,
+                                                    offsetUnit: GaugeSizeUnit.factor,
+                                                    minorTicksPerInterval: 0,
+                                                    startAngle: 270,
+                                                    endAngle: 270,
+                                                    radiusFactor: 0.6,
+                                                    majorTickStyle: MajorTickStyle(
+                                                        length: 0.1,
+                                                        thickness: 5,
+                                                        lengthUnit:
+                                                            GaugeSizeUnit.factor,
+                                                        color: Colors.white),
+                                                    /* annotations: <GaugeAnnotation>[
+                                                        GaugeAnnotation(
+                                                            widget: Text(
+                                                          'Charging',
+                                                          style: TextStyle(
+                                                              color: Colors.green, fontSize: 25),
+                                                        ))
+                                                      ]*/
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      onPressed: () {
-                                        visibilityWidgetsWatch
-                                            .setStopLoader(true);
-                                        visibilityWidgetsWatch
-                                            .setIsPaused(true);
-                                        visibilityWidgetsWatch
-                                            .setChargingState(70);
-                                        visibilityWidgetsWatch
-                                            .SendRequest3(3, 2);
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(30.0),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(15.0),
+                                            ),
+                                            color: Colors.white,
+                                            elevation: 10,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(15.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${visibilityWidgetsWatch.chargingData.length > 0 ? (visibilityWidgetsWatch.chargingData[0].sessionEnergy / 1000).toStringAsFixed(2) : ""} KWh",
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold),
+                                                  ),
+                                                  SizedBox(
+                                                    height: ScreenUtil().setHeight(10),
+                                                    width: ScreenUtil().setWidth(20),
+                                                  ),
+                                                  const Text(
+                                                    "Charging Energy",
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      ListView.builder(
+                                        physics:
+                                        const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: visibilityWidgetsWatch.chargingData.length,
+                                        itemBuilder:
+                                            (context, index) {
+                                          return Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                                                child: Text('Phase ${index+1}',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Constants.blue),),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Card(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                          BorderRadius.circular(15.0),
+                                                        ),
+                                                        color: Colors.white,
+                                                        elevation: 10,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(15.0),
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(
+                                                                "${(visibilityWidgetsWatch.chargingData[index].current / 1000).toStringAsFixed(2)} A",
+                                                                style: const TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight.bold),
+                                                              ),
+                                                              SizedBox(
+                                                                height: ScreenUtil().setHeight(10),
+                                                                width: ScreenUtil().setWidth(20),
+                                                              ),
+                                                              const Text(
+                                                                "Charging Current",
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Card(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                          BorderRadius.circular(15.0),
+                                                        ),
+                                                        color: Colors.white,
+                                                        elevation: 10,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(15.0),
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(
+                                                                "${(visibilityWidgetsWatch.chargingData[index].voltage / 100).toStringAsFixed(2)} V",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight.bold),
+                                                              ),
+                                                              SizedBox(
+                                                                height: ScreenUtil().setHeight(10),
+                                                                width: ScreenUtil().setWidth(20),
+                                                              ),
+                                                              Text(
+                                                                "Charging Voltage",
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Card(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                          BorderRadius.circular(15.0),
+                                                        ),
+                                                        color: Colors.white,
+                                                        elevation: 10,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(15.0),
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(
+                                                                "${(visibilityWidgetsWatch.chargingData[index].power / 1000).toStringAsFixed(2)} KW",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                    FontWeight.bold),
+                                                              ),
+                                                              SizedBox(
+                                                                height: ScreenUtil().setHeight(10),
+                                                                width: ScreenUtil().setWidth(20),
+                                                              ),
+                                                              Text(
+                                                                "Charging Power",
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      RaisedButton(
+                                        textColor: Colors.black,
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisSize:
+                                            MainAxisSize.min,
+                                            children: [
+                                              SizedBox(
+                                                  width: ScreenUtil().setWidth(15),
+                                                  height: ScreenUtil().setHeight(15),
+                                                  child: Container(
+                                                    color: Colors.red,
+                                                  )),
+                                              Padding(
+                                                padding: const EdgeInsets
+                                                    .fromLTRB(5, 0, 0, 0),
+                                                child: Text(
+                                                  "Stop",
+                                                  style: TextStyle(
+                                                      color:
+                                                      Colors.black),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          visibilityWidgetsWatch
+                                              .setStopLoader(true);
+                                          visibilityWidgetsWatch
+                                              .setIsPaused(true);
+                                          visibilityWidgetsWatch
+                                              .setChargingState(70);
+                                          visibilityWidgetsWatch
+                                              .SendRequest3(3, 2);
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(30.0),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 visible: visibilityWidgetsWatch.isChargingCard(),
                               ),

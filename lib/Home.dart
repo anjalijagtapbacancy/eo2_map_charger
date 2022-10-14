@@ -13,7 +13,6 @@ import 'ConstantFunction/size_constants.dart';
 import 'VisibilityWidgets.dart';
 import 'charging_summary.dart';
 import 'contact_us.dart';
-import 'dash_board.dart';
 import 'dash_board2.dart';
 import 'ConstantFunction/Constants.dart';
 
