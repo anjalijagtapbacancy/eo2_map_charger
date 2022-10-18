@@ -1,19 +1,22 @@
-class ResponseMsgId34 {
+class ResponseMsgId35 {
   int msgId;
-  Properties34 properties;
+  String devId;
+  Properties properties;
 
-  ResponseMsgId34({this.msgId, this.properties});
+  ResponseMsgId35({this.msgId, this.devId, this.properties});
 
-  ResponseMsgId34.fromJson(Map<String, dynamic> json) {
+  ResponseMsgId35.fromJson(Map<String, dynamic> json) {
     msgId = json['msg_id'];
+    devId = json['dev_id'];
     properties = json['properties'] != null
-        ? new Properties34.fromJson(json['properties'])
+        ? new Properties.fromJson(json['properties'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['msg_id'] = this.msgId;
+    data['dev_id'] = this.devId;
     if (this.properties != null) {
       data['properties'] = this.properties.toJson();
     }
@@ -21,23 +24,17 @@ class ResponseMsgId34 {
   }
 }
 
-class Properties34 {
+class Properties {
   int status;
-  int errorcode;
-  String rFID;
 
-  Properties34({this.errorcode, this.rFID, this.status});
+  Properties({this.status});
 
-  Properties34.fromJson(Map<String, dynamic> json) {
-    errorcode = json['err_code'];
-    rFID = json['RFID'];
+  Properties.fromJson(Map<String, dynamic> json) {
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['err_code'] = this.errorcode;
-    data['RFID'] = this.rFID;
     data['status'] = this.status;
     return data;
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eo2_map_charger/model/Response/ResponseMsgId35.dart';
 import 'package:eo2_map_charger/model/Response/ResponseMsgId8.dart';
 import 'package:eo2_map_charger/user_name.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +28,7 @@ import 'model/Request/RequestMsgId26.dart';
 import 'model/Request/RequestMsgId28.dart';
 import 'model/Request/RequestMsgId3.dart';
 import 'model/Request/RequestMsgId32.dart';
+import 'model/Request/RequestMsgId35.dart';
 import 'model/Request/RequestMsgId4.dart';
 import 'model/Request/RequestMsgId9.dart';
 import 'model/Response/CommonResponse.dart';
@@ -123,6 +125,7 @@ class VisibilityWidgets with ChangeNotifier {
   num energy,totalConsumptionWeek=0,totalConsumptionMonth=0,totalConsumptionYear=0;
   bool readyLoader = true,
       stopLoader = true,
+      deleteCardLoader = false,
       ChargingSummaryLoader = false,
       EvAnalysisLoader = false,
       SettingsLoader = false,
@@ -168,6 +171,7 @@ class VisibilityWidgets with ChangeNotifier {
   Properties33 responsePropertyMsgId33 = new Properties33();
   ResponseMsgId34 responseMsgId34 = new ResponseMsgId34();
   Properties34 responsePropertyMsgId34 = new Properties34();
+  ResponseMsgId35 responseMsgId35 = ResponseMsgId35();
 
   ClearLists() {
     WeekEnergyList = null;
@@ -213,6 +217,13 @@ class VisibilityWidgets with ChangeNotifier {
 
   bool setRfidShowLoader(bool value){
     rfidShowLoader = value;
+    notifyListeners();
+  }
+
+  bool setDeleteCardLoader(bool value)
+  {
+    deleteCardLoader = value;
+    print("delete loader $value");
     notifyListeners();
   }
 
@@ -752,20 +763,59 @@ class VisibilityWidgets with ChangeNotifier {
           } else {
             setRfidShowLoader(false);
             if(responsePropertyMsgId34.errorcode == 1)
-              CommonWidgets().showToast('SuccessFully Added');
+              {
+                CommonWidgets().showToast('SuccessFully Added');
+                Navigator.pop(context);
+              }
             else if(responsePropertyMsgId34.errorcode == 2)
-              CommonWidgets().showToast('Already Added');
+              {
+                CommonWidgets().showToast('Already Added');
+                Navigator.pop(context);
+              }
+
             else if(responsePropertyMsgId34.errorcode == 3)
-              CommonWidgets().showToast('Timeout');
+              {
+                CommonWidgets().showToast('Timeout');
+                Navigator.pop(context);
+              }
+
             else if(responsePropertyMsgId34.errorcode == 4)
-              CommonWidgets().showToast('Full');
+              {
+                CommonWidgets().showToast('Full');
+                Navigator.pop(context);
+              }
+
+            else if(responsePropertyMsgId34.errorcode == 5)
+              {
+                print("error code 5");
+                setDeleteCardLoader(false);
+                CommonWidgets().showToast("Successfully Deleted");
+              }
+            else
+              {
+                print("in else ");
+              }
             CommonRequests(33);
-            Navigator.pop(context);
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
         }
         break;
+      // case "35":
+      //   {
+      //     responseMsgId35 = ResponseMsgId35.fromJson(jsonDecode(response));
+      //     print(" 35 rs");
+      //     setDeleteCardLoader(false);
+      //     if(responseMsgId35.properties.status == 1)
+      //       {
+      //          CommonWidgets().showToast("Successfully Deleted");
+      //       }
+      //     else if(responseMsgId35.properties.status == 3)
+      //       {
+      //         CommonWidgets().showToast("Timeout");
+      //       }
+      //   }
+      //   break;
       case "255":
         try {
           commonResponse = CommonResponse.fromJson(jsonDecode(response));
@@ -919,6 +969,18 @@ class VisibilityWidgets with ChangeNotifier {
       await sendMessage(socket, jsonEncode(requestMsgId32));
     } on Exception catch (e) {
       print("===Exception:" + msgId.toString() + e.toString());
+    }
+  }
+
+
+  Future<void> SendRequest35(int msgId, int action , String rfidTag) async {
+    try {
+      RequestMsgId35 requestMsgId35 = RequestMsgId35.setData(msgId, action , rfidTag , device_id);
+      setDeleteCardLoader(true);
+      await sendMessage(socket, jsonEncode(requestMsgId35));
+    } on Exception catch (e) {
+      print("===Exception:" + msgId.toString() + e.toString());
+      setDeleteCardLoader(false);
     }
   }
 

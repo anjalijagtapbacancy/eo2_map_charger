@@ -91,5 +91,6 @@ class Constants {
   static Color blue= Color.fromRGBO(40, 158, 243, 1.0);
   static Color white= Color.fromRGBO(255, 255, 255, 1.0);
   static Color black= Color.fromRGBO(13, 23, 36, 1.0);
+  static Color orange = Color(0xFFE77721);
 }
 

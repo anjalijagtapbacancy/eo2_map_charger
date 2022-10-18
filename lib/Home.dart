@@ -302,13 +302,13 @@ class home_state extends State<Home> {
               width: MediaQuery.of(context).size.width/2,
               child: Text('Do you want to Disconnect?')),
           actions: <Widget>[
-            FlatButton(
+            MaterialButton(
               child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.Cancel);
               },
             ),
-            FlatButton(
+            MaterialButton(
               child: const Text('Yes'),
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.Accept);

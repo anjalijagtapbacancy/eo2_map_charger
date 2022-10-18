@@ -168,7 +168,7 @@ class connection extends State<Connection> {
                     child: Container(
                       height: 50,
                       child: Center(
-                        child: RaisedButton(
+                        child: MaterialButton(
                           textColor: Constants.black,
                           color: Constants.blue,
                           child: Center(

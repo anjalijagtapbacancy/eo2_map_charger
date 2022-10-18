@@ -124,7 +124,7 @@ class dashboard_state extends State<DashBoard2>
                                     width: ScreenUtil().setWidth(5),
                                     height: ScreenUtil().setHeight(5),
                                   ),
-                                  RaisedButton(
+                                  MaterialButton(
                                     textColor: Colors.black,
                                     color: Colors.white,
                                     child: Padding(
@@ -528,7 +528,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                 CrossAxisAlignment
                                                                                     .center,
                                                                             children: [
-                                                                              RaisedButton(
+                                                                              MaterialButton(
                                                                                 textColor:
                                                                                     Colors.black,
                                                                                 color: Colors
@@ -558,7 +558,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                       BorderRadius.circular(30.0),
                                                                                 ),
                                                                               ),
-                                                                              RaisedButton(
+                                                                              MaterialButton(
                                                                                 textColor:
                                                                                     Colors.black,
                                                                                 color: Colors
@@ -825,7 +825,7 @@ class dashboard_state extends State<DashBoard2>
                                                                             CrossAxisAlignment
                                                                                 .center,
                                                                         children: [
-                                                                          RaisedButton(
+                                                                          MaterialButton(
                                                                             textColor:
                                                                                 Colors
                                                                                     .black,
@@ -860,7 +860,7 @@ class dashboard_state extends State<DashBoard2>
                                                                                       30.0),
                                                                             ),
                                                                           ),
-                                                                          RaisedButton(
+                                                                          MaterialButton(
                                                                             textColor:
                                                                                 Colors
                                                                                     .black,
@@ -1371,7 +1371,7 @@ class dashboard_state extends State<DashBoard2>
                                             ],
                                           );
                                         }),
-                                      RaisedButton(
+                                      MaterialButton(
                                         textColor: Colors.black,
                                         color: Colors.white,
                                         child: Padding(
@@ -1758,7 +1758,7 @@ class dashboard_state extends State<DashBoard2>
                                         ],
                                       ),
                                     ),
-                                    RaisedButton(
+                                    MaterialButton(
                                       textColor: Colors.black,
                                       color: Colors.white,
                                       child: Padding(
@@ -1807,7 +1807,7 @@ class dashboard_state extends State<DashBoard2>
                 height: ScreenUtil().setHeight(50),
                 width: ScreenUtil().setWidth(200),
                 child: Center(
-                  child: RaisedButton(
+                  child: MaterialButton(
                     textColor: Colors.black,
                     color: Colors.white,
                     child: Padding(
@@ -1853,13 +1853,13 @@ class dashboard_state extends State<DashBoard2>
         return AlertDialog(
           title: SizedBox(width:MediaQuery.of(context).size.width,child: Text('Do you want to Disconnect?')),
           actions: <Widget>[
-            FlatButton(
+            MaterialButton(
               child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.Cancel);
               },
             ),
-            FlatButton(
+            MaterialButton(
               child: const Text('Yes'),
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.Accept);

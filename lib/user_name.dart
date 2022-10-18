@@ -90,7 +90,7 @@ class user_name extends State<UserName> {
                   child: Container(
                     height: 50,
                     child: Center(
-                      child: RaisedButton(
+                      child: MaterialButton(
                         textColor: Colors.black,
                         color: Constants.blue,
                         child: Center(

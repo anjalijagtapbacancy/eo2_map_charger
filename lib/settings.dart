@@ -189,7 +189,7 @@ class settings_state extends State<Settings> {
               ),
               Container(
                 height: ScreenUtil().setHeight(60),
-                child: RaisedButton(
+                child: MaterialButton(
                   textColor: Constants.blue,
                   color: Constants.white,
                   child: Center(
@@ -222,7 +222,7 @@ class settings_state extends State<Settings> {
               ),
               Container(
                 height: ScreenUtil().setHeight(60),
-                child: RaisedButton(
+                child: MaterialButton(
                   textColor: Constants.blue,
                   color: Constants.white,
                   child: Center(
@@ -259,7 +259,7 @@ class settings_state extends State<Settings> {
               ),
               Container(
                 height: ScreenUtil().setHeight(60),
-                child: RaisedButton(
+                child: MaterialButton(
                   textColor: Constants.blue,
                   color: Constants.white,
                   child: Center(
@@ -403,7 +403,7 @@ class settings_state extends State<Settings> {
                         height: ScreenUtil().setHeight(50),
                         width: ScreenUtil().setWidth(150),
                         child: Center(
-                          child: RaisedButton(
+                          child: MaterialButton(
                             textColor: Colors.black,
                             color: Constants.blue,
                             child: Center(
