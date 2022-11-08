@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eo2_map_charger/CommonWidgets.dart';
 import 'package:eo2_map_charger/ConnectServer.dart';
 import 'package:eo2_map_charger/Connection.dart';
 import 'package:eo2_map_charger/ota.dart';
@@ -55,7 +56,7 @@ class home_state extends State<Home> {
     ConnectServer(context);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       visibilityWidgetsRead = context.read<VisibilityWidgets>();
-      visibilityWidgetsRead.setIndex(0);
+      visibilityWidgetsRead.changeIndex(0);
       //visibilityWidgetsRead.ConnectServer(context);
     });
     // VisibilityWidgets().ConnectServer(context);
@@ -85,7 +86,7 @@ class home_state extends State<Home> {
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            body: showBody(),
+            body: showWidgetBody(),
             drawer: Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -204,7 +205,8 @@ class home_state extends State<Home> {
                     leading: Image.asset(AssetConstants.dashboard),
                     title: const Text('Dashboard'),
                     onTap: () {
-                      visibilityWidgetsWatch.setIndex(0);
+                      visibilityWidgetsWatch.CommonRequests(8);
+                      visibilityWidgetsWatch.changeIndex(0);
                       Navigator.pop(context);
                     },
                   ),
@@ -212,7 +214,7 @@ class home_state extends State<Home> {
                     leading: Image.asset(AssetConstants.charging_summary),
                     title: const Text('Charging Summary'),
                     onTap: () {
-                      visibilityWidgetsWatch.setIndex(1);
+                      visibilityWidgetsWatch.changeIndex(1);
                       Navigator.pop(context);
                     },
                   ),
@@ -221,7 +223,7 @@ class home_state extends State<Home> {
                       leading: Image.asset(AssetConstants.settings),
                       title: const Text('Settings'),
                       onTap: () {
-                        visibilityWidgetsWatch.setIndex(2);
+                        visibilityWidgetsWatch.changeIndex(2);
                         Navigator.pop(context);
                       },
                     ),
@@ -232,7 +234,7 @@ class home_state extends State<Home> {
                       leading: Image.asset(AssetConstants.ota),
                       title: const Text('OTA'),
                       onTap: () {
-                        visibilityWidgetsWatch.setIndex(3);
+                        visibilityWidgetsWatch.changeIndex(3);
                         Navigator.pop(context);
                       },
                     ),
@@ -242,7 +244,7 @@ class home_state extends State<Home> {
                     leading: Image.asset(AssetConstants.contact_us),
                     title: const Text('Contact Us'),
                     onTap: () {
-                      visibilityWidgetsWatch.setIndex(4);
+                      visibilityWidgetsWatch.changeIndex(4);
                       Navigator.pop(context);
                     },
                   ),
@@ -268,17 +270,18 @@ class home_state extends State<Home> {
           ),
         ),
         onWillPop: () async {
-          if (visibilityWidgetsWatch.index == 0) {
+          if (visibilityWidgetsWatch.indexPage == 0) {
             final ConfirmAction action = await _asyncConfirmDialog(context);
           } else {
-            visibilityWidgetsWatch.setIndex(0);
+            visibilityWidgetsWatch.changeIndex(0);
+            visibilityWidgetsWatch.CommonRequests(8);
             return Future.value(false);
           }
         });
   }
 
   Widget showBody() {
-    switch (visibilityWidgetsWatch.index) {
+    switch (visibilityWidgetsWatch.indexPage) {
       case 0:
         return DashBoard2();
       case 1:
@@ -290,6 +293,34 @@ class home_state extends State<Home> {
       case 4:
         return ContactUs();
     }
+  }
+
+  Widget showWidgetBody()
+  {
+    if(visibilityWidgetsWatch.indexPage == 0)
+      {
+        return DashBoard2();
+      }
+    else if(visibilityWidgetsWatch.indexPage == 1)
+      {
+        return ChargingSummary();
+      }
+    else if(visibilityWidgetsWatch.indexPage == 2)
+      {
+        return Settings();
+      }
+    else if(visibilityWidgetsWatch.indexPage == 3)
+      {
+        return OTA();
+      }
+    else if(visibilityWidgetsWatch.indexPage == 4)
+      {
+        return ContactUs();
+      }
+    else
+      {
+        return Container();
+      }
   }
 
   Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {

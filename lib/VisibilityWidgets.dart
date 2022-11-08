@@ -58,7 +58,7 @@ class VisibilityWidgets with ChangeNotifier {
   String appbar_name="Dashboard";
   bool isrunning = false, isNetwork = false;
   int status;
-  int index = 0;
+  int indexPage = 0;
   List<WeekEnergy> WeekEnergyData = [];
   List<MonthEnergy> MonthEnergyData = [];
   List<YearEnergy> YearEnergyData = [];
@@ -206,8 +206,14 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
   void setIndex(int Index) {
-    index = Index;
+    indexPage = Index;
     notifyListeners();
+  }
+
+  void changeIndex(int i)
+  {
+     indexPage = i;
+     notifyListeners();
   }
 
   bool setRunning(bool running) {
@@ -223,7 +229,6 @@ class VisibilityWidgets with ChangeNotifier {
   bool setDeleteCardLoader(bool value)
   {
     deleteCardLoader = value;
-    print("delete loader $value");
     notifyListeners();
   }
 
@@ -341,7 +346,7 @@ class VisibilityWidgets with ChangeNotifier {
               Array6 array = Array6(power:responsePropertyMsgId6single.power,current: responsePropertyMsgId6single.current,sessionEnergy: responsePropertyMsgId6single.sessionEnergy,
                           voltage: responsePropertyMsgId6single.voltage,phase: "1");
               data.add(array);
-              setChargingData(data);
+              setChargingData( data);
             }
           }
         } catch (e) {
@@ -717,17 +722,20 @@ class VisibilityWidgets with ChangeNotifier {
           //responsePropertyMsgId31 = responseMsgId31.properties;
           //HeartBeat=true;
           print('true');
-          if(HeartBeatTimer !=null)
+          if(HeartBeatTimer !=null) {
             HeartBeatTimer.cancel();
+          }
           responseMsgId31=null;
           print('null');
-          HeartBeatTimer=Timer( const Duration(seconds: 5),
+          HeartBeatTimer=Timer( const Duration(seconds: 10),
                 () {
-              print('after 5 sec');
+              print('after 10 sec');
+              print(" Respinse msg ${responseMsgId31.properties}");
               if(responseMsgId31==null){
                 print('socket close');
-                if (socket != null)
+                if (socket != null) {
                   socket.destroy();
+                }
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => Connection()),
                         (Route<dynamic> route) => false);
@@ -858,10 +866,10 @@ class VisibilityWidgets with ChangeNotifier {
     }
   }
 
-  Future<void> SendRequest3(int msgId, int chargingStartStop) async {
+  Future<void> SendRequest3(int msgId, int chargingStartStop , String userName) async {
     try {
       RequestMsgId3 requestMsgId3 =
-          RequestMsgId3.setData(msgId, chargingStartStop);
+          RequestMsgId3.setData(msgId, chargingStartStop , userName);
       await sendMessage(socket, jsonEncode(requestMsgId3));
     } on Exception catch (e) {
       print("===Exception:" + msgId.toString() + e.toString());

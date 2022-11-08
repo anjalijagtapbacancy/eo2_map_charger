@@ -294,6 +294,38 @@ class charging_summary_state extends State<ChargingSummary> {
                                               ),
                                             ],
                                           ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "User",
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  //fontWeight: FontWeight.bold,
+                                                    color: Constants.black),
+                                              ),
+                                              Text(
+                                                visibilityWidgetsWatch
+                                                    .ChargerSummaryList[
+                                                index]
+                                                    .username !=
+                                                    ""
+                                                    ? "             ${visibilityWidgetsWatch.ChargerSummaryList[index].username}"
+                                                    : '             No User',
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -1195,8 +1227,8 @@ class charging_summary_state extends State<ChargingSummary> {
 
   String durationLog(int duration) {
     int secLog = duration % 60;
-    int minuteLog = ((duration / 60) % 60).round();
-    int hourLog = ((duration / 60) / 60).round();
+    int minuteLog = ((duration / 60) % 60).floor();
+    int hourLog = ((duration / 60) / 60).floor();
     String durationlog =
         sprintf("%02d:%02d:%02d", [hourLog, minuteLog, secLog]);
     return durationlog;

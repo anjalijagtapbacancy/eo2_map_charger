@@ -51,7 +51,7 @@ dev_dependencies:
   app_settings: ^4.1.8
   gateway: ^0.3.0
   syncfusion_flutter_sliders: ^20.2.46
-  provider: ^6.0.1
+  provider:
   shared_preferences: ^2.0.9
   sprintf: ^6.0.0
   intl: ^0.17.0

@@ -148,7 +148,9 @@ class dashboard_state extends State<DashBoard2>
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => EvAnalysis()));
+                                              builder: (context) => EvAnalysis())).then((value) {
+                                        visibilityWidgetsWatch.CommonRequests(8);
+                                      });
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30.0),
@@ -649,7 +651,8 @@ class dashboard_state extends State<DashBoard2>
                                                         visibilityWidgetsWatch
                                                             .setReadyLoader(true);
                                                         visibilityWidgetsWatch
-                                                            .SendRequest3(3, 1);
+                                                            .SendRequest3(3, 1 ,     visibilityWidgetsWatch
+                                                            .user_name);
                                                         await Future.delayed(
                                                             Duration(seconds: 1));
                                                         visibilityWidgetsWatch
@@ -1263,7 +1266,7 @@ class dashboard_state extends State<DashBoard2>
                                                             CrossAxisAlignment.start,
                                                             children: [
                                                               Text(
-                                                                "${(visibilityWidgetsWatch.chargingData[index].current / 1000).toStringAsFixed(2)} A",
+                                                                "${(visibilityWidgetsWatch.chargingData[index].current / 100).toStringAsFixed(2)} A",
                                                                 style: const TextStyle(
                                                                     fontWeight:
                                                                     FontWeight.bold),
@@ -1408,7 +1411,8 @@ class dashboard_state extends State<DashBoard2>
                                           visibilityWidgetsWatch
                                               .setChargingState(70);
                                           visibilityWidgetsWatch
-                                              .SendRequest3(3, 2);
+                                              .SendRequest3(3, 2,     visibilityWidgetsWatch
+                                              .user_name);
                                         },
                                         shape: RoundedRectangleBorder(
                                           borderRadius:

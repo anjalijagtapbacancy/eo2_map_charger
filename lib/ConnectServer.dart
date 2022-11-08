@@ -136,8 +136,9 @@ Future<void> ConnectServer(BuildContext context1) async {
               try {
                 print('Server left.');
                 visibilityWidgetsRead.responseMsgId8 = null;
-                if(visibilityWidgetsRead.socket!=null)
+                if(visibilityWidgetsRead.socket!=null) {
                   visibilityWidgetsRead.socket.destroy();
+                }
                 if (context1 != null)
                   Navigator.of(context1).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context1) => Connection()),

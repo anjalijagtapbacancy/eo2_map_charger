@@ -57,6 +57,7 @@ class Array10 {
   int duration;
   int sessionEnergy;
   int mode;
+  String username;
 
   Array10(
       {this.id,
@@ -64,7 +65,7 @@ class Array10 {
       this.time,
       this.duration,
       this.sessionEnergy,
-      this.mode});
+      this.mode , this.username});
 
   Array10.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -73,6 +74,7 @@ class Array10 {
     duration = json['duration'];
     sessionEnergy = json['session_energy'];
     mode = json['mode'];
+    username = json['user_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +85,7 @@ class Array10 {
     data['duration'] = this.duration;
     data['session_energy'] = this.sessionEnergy;
     data['mode'] = this.mode;
+    data['user_name'] = this.username;
     return data;
   }
 }

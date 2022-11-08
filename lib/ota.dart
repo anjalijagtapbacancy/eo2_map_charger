@@ -17,8 +17,8 @@ class ota_state extends State<OTA> {
   VisibilityWidgets visibilityWidgetsRead;
   VisibilityWidgets visibilityWidgetsWatch;
   final GlobalKey<FormState> file_name_key = GlobalKey<FormState>();
-  String fileName="EO2_Charger.bin",
-      fileLink="http://bacancy-system-nptl.s3.ap-south-1.amazonaws.com/MAP/OTA/File/MAPChargerV1_0.bin";
+  String fileName="Trinity.bin",
+      fileLink="http://bacancy-system-nptl.s3.ap-south-1.amazonaws.com/Trinity/OTA/Trinity3ph_OCPP_Mobile_app_V1_1.bin";
 
   @override
   Future<void> initState() {
