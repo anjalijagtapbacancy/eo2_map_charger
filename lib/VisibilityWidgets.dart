@@ -133,7 +133,7 @@ class VisibilityWidgets with ChangeNotifier {
   List<Array33> rfidList=[];
   bool rfidShowLoader = false;
   StreamSubscription subscription;
-  Timer HeartBeatTimer;
+  static Timer HeartBeatTimer;
   //bool HeartBeat;
   CommonResponse commonResponse = new CommonResponse();
   ResponseMsgId6 responseMsgId6 = new ResponseMsgId6();
@@ -708,7 +708,8 @@ class VisibilityWidgets with ChangeNotifier {
             Future.delayed(Duration(seconds: 2));
             if (chargercapacity == '16 A')
               SendRequest13(13, 15);
-            else if (chargercapacity == '32 A') SendRequest13(13, 30);
+            else if (chargercapacity == '32 A')
+              SendRequest13(13, 30);
             await Future.delayed(Duration(milliseconds: 500));
             CommonRequests(14);
           }
@@ -730,7 +731,6 @@ class VisibilityWidgets with ChangeNotifier {
           HeartBeatTimer=Timer( const Duration(seconds: 10),
                 () {
               print('after 10 sec');
-              print(" Respinse msg ${responseMsgId31.properties}");
               if(responseMsgId31==null){
                 print('socket close');
                 if (socket != null) {
@@ -1026,7 +1026,7 @@ class VisibilityWidgets with ChangeNotifier {
     } else if(auto_mode == 4) {
       return "Tips: Your Charger is in Plug and Play Mode With Push Button";
     }
-    notifyListeners();
+//    notifyListeners();
   }
 
   bool isTip() {
@@ -1163,7 +1163,7 @@ class VisibilityWidgets with ChangeNotifier {
   }
 
   bool isReadyCard() {
-    if (auto_mode == 0) {
+    if (auto_mode == 0 || auto_mode == 1 || auto_mode == 2 || auto_mode == 4) {
       if (charging_state == 65) {
         return true;
       } else if (charging_state == 66) {
@@ -1182,7 +1182,7 @@ class VisibilityWidgets with ChangeNotifier {
   }
 
   bool isChargingCard() {
-    if (auto_mode == 0) {
+    if (auto_mode == 0 || auto_mode == 1 || auto_mode == 2 || auto_mode == 4 ) {
       if (charging_state == 65) {
         return false;
       } else if (charging_state == 66) {
@@ -1194,6 +1194,26 @@ class VisibilityWidgets with ChangeNotifier {
       } else if (charging_state == 73) {
         return false;
       }
+    }
+    else {
+      return false;
+    }
+    notifyListeners();
+  }
+
+  bool showStop() {
+    if (auto_mode == 0) {
+      if (charging_state == 65) {
+        return true;
+      } else if (charging_state == 66) {
+        return true;
+      } else if (charging_state == 67) {
+        return true;
+      } else if (charging_state == 70) {
+        return false;
+      } else if (charging_state == 73) {
+        return true;
+      }
     } else {
       return false;
     }
@@ -1201,7 +1221,7 @@ class VisibilityWidgets with ChangeNotifier {
   }
 
   bool isPausedCard() {
-    if (auto_mode == 0) {
+    if (auto_mode == 0|| auto_mode == 1 || auto_mode == 2 || auto_mode == 4) {
       if (charging_state == 65) {
         return false;
       } else if (charging_state == 66) {

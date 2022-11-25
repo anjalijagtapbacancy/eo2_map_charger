@@ -733,32 +733,72 @@ class dashboard_state extends State<DashBoard2>
                                                                             fontSize:
                                                                                 20),
                                                                       ),
-                                                                      Text(
+                                                                      // Text(
+                                                                      //   [
+                                                                      //         6,
+                                                                      //         10,
+                                                                      //         15,
+                                                                      //         18,
+                                                                      //         24,
+                                                                      //         30
+                                                                      //       ][visibilityWidgetsWatch
+                                                                      //               .currentMax
+                                                                      //               .round()]
+                                                                      //           .toString() +
+                                                                      //       " A",
+                                                                      //   style: TextStyle(
+                                                                      //       color: Constants.blue,
+                                                                      //       fontSize:
+                                                                      //           20.sp),
+                                                                      // ),
+                                                                      visibilityWidgetsWatch.chargercapacity == "32 A"
+                                                                          ? Text(
                                                                         [
-                                                                              6,
-                                                                              10,
-                                                                              15,
-                                                                              18,
-                                                                              24,
-                                                                              30
-                                                                            ][visibilityWidgetsWatch
-                                                                                    .currentMax
-                                                                                    .round()]
-                                                                                .toString() +
+                                                                          6,
+                                                                          10,
+                                                                          15,
+                                                                          18,
+                                                                          24,
+                                                                          30
+                                                                        ][visibilityWidgetsWatch.currentMax.round()]
+                                                                            .toString() +
                                                                             " A",
                                                                         style: TextStyle(
-                                                                            color: Constants.blue,
+                                                                            color: Colors.blue,
+                                                                            fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
                                                                             fontSize:
-                                                                                20.sp),
+                                                                            30.sp),
+                                                                      )
+                                                                          : Text(
+                                                                        [
+                                                                          6,
+                                                                          10,
+                                                                          15
+                                                                        ][visibilityWidgetsWatch.currentMax.round()]
+                                                                            .toString() +
+                                                                            " A",
+                                                                        style: TextStyle(
+                                                                            color: Colors.blue,
+                                                                            fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                            30.sp),
                                                                       ),
-                                                                      Slider(
+                                                                      visibilityWidgetsWatch.chargercapacity == "32 A"
+                                                                          ? Slider(
                                                                         value: visibilityWidgetsWatch
                                                                             .currentMax
                                                                             .toDouble(),
                                                                         min: 0,
                                                                         max: 5,
-                                                                        divisions: 5,
-                                                                        inactiveColor: Colors.grey[300],
+                                                                        divisions:
+                                                                        5,
+                                                                        inactiveColor:
+                                                                        Colors.grey[
+                                                                        300],
                                                                         label: [
                                                                           6,
                                                                           10,
@@ -767,19 +807,52 @@ class dashboard_state extends State<DashBoard2>
                                                                           24,
                                                                           30
                                                                         ][visibilityWidgetsWatch
-                                                                                .currentMax
-                                                                                .round()]
+                                                                            .currentMax
+                                                                            .round()]
                                                                             .toString(),
                                                                         activeColor:
-                                                                        Constants.blue,
+                                                                        Constants
+                                                                            .blue,
                                                                         onChanged:
                                                                             (double
-                                                                                value) {
-                                                                          setState(() {
-                                                                            visibilityWidgetsWatch
-                                                                                .setCurrentMax(
-                                                                                    value.round());
-                                                                          });
+                                                                        value) {
+                                                                          setState(
+                                                                                  () {
+                                                                                visibilityWidgetsWatch
+                                                                                    .setCurrentMax(value.round());
+                                                                              });
+                                                                        },
+                                                                      )
+                                                                          : Slider(
+                                                                        value: visibilityWidgetsWatch
+                                                                            .currentMax
+                                                                            .toDouble(),
+                                                                        min: 0,
+                                                                        max: 2,
+                                                                        divisions:
+                                                                        2,
+                                                                        inactiveColor:
+                                                                        Colors.grey[
+                                                                        300],
+                                                                        label: [
+                                                                          6,
+                                                                          10,
+                                                                          15,
+                                                                        ][visibilityWidgetsWatch
+                                                                            .currentMax
+                                                                            .round()]
+                                                                            .toString(),
+                                                                        activeColor:
+                                                                        Constants
+                                                                            .blue,
+                                                                        onChanged:
+                                                                            (double
+                                                                        value) {
+                                                                          setState(
+                                                                                  () {
+                                                                                visibilityWidgetsWatch
+                                                                                    .setCurrentMax(value.round());
+                                                                              });
                                                                         },
                                                                       ),
                                                                       Padding(
@@ -1266,7 +1339,7 @@ class dashboard_state extends State<DashBoard2>
                                                             CrossAxisAlignment.start,
                                                             children: [
                                                               Text(
-                                                                "${(visibilityWidgetsWatch.chargingData[index].current / 100).toStringAsFixed(2)} A",
+                                                                "${(visibilityWidgetsWatch.chargingData[index].current / 1000).toStringAsFixed(2)} A",
                                                                 style: const TextStyle(
                                                                     fontWeight:
                                                                     FontWeight.bold),
@@ -1374,49 +1447,52 @@ class dashboard_state extends State<DashBoard2>
                                             ],
                                           );
                                         }),
-                                      MaterialButton(
-                                        textColor: Colors.black,
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisSize:
-                                            MainAxisSize.min,
-                                            children: [
-                                              SizedBox(
-                                                  width: ScreenUtil().setWidth(15),
-                                                  height: ScreenUtil().setHeight(15),
-                                                  child: Container(
-                                                    color: Colors.red,
-                                                  )),
-                                              Padding(
-                                                padding: const EdgeInsets
-                                                    .fromLTRB(5, 0, 0, 0),
-                                                child: Text(
-                                                  "Stop",
-                                                  style: TextStyle(
-                                                      color:
-                                                      Colors.black),
+                                      Visibility(
+                                        visible: visibilityWidgetsWatch.showStop(),
+                                        child: MaterialButton(
+                                          textColor: Colors.black,
+                                          color: Colors.white,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisSize:
+                                              MainAxisSize.min,
+                                              children: [
+                                                SizedBox(
+                                                    width: ScreenUtil().setWidth(15),
+                                                    height: ScreenUtil().setHeight(15),
+                                                    child: Container(
+                                                      color: Colors.red,
+                                                    )),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .fromLTRB(5, 0, 0, 0),
+                                                  child: Text(
+                                                    "Stop",
+                                                    style: TextStyle(
+                                                        color:
+                                                        Colors.black),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        onPressed: () {
-                                          visibilityWidgetsWatch
-                                              .setStopLoader(true);
-                                          visibilityWidgetsWatch
-                                              .setIsPaused(true);
-                                          visibilityWidgetsWatch
-                                              .setChargingState(70);
-                                          visibilityWidgetsWatch
-                                              .SendRequest3(3, 2,     visibilityWidgetsWatch
-                                              .user_name);
-                                        },
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(30.0),
+                                          onPressed: () {
+                                            visibilityWidgetsWatch
+                                                .setStopLoader(true);
+                                            visibilityWidgetsWatch
+                                                .setIsPaused(true);
+                                            visibilityWidgetsWatch
+                                                .setChargingState(70);
+                                            visibilityWidgetsWatch
+                                                .SendRequest3(3, 2,     visibilityWidgetsWatch
+                                                .user_name);
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(30.0),
+                                          ),
                                         ),
                                       ),
                                     ],

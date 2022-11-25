@@ -33,6 +33,7 @@ class home_state extends State<Home> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String userName="";
   home_state();
+  int index = 0;
 
   @override
   void initState() {
@@ -86,7 +87,7 @@ class home_state extends State<Home> {
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            body: showWidgetBody(),
+            body: showBody(),
             drawer: Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -205,6 +206,9 @@ class home_state extends State<Home> {
                     leading: Image.asset(AssetConstants.dashboard),
                     title: const Text('Dashboard'),
                     onTap: () {
+                      setState((){
+                        index = 0 ;
+                      });
                       visibilityWidgetsWatch.CommonRequests(8);
                       visibilityWidgetsWatch.changeIndex(0);
                       Navigator.pop(context);
@@ -214,6 +218,9 @@ class home_state extends State<Home> {
                     leading: Image.asset(AssetConstants.charging_summary),
                     title: const Text('Charging Summary'),
                     onTap: () {
+                      setState((){
+                        index = 1 ;
+                      });
                       visibilityWidgetsWatch.changeIndex(1);
                       Navigator.pop(context);
                     },
@@ -223,6 +230,9 @@ class home_state extends State<Home> {
                       leading: Image.asset(AssetConstants.settings),
                       title: const Text('Settings'),
                       onTap: () {
+                        setState((){
+                          index = 2 ;
+                        });
                         visibilityWidgetsWatch.changeIndex(2);
                         Navigator.pop(context);
                       },
@@ -234,6 +244,9 @@ class home_state extends State<Home> {
                       leading: Image.asset(AssetConstants.ota),
                       title: const Text('OTA'),
                       onTap: () {
+                        setState((){
+                          index = 3 ;
+                        });
                         visibilityWidgetsWatch.changeIndex(3);
                         Navigator.pop(context);
                       },
@@ -244,6 +257,9 @@ class home_state extends State<Home> {
                     leading: Image.asset(AssetConstants.contact_us),
                     title: const Text('Contact Us'),
                     onTap: () {
+                      setState((){
+                        index = 4 ;
+                      });
                       visibilityWidgetsWatch.changeIndex(4);
                       Navigator.pop(context);
                     },
@@ -270,7 +286,7 @@ class home_state extends State<Home> {
           ),
         ),
         onWillPop: () async {
-          if (visibilityWidgetsWatch.indexPage == 0) {
+          if (index== 0) {
             final ConfirmAction action = await _asyncConfirmDialog(context);
           } else {
             visibilityWidgetsWatch.changeIndex(0);
@@ -281,7 +297,7 @@ class home_state extends State<Home> {
   }
 
   Widget showBody() {
-    switch (visibilityWidgetsWatch.indexPage) {
+    switch (index) {
       case 0:
         return DashBoard2();
       case 1:
@@ -295,33 +311,6 @@ class home_state extends State<Home> {
     }
   }
 
-  Widget showWidgetBody()
-  {
-    if(visibilityWidgetsWatch.indexPage == 0)
-      {
-        return DashBoard2();
-      }
-    else if(visibilityWidgetsWatch.indexPage == 1)
-      {
-        return ChargingSummary();
-      }
-    else if(visibilityWidgetsWatch.indexPage == 2)
-      {
-        return Settings();
-      }
-    else if(visibilityWidgetsWatch.indexPage == 3)
-      {
-        return OTA();
-      }
-    else if(visibilityWidgetsWatch.indexPage == 4)
-      {
-        return ContactUs();
-      }
-    else
-      {
-        return Container();
-      }
-  }
 
   Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
     return showDialog<ConfirmAction>(

@@ -135,6 +135,7 @@ Future<void> ConnectServer(BuildContext context1) async {
 
               try {
                 print('Server left.');
+                VisibilityWidgets.HeartBeatTimer?.cancel();
                 visibilityWidgetsRead.responseMsgId8 = null;
                 if(visibilityWidgetsRead.socket!=null) {
                   visibilityWidgetsRead.socket.destroy();
@@ -195,7 +196,14 @@ int EpochTime() {
 }
 
 Future<void> sendMessage(Socket socket, String message) async {
-  print('Client: $message');
-  socket.write(message);
-  await Future.delayed(Duration(milliseconds: 500));
+  try
+      {
+        print('Client: $message');
+        socket?.write(message);
+        await Future.delayed(Duration(milliseconds: 500));
+      }
+      catch(e)
+      {
+        print("Error sending message ");
+      }
 }
