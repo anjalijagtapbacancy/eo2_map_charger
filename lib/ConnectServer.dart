@@ -120,6 +120,7 @@ Future<void> ConnectServer(BuildContext context1) async {
             onError: (error) async {
               //timer.cancel();
               print("Error===" + error.toString());
+              VisibilityWidgets.HeartBeatTimer.cancel();
               visibilityWidgetsRead.socket.destroy();
               visibilityWidgetsRead.responseMsgId8 = null;
               // SystemNavigator.pop();

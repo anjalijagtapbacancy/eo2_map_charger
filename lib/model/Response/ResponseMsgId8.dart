@@ -27,13 +27,15 @@ class Properties8 {
   num totalEnergy;
   num evChargingState;
   int status;
+  int chargingFaultState;
 
   Properties8(
       {this.sysTime,
       this.evConnectionStatus,
       this.totalEnergy,
       this.evChargingState,
-      this.status});
+      this.status,
+      this.chargingFaultState});
 
   Properties8.fromJson(Map<String, dynamic> json) {
     sysTime = json['sys_time'];
@@ -41,6 +43,7 @@ class Properties8 {
     totalEnergy = json['total_energy'];
     evChargingState = json['ev_charging_state'];
     status = json['status'];
+    chargingFaultState = json['ev_error_code'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +53,7 @@ class Properties8 {
     data['total_energy'] = this.totalEnergy;
     data['ev_charging_state'] = this.evChargingState;
     data['status'] = this.status;
+    data['ev_error_code'] = this.chargingFaultState;
     return data;
   }
 }

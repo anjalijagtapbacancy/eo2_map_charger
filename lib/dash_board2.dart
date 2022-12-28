@@ -173,14 +173,71 @@ class dashboard_state extends State<DashBoard2>
                                           Visibility(
                                             child: Padding(
                                               padding:  EdgeInsets.fromLTRB(10, 0, 10, 5),
-                                              child: Text(
+                                              child: visibilityWidgetsWatch.charging_state == 73 ? visibilityWidgetsWatch.Tips()?.contains("?") ? Container(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "${visibilityWidgetsWatch.Tips().split("?").first}",
+                                                      style: TextStyle(
+                                                          fontSize: 17.sp,
+                                                          wordSpacing: 1.0,
+                                                          color: Colors.black),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                   visibilityWidgetsWatch.Tips().split("?").length > 2 ? Row(
+                                                     mainAxisAlignment: MainAxisAlignment.center,
+                                                     crossAxisAlignment: CrossAxisAlignment.end,
+                                                     children: [
+                                                       Text(
+                                                         "${visibilityWidgetsWatch.Tips().split("?").elementAt(1)}",
+                                                         style: TextStyle(
+                                                             fontSize: 17.sp,
+                                                             wordSpacing: 1.0,
+                                                             color: Colors.black),
+                                                         textAlign: TextAlign.center,
+                                                       ),
+                                                       Text(
+                                                         "${visibilityWidgetsWatch.Tips().split("?").last}",
+                                                         style: TextStyle(
+                                                             fontSize: 17.sp,
+                                                             wordSpacing: 1.0,
+                                                             color: Colors.red),
+                                                         textAlign: TextAlign.center,
+                                                       ),
+                                                     ],
+                                                   ) : Row(
+                                                     mainAxisAlignment: MainAxisAlignment.center,
+                                                     crossAxisAlignment: CrossAxisAlignment.end,
+                                                     children: [
+                                                       Text(
+                                                         "${visibilityWidgetsWatch.Tips().split("?").last}",
+                                                         style: TextStyle(
+                                                             fontSize: 17.sp,
+                                                             wordSpacing: 1.0,
+                                                             color: Colors.red),
+                                                         textAlign: TextAlign.center,
+                                                       ),
+                                                     ],
+                                                   ),
+                                                  ],
+                                                ),
+                                              ) : Text(
                                                 "${visibilityWidgetsWatch.Tips()}",
                                                 style: TextStyle(
                                                     fontSize: 17.sp,
                                                     wordSpacing: 1.0,
                                                     color: Colors.black),
                                                 textAlign: TextAlign.center,
-                                              ),
+                                              ) : Text(
+                                                "${visibilityWidgetsWatch.Tips()}",
+                                                style: TextStyle(
+                                                    fontSize: 17.sp,
+                                                    wordSpacing: 1.0,
+                                                    color: Colors.black),
+                                                textAlign: TextAlign.center,
+                                              ) ,
                                             ),
                                             visible: visibilityWidgetsWatch.isTip(),
                                           ),
@@ -1170,7 +1227,7 @@ class dashboard_state extends State<DashBoard2>
                                                                   ),
                                                                 ),
                                                               ),*/
-                                                            Text(
+                                                            visibilityWidgetsWatch.auto_mode == 0 ? Text(
                                                               sprintf(
                                                                   '%02d:%02d:%02d', [
                                                                 visibilityWidgetsWatch
@@ -1186,7 +1243,7 @@ class dashboard_state extends State<DashBoard2>
                                                                   fontWeight:
                                                                       FontWeight.bold,
                                                                   fontSize: 15),
-                                                            ),
+                                                            ) : Container(),
                                                             Text(
                                                               "Charging",
                                                               style: TextStyle(

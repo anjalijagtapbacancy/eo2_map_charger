@@ -7,7 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'CommonWidgets.dart';
 import 'ConstantFunction/Constants.dart';
 import 'VisibilityWidgets.dart';
@@ -181,151 +181,135 @@ class charging_summary_state extends State<ChargingSummary> {
                                   Visibility(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                      child: Table(
+                                        columnWidths: {
+                                          0 : FlexColumnWidth(6),
+                                          1 : FlexColumnWidth(4)
+                                        },
                                         children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Energy",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              Text(
-                                                "                ${(visibilityWidgetsWatch.ChargerSummaryList[index].sessionEnergy / 1000).toStringAsFixed(2)} kWh",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ],
+                                          TableRow(
+                                              children: [
+                                                Text(
+                                                  "Energy",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    //fontWeight: FontWeight.bold,
+                                                      color: Constants.black),
+                                                ),
+                                                Text(
+                                                  "${(visibilityWidgetsWatch.ChargerSummaryList[index].sessionEnergy / 1000).toStringAsFixed(2)} kWh",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: Constants.black),
+                                                ),]
                                           ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Mode",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              Text(
-                                                "                 ${modeLog(index)}",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ],
+                                          TableRow(
+                                              children:
+                                              [
+                                                Container(height: 10.h,),Container(height: 10.h,)
+                                              ]
                                           ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Duration",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              Text(
-                                                "             ${durationLog(visibilityWidgetsWatch.ChargerSummaryList[index].duration)}",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ],
+                                          TableRow(
+                                              children: [
+                                                Text(
+                                                  "Mode",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    //fontWeight: FontWeight.bold,
+                                                      color: Constants.black),
+                                                ),
+                                                Text(
+                                                  "${modeLog(index)}",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: Constants.black),
+                                                ),]
                                           ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Completion Reason",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              Text(
-                                                reasonLog(visibilityWidgetsWatch
-                                                    .ChargerSummaryList[index]
-                                                    .event),
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ],
+                                          TableRow(
+                                              children:
+                                              [
+                                                Container(height: 10.h,),Container(height: 10.h,)
+                                              ]
                                           ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "User",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                  //fontWeight: FontWeight.bold,
-                                                    color: Constants.black),
-                                              ),
-                                              Text(
-                                                visibilityWidgetsWatch
-                                                    .ChargerSummaryList[
-                                                index]
-                                                    .username !=
-                                                    ""
-                                                    ? "             ${visibilityWidgetsWatch.ChargerSummaryList[index].username}"
-                                                    : '             No User',
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                              SizedBox(
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ],
+                                          TableRow(
+                                              children: [
+                                                Text(
+                                                  "Duration",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    //fontWeight: FontWeight.bold,
+                                                      color: Constants.black),
+                                                ),
+                                                Text(
+                                                  "${durationLog(visibilityWidgetsWatch.ChargerSummaryList[index].duration)}",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: Constants.black),
+                                                ),]
                                           ),
+                                          TableRow(
+                                              children:
+                                              [
+                                                Container(height: 10.h,),Container(height: 10.h,)
+                                              ]
+                                          ),
+                                          TableRow(
+                                              children: [
+                                                Text(
+                                                  "Completion Reason",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    //fontWeight: FontWeight.bold,
+                                                      color: Constants.black),
+                                                ),
+                                                Text(
+                                                  reasonLog(visibilityWidgetsWatch
+                                                      .ChargerSummaryList[index]
+                                                      .event),
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: visibilityWidgetsWatch
+                                                          .ChargerSummaryList[
+                                                      index]
+                                                          .event ==
+                                                          1 ||
+                                                          visibilityWidgetsWatch
+                                                              .ChargerSummaryList[
+                                                          index]
+                                                              .event ==
+                                                              4
+                                                          ? Constants.black
+                                                          : Colors.black),
+                                                ),]
+                                          ),
+                                          TableRow(
+                                              children:
+                                              [
+                                                Container(height: 10.h,),Container(height: 10.h,)
+                                              ]
+                                          ),
+                                          TableRow(
+                                              children: [
+                                                Text(
+                                                  "User",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    //fontWeight: FontWeight.bold,
+                                                      color: Constants.black),
+                                                ),
+                                                Text(
+                                                  visibilityWidgetsWatch
+                                                      .ChargerSummaryList[
+                                                  index]
+                                                      .username !=
+                                                      ""
+                                                      ? "${visibilityWidgetsWatch.ChargerSummaryList[index].username}"
+                                                      : 'No User',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: Constants.black),
+                                                ),]
+                                          )
                                         ],
                                       ),
                                     ),

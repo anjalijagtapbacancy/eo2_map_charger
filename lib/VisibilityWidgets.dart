@@ -71,6 +71,7 @@ class VisibilityWidgets with ChangeNotifier {
       overall_energy = 0.0;*/
   int TIMEDELAY = 10;
   int charging_state = 0,
+      charging_fault_state = 0,
       auto_mode,
       currentMax,
       startHour = 00,
@@ -232,6 +233,12 @@ class VisibilityWidgets with ChangeNotifier {
     notifyListeners();
   }
 
+  setChargeFault(int x)
+  {
+    charging_fault_state = x;
+    notifyListeners();
+  }
+
   Future<void> UserName() async {
     final pref = await SharedPreferences.getInstance();
     setuser_name((pref.getString('user_name') != null) ? pref.getString('user_name') : "");
@@ -379,6 +386,10 @@ class VisibilityWidgets with ChangeNotifier {
             if (charging_state == 67) {
               startCounting();
             }
+            if(charging_state == 73)
+              {
+                 setChargeFault(responsePropertyMsgId8.chargingFaultState);
+              }
           }
         } catch (e) {
           print("===Exception: " + msgId + " " + e.toString());
@@ -497,6 +508,7 @@ class VisibilityWidgets with ChangeNotifier {
               currentMax = 5;
             else
               currentMax = 5;
+
             /*currentMax = String.valueOf(responsePropertyMsgId14.getMaxCurrent());
             PreferenceMan.getInstance().setMaxCurrent(Integer.parseInt(currentMax));
           */
@@ -705,11 +717,15 @@ class VisibilityWidgets with ChangeNotifier {
               connectiontype = "Socket";
             else
               connectiontype = "Cable";
-            Future.delayed(Duration(seconds: 2));
-            if (chargercapacity == '16 A')
-              SendRequest13(13, 15);
-            else if (chargercapacity == '32 A')
-              SendRequest13(13, 30);
+            // Future.delayed(Duration(seconds: 2));
+            // if (chargercapacity == '16 A')
+            //   SendRequest13(13, 15);
+            // else if (chargercapacity == '32 A')
+            //   SendRequest13(13, 30);
+            if( responsePropertyMsgId14 != null && responsePropertyMsgId14.maxCurrent > responsePropertyMsgId27.chargerCapacity)
+              {
+                SendRequest13(13, 15);
+              }
             await Future.delayed(Duration(milliseconds: 500));
             CommonRequests(14);
           }
@@ -1004,6 +1020,87 @@ class VisibilityWidgets with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  showFaultState(int chargeState)
+  {
+    if(charging_state == 73)
+      {
+        switch(chargeState)
+        {
+          case 1:
+            {
+              return "Full Charge";
+            }
+            break;
+          case 2:
+            {
+              return "Gun Removed";
+            }
+            break;
+          case 3:
+            {
+              return "FAULT_OCCURRED";
+            }
+            break;
+          case 4:
+            {
+              return "Manual Stop";
+            }
+            break;
+          case 5:
+            {
+              return "Power Loss";
+            }
+            break;
+          case 6:
+            {
+              return "Charging Start";
+            }
+            break;
+          case 7:
+            {
+              return "Other";
+            }
+            break;
+          case 8:
+            {
+              return "Over Current";
+            }
+            break;
+          case 9:
+          {
+            return "Over Voltage";
+          }
+          break;
+          case 10:
+          {
+            return "Under Voltage";
+          }
+          break;
+          case 11:
+          {
+            return "Zero Current";
+          }
+          break;
+          case 12:
+          {
+            return "Emergency Stop";
+          }
+          break;
+          case 13:
+            {
+              return "Earth Fault";
+            }
+            break;
+          case 14:
+            {
+              return "Trip Stop";
+            }
+            break;
+        }
+      }
+  }
+
   String Tips() {
     if (auto_mode == 0) {
       if (charging_state == 65) {
@@ -1015,18 +1112,87 @@ class VisibilityWidgets with ChangeNotifier {
       } else if (charging_state == 70) {
         return "";
       } else if (charging_state == 73) {
-        return "Tips: There is Some Fault";
+        String x = charging_fault_state != null ? showFaultState(charging_fault_state) : "";
+        if(x.isNotEmpty)
+          {
+            return "Fault Occurred : $x";
+          }
+        else
+          {
+            return "There is a Fault.";
+          }
       }
-    } else if(auto_mode == 1) {
-      return "Tips: Your Charger is in Plug and Play Mode";
-    } else if(auto_mode == 2) {
-      return "Tips: Your Charger is in RFID Mode";
-    } else if(auto_mode == 3) {
+    }
+
+    else if(auto_mode == 1) {
+      String y = "Tips: Your Charger is in Plug and Play Mode";
+      if (charging_state == 65) {
+        return "$y\n\nPlease insert the Charging Gun";
+      } else if (charging_state == 66) {
+        return "Tips: Your Charger is in Plug and Play Mode";
+      } else if (charging_state == 67) {
+        return "";
+      } else if (charging_state == 70) {
+        return "";
+      } else if (charging_state == 73) {
+        String x = charging_fault_state != null ? showFaultState(charging_fault_state) : "";
+        if(x.isNotEmpty)
+        {
+          return "$y?\n\nFault Occurred :? $x";
+        }
+        else
+        {
+          return "$y?\nThere is a Fault.";
+        }
+      }
+    }
+
+    else if(auto_mode == 2) {
+      String y = "Tips: Your Charger is in RFID Mode";
+      if (charging_state == 65) {
+        return "$y\n\nPlease insert the Charging Gun";
+      } else if (charging_state == 66) {
+        return "Tips: Your Charger is in RFID Mode";
+      } else if (charging_state == 67) {
+        return "";
+      } else if (charging_state == 70) {
+        return "";
+      } else if (charging_state == 73) {
+        String x = charging_fault_state != null ? showFaultState(charging_fault_state) : "";
+        if(x.isNotEmpty)
+        {
+          return "$y?\n\nFault Occurred :? $x";
+        }
+        else
+        {
+          return "$y?\nThere is a Fault.";
+        }
+      }
+    }
+    else if(auto_mode == 3) {
       return "Tips: Your Charger is in OCPP Mode";
     } else if(auto_mode == 4) {
-      return "Tips: Your Charger is in Plug and Play Mode With Push Button";
+      String y = "Tips: Your Charger is in Plug and Play Mode With Push Button";
+      if (charging_state == 65) {
+        return "$y\n\nPlease insert the Charging Gun";
+      } else if (charging_state == 66) {
+        return "Tips: Your Charger is in OCPP Mode";
+      } else if (charging_state == 67) {
+        return "";
+      } else if (charging_state == 70) {
+        return "";
+      } else if (charging_state == 73) {
+        String x = charging_fault_state != null ? showFaultState(charging_fault_state) : "";
+        if(x.isNotEmpty)
+        {
+          return "$y?\n\nFault Occurred :? $x";
+        }
+        else
+        {
+          return "$y?\nThere is a Fault.";
+        }
+      }
     }
-//    notifyListeners();
   }
 
   bool isTip() {
