@@ -178,6 +178,9 @@ class VisibilityWidgets with ChangeNotifier {
     WeekEnergyList = null;
     MonthEnergyList = null;
     YearEnergyList = null;
+    totalConsumptionMonth = 0;
+    totalConsumptionYear = 0;
+    totalConsumptionWeek = 0;
     WeekEnergyData.clear();
     MonthEnergyData.clear();
     YearEnergyData.clear();
@@ -1024,82 +1027,87 @@ class VisibilityWidgets with ChangeNotifier {
   showFaultState(int chargeState)
   {
     if(charging_state == 73)
+    {
+      switch(chargeState)
       {
-        switch(chargeState)
-        {
-          case 1:
-            {
-              return "Full Charge";
-            }
-            break;
-          case 2:
-            {
-              return "Gun Removed";
-            }
-            break;
-          case 3:
-            {
-              return "FAULT_OCCURRED";
-            }
-            break;
-          case 4:
-            {
-              return "Manual Stop";
-            }
-            break;
-          case 5:
-            {
-              return "Power Loss";
-            }
-            break;
-          case 6:
-            {
-              return "Charging Start";
-            }
-            break;
-          case 7:
-            {
-              return "Other";
-            }
-            break;
-          case 8:
-            {
-              return "Over Current";
-            }
-            break;
-          case 9:
+        case 1:
+          {
+            return "Your vehicle is fully Charged!";
+          }
+          break;
+        case 2:
+          {
+            return "Gun Removed";
+          }
+          break;
+        case 3:
+          {
+            return "FAULT_OCCURRED";
+          }
+          break;
+        case 4:
+          {
+            return "Manual Stop";
+          }
+          break;
+        case 5:
+          {
+            return "Power Loss";
+          }
+          break;
+        case 6:
+          {
+            return "Charging Start";
+          }
+          break;
+        case 7:
+          {
+            return "Other";
+          }
+          break;
+        case 8:
+          {
+            return "Over Current";
+          }
+          break;
+        case 9:
           {
             return "Over Voltage";
           }
           break;
-          case 10:
+        case 10:
           {
             return "Under Voltage";
           }
           break;
-          case 11:
+        case 11:
           {
             return "Zero Current";
           }
           break;
-          case 12:
+        case 12:
           {
             return "Emergency Stop";
           }
           break;
-          case 13:
-            {
-              return "Earth Fault";
-            }
-            break;
-          case 14:
-            {
-              return "Trip Stop";
-            }
-            break;
-        }
+        case 13:
+          {
+            return "Earth Fault";
+          }
+          break;
+        case 14:
+          {
+            return "Trip Stop";
+          }
+        case 15:
+          {
+            return "Your vehicle is charged!";
+          }
+          break;
       }
+    }
   }
+
 
   String Tips() {
     if (auto_mode == 0) {
@@ -1115,11 +1123,11 @@ class VisibilityWidgets with ChangeNotifier {
         String x = charging_fault_state != null ? showFaultState(charging_fault_state) : "";
         if(x.isNotEmpty)
           {
-            return "Fault Occurred : $x";
+            return " ?Fault Occurred :? $x";
           }
         else
           {
-            return "There is a Fault.";
+            return " ?There is a Fault.";
           }
       }
     }
@@ -1176,7 +1184,7 @@ class VisibilityWidgets with ChangeNotifier {
       if (charging_state == 65) {
         return "$y\n\nPlease insert the Charging Gun";
       } else if (charging_state == 66) {
-        return "Tips: Your Charger is in OCPP Mode";
+        return "Tips: Your Charger is in Plug and Play Mode With Push Button";
       } else if (charging_state == 67) {
         return "";
       } else if (charging_state == 70) {
@@ -1631,6 +1639,7 @@ class VisibilityWidgets with ChangeNotifier {
 
         for(int i=0;i<WeekEnergyData.length;i++){
           totalConsumptionWeek=totalConsumptionWeek+WeekEnergyData[i].energy;
+          print("total Comn $totalConsumptionWeek");
         }
         notifyListeners();
       }
@@ -1748,6 +1757,7 @@ class VisibilityWidgets with ChangeNotifier {
     }
     for(int i=0;i<MonthEnergyData.length;i++){
       totalConsumptionMonth=totalConsumptionMonth+MonthEnergyData[i].energy;
+      print("total Comn $totalConsumptionMonth");
     }
     notifyListeners();
     } catch (e) {
@@ -1780,6 +1790,7 @@ class VisibilityWidgets with ChangeNotifier {
         }
         for(int i=0;i<YearEnergyData.length;i++){
           totalConsumptionYear=totalConsumptionYear+YearEnergyData[i].energy;
+          print("total Comn $totalConsumptionYear");
         }
         notifyListeners();
       }

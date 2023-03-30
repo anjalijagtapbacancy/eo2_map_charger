@@ -1219,29 +1219,89 @@ class charging_summary_state extends State<ChargingSummary> {
   }
 
   String reasonLog(int event) {
-    if (event == 1) {
-      return "Full Charged";
-    } else if (event == 2) {
-      return "Gun Removed";
-    } else if (event == 3) {
-      return "Fault Occurred";
-    } else if (event == 4) {
-      return "Manual Stop";
-    } else if (event == 5) {
-      return "Power Loss";
-    } else if (event == 6) {
-      return "Charging Start";
-    } else if (event == 7) {
-      return "Other";
-    } else if (event == 8) {
-      return "OverCurrent";
-    } else if (event == 9) {
-      return "OverVoltage";
-    } else if (event == 10) {
-      return "UnderVoltage";
-    } else if (event == 11) {
-      return "Emergency Stop";
-    }
+      switch(event)
+      {
+        case 1:
+          {
+            return "Full Charge";
+          }
+          break;
+        case 2:
+          {
+            return "Gun Removed";
+          }
+          break;
+        case 3:
+          {
+            return "Fault Occurred";
+          }
+          break;
+        case 4:
+          {
+            return "Manual Stop";
+          }
+          break;
+        case 5:
+          {
+            return "Power Loss";
+          }
+          break;
+        case 6:
+          {
+            return "Charging Start";
+          }
+          break;
+        case 7:
+          {
+            return "Other";
+          }
+          break;
+        case 8:
+          {
+            return "Over Current";
+          }
+          break;
+        case 9:
+          {
+            return "Over Voltage";
+          }
+          break;
+        case 10:
+          {
+            return "Under Voltage";
+          }
+          break;
+        case 11:
+          {
+            return "Zero Current";
+          }
+          break;
+        case 12:
+          {
+            return "Emergency Stop";
+          }
+          break;
+        case 13:
+          {
+            return "Earth Fault";
+          }
+          break;
+        case 14:
+          {
+            return "Trip Stop";
+          }
+          break;
+        case 15:
+          {
+            return "RFID Stop";
+          }
+          break;
+        case 16:
+          {
+            return "Schedule Stop";
+          }
+          break;
+      }
   }
 
   int serialNo(int index) {

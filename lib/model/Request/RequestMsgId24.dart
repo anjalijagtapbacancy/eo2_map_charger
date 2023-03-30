@@ -79,7 +79,7 @@ class Properties {
     apn = json['apn'];
     gsmPass = json['gsm_pass'];
     gsmType = json['gsm_type'];
-    networkswitchmode = json['network_switch_mode'];
+    networkswitchmode = json['network_switching'];
   }
 
   Map<String, dynamic> toJson() {
@@ -92,7 +92,7 @@ class Properties {
     data['apn'] = this.apn;
     data['gsm_pass'] = this.gsmPass;
     data['gsm_type'] = this.gsmType;
-    data['network_switch_mode'] = this.networkswitchmode;
+    data['network_switching'] = this.networkswitchmode;
     return data;
   }
 }
