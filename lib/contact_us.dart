@@ -41,17 +41,13 @@ class contact_us extends State<ContactUs> {
           padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
           child: Column(
             children: [
-              Image.asset(AssetConstants.app_logo),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: Text(
-                  "Address:",
-                  style: TextStyle(color: Constants.blue),
-                ),
+              Text(
+                "Address:",
+                style: TextStyle(color: Constants.blue),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("D-10, Defence Colony,New Delhi – 110024, India"),
+              const Padding(
+                padding:  EdgeInsets.all(20),
+                child:  Text("15-16, Times Corporate Park, Near, Thaltej - Shilaj Rd, opp. COPPER STONE FLATS, Thaltej, Ahmedabad, Gujarat 380059"),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -62,7 +58,7 @@ class contact_us extends State<ContactUs> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("info@trinitytouch.com"),
+                child: Text("solutions@bacancy.com"),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -73,7 +69,7 @@ class contact_us extends State<ContactUs> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text("trinitytouch.com"),
+                child: Text("bacancy.com"),
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(20),

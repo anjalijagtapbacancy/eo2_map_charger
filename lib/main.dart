@@ -91,10 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   SizedBox(height:ScreenUtil().setHeight(50)),
                   Image(
-                    image: AssetImage(AssetConstants.app_logo),
-                    height: ScreenUtil().setHeight(100),
-                  ),
-                  Image(
                     image: AssetImage(AssetConstants.charging_gun),
                     height: ScreenUtil().setHeight(350)
                   ),
@@ -105,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextStyle(color: Constants.black,fontSize: 14.sp),
                       ),
                       Text(
-                        'Trinity Touch Private Limited',
+                        'Bacancy Technology',
                         style: TextStyle(color: Constants.blue,fontSize: 14.sp),
                       ),
                     ],
